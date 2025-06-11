@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Krisan Aster Kuning - The Secret Garden</title>
+    <link rel="stylesheet" href="css/detail_produk.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="images/logo.png" alt="The Secret Garden">
+                </a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">BERANDA</a></li>
+                    <li><a href="produk.html" class="active">PRODUK</a></li>
+                    <li><a href="kontak.html">KONTAK</a></li>
+                    <li><a href="tentang-kami.html">TENTANG KAMI</a></li>
+                </ul>
+            </nav>
+            <div class="icons">
+                <a href="cart.html"><i class="fas fa-shopping-cart"></i></a>
+                <a href="account.html"><i class="fas fa-user"></i></a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-container">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="index.html">Beranda</a>
+                <span class="separator">/</span>
+                <a href="produk.html">Produk</a>
+                <span class="separator">/</span>
+                <span class="current">Krisan Aster Kuning</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Detail -->
+    <section class="product-detail">
+        <div class="container">
+            <div class="product-detail-container">
+                <!-- Product Gallery -->
+                <div class="product-gallery">
+                    <div class="main-image">
+                        <img id="main-product-image" src="images/krisan (1).jpeg" alt="Krisan Aster Kuning">
+                    </div>
+                    <div class="thumbnail-images">
+                        <div class="thumbnail active" data-image="images/krisan1.jpeg">
+                            <img src="images/krisan (2).jpeg" alt="Krisan Thumbnail 1">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Info -->
+                <div class="product-info">
+                    <h1 class="product-title">Krisan Aster Kuning</h1>
+                    <div class="product-rating">
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <span class="rating-count">(4.5)</span>
+                    </div>
+                    <div class="product-price">
+                        <span class="price">Rp 115.000</span>
+                    </div>
+                    <div class="product-stock">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Stok tersedia</span>
+                    </div>
+                    <div class="product-description">
+                        <p>Krisan Aster Kuning adalah tanaman hias berbunga dengan kelopak kuning cerah yang mencolok dan tahan lama. Tanaman ini dikenal sebagai simbol kebahagiaan dan optimisme dalam budaya Jepang. Bunganya yang cerah cocok untuk menghiasi ruangan atau taman, dengan masa berbunga yang panjang dan perawatan yang relatif mudah.</p>
+                    </div>
+                    <div class="product-quantity">
+                        <label>Jumlah:</label>
+                        <div class="quantity-input">
+                            <button class="quantity-btn minus">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <input type="number" value="1" min="1" max="10">
+                            <button class="quantity-btn plus">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="product-actions">
+                        <button id="add-to-cart-btn" class="btn primary-btn">
+                            <i class="fas fa-shopping-cart"></i>
+                            Tambahkan ke Keranjang
+                        </button>
+                        <button class="btn secondary-btn">
+                            <i class="fas fa-bolt"></i>
+                            Beli Sekarang
+                        </button>
+                    </div>
+                    <div class="product-delivery">
+                        <div class="delivery-item">
+                            <i class="fas fa-truck"></i>
+                            <span>Pengiriman gratis untuk pembelian di atas Rp 500.000</span>
+                        </div>
+                        <div class="delivery-item">
+                            <i class="fas fa-undo"></i>
+                            <span>Pengembalian gratis dalam 7 hari</span>
+                        </div>
+                        <div class="delivery-item">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Garansi tanaman sehat selama 30 hari</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Tabs -->
+    <section class="product-tabs">
+        <div class="container">
+            <div class="tabs-container">
+                <div class="tabs-header">
+                    <button class="tab-btn active" data-tab="description-tab">Deskripsi</button>
+                    <button class="tab-btn" data-tab="specifications-tab">Spesifikasi</button>
+                    <button class="tab-btn" data-tab="care-tab">Perawatan</button>
+                    <button class="tab-btn" data-tab="reviews-tab">Ulasan</button>
+                </div>
+                <div class="tabs-content">
+                    <!-- Description Tab -->
+                    <div id="description-tab" class="tab-panel active">
+                        <h3>Tentang Krisan Aster Kuning</h3>
+                        <p>Krisan (Chrysanthemum) adalah tanaman hias berbunga yang berasal dari Asia Timur, terutama China dan Jepang. Tanaman ini telah dibudidayakan selama lebih dari 2.500 tahun dan memiliki makna budaya yang dalam di banyak negara Asia. Krisan Aster Kuning yang kami tawarkan adalah varietas dengan bunga berwarna kuning cerah yang mampu menyemarakkan ruangan atau taman Anda.</p>
+                        <p>Tanaman ini memiliki bunga dengan kelopak yang tersusun rapi membentuk pola yang indah. Warna kuningnya yang cerah dapat bertahan selama berminggu-minggu, membuatnya menjadi pilihan populer untuk dekorasi. Krisan juga dikenal sebagai tanaman pembersih udara yang efektif, mampu menyerap polutan seperti benzena dan formaldehida dari udara dalam ruangan.</p>
+                        <h3>Fitur Utama</h3>
+                        <ul>
+                            <li>Bunga kuning cerah yang tahan lama</li>
+                            <li>Simbol kebahagiaan dan umur panjang</li>
+                            <li>Mudah dirawat dan cocok untuk pemula</li>
+                            <li>Pembersih udara alami</li>
+                            <li>Cocok untuk pot atau ditanam langsung di tanah</li>
+                        </ul>
+                    </div>
+
+                    <!-- Specifications Tab -->
+                    <div id="specifications-tab" class="tab-panel">
+                        <h3>Spesifikasi Tanaman</h3>
+                        <table class="specs-table">
+                            <tr>
+                                <td>Nama Ilmiah</td>
+                                <td>Chrysanthemum morifolium</td>
+                            </tr>
+                            <tr>
+                                <td>Nama Umum</td>
+                                <td>Krisan, Seruni, Mum</td>
+                            </tr>
+                            <tr>
+                                <td>Asal</td>
+                                <td>Asia Timur (China, Jepang)</td>
+                            </tr>
+                            <tr>
+                                <td>Keluarga</td>
+                                <td>Asteraceae</td>
+                            </tr>
+                            <tr>
+                                <td>Tinggi Tanaman</td>
+                                <td>30-60 cm</td>
+                            </tr>
+                            <tr>
+                                <td>Lebar Tanaman</td>
+                                <td>30-45 cm</td>
+                            </tr>
+                            <tr>
+                                <td>Warna Bunga</td>
+                                <td>Kuning cerah</td>
+                            </tr>
+                            <tr>
+                                <td>Diameter Bunga</td>
+                                <td>5-10 cm</td>
+                            </tr>
+                            <tr>
+                                <td>Musim Berbunga</td>
+                                <td>Musim gugur (dapat dipaksa berbunga di waktu lain)</td>
+                            </tr>
+                            <tr>
+                                <td>Kebutuhan Cahaya</td>
+                                <td>Cahaya matahari penuh hingga sebagian teduh</td>
+                            </tr>
+                            <tr>
+                                <td>Kebutuhan Air</td>
+                                <td>Sedang, jaga tanah tetap lembab</td>
+                            </tr>
+                            <tr>
+                                <td>Toksisitas</td>
+                                <td>Beracun jika dikonsumsi oleh hewan peliharaan</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- Care Tab -->
+                    <div id="care-tab" class="tab-panel">
+                        <h3>Panduan Perawatan</h3>
+                        <div class="care-item">
+                            <div class="care-icon">
+                                <i class="fas fa-sun"></i>
+                            </div>
+                            <div class="care-content">
+                                <h4>Pencahayaan</h4>
+                                <p>Krisan membutuhkan setidaknya 5-6 jam sinar matahari langsung setiap hari untuk berbunga optimal. Tempatkan di lokasi yang mendapat sinar matahari pagi yang cukup. Jika ditanam di dalam ruangan, pilih jendela yang menghadap ke timur atau barat. Kekurangan cahaya akan menyebabkan tanaman tumbuh tinggi dan kurus dengan sedikit bunga.</p>
+                            </div>
+                        </div>
+                        <div class="care-item">
+                            <div class="care-icon">
+                                <i class="fas fa-tint"></i>
+                            </div>
+                            <div class="care-content">
+                                <h4>Penyiraman</h4>
+                                <p>Siram ketika 2-3 cm tanah bagian atas terasa kering. Krisan menyukai tanah yang lembab tetapi tidak basah. Hindari menyiram daun atau bunga secara langsung karena dapat menyebabkan bercak atau jamur. Di musim panas, mungkin perlu disiram setiap 2-3 hari, sementara di musim dingin cukup seminggu sekali.</p>
+                            </div>
+                        </div>
+                        <div class="care-item">
+                            <div class="care-icon">
+                                <i class="fas fa-temperature-high"></i>
+                            </div>
+                            <div class="care-content">
+                                <h4>Suhu & Pemangkasan</h4>
+                                <p>Krisan menyukai suhu sedang antara 15-21°C. Suhu malam yang lebih dingin (sekitar 10-15°C) dapat membantu memperpanjang masa berbunga. Setelah bunga layu, pangkas batang hingga sekitar 15 cm dari tanah untuk merangsang pertumbuhan baru. Beri pupuk cair seimbang setiap 2 minggu selama musim tanam.</p>
+                            </div>
+                        </div>
+                        <div class="care-item">
+                            <div class="care-icon">
+                                <i class="fas fa-seedling"></i>
+                            </div>
+                            <div class="care-content">
+                                <h4>Perbanyakan & Perawatan Musim Dingin</h4>
+                                <p>Krisan dapat diperbanyak dengan stek batang di musim semi. Untuk tanaman pot, ganti media tanam setiap tahun di awal musim semi. Di daerah dengan musim dingin yang keras, beri mulsa tebal untuk melindungi akar atau pindahkan ke dalam ruangan. Krisan dalam ruangan mungkin perlu lampu tumbuh untuk berbunga di luar musimnya.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Reviews Tab -->
+                    <div id="reviews-t

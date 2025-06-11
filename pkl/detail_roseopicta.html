@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calathea Roseopicta - The Secret Garden</title>
+    <link rel="stylesheet" href="css/detail_produk.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="images/logo.png" alt="The Secret Garden">
+                </a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">BERANDA</a></li>
+                    <li><a href="produk.html" class="active">PRODUK</a></li>
+                    <li><a href="kontak.html">KONTAK</a></li>
+                    <li><a href="tentang_kami.html">TENTANG KAMI</a></li>
+                </ul>
+            </nav>
+            <div class="icons">
+                <a href="cart.html"><i class="fas fa-shopping-cart"></i></a>
+                <a href="account.html"><i class="fas fa-user"></i></a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-container">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="index.html">Beranda</a>
+                <span class="separator">/</span>
+                <a href="produk.html">Produk</a>
+                <span class="separator">/</span>
+                <span class="current">Calathea Roseopicta</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Detail -->
+    <section class="product-detail">
+        <div class="container">
+            <div class="product-detail-container">
+                <!-- Product Gallery -->
+                <div class="product-gallery">
+                    <div class="main-image">
+                        <img id="main-product-image" src="images/calateha roseopicta.jpg" alt="Calathea Roseopicta">
+                    </div>
+                    <div class="thumbnail-images">
+                        <div class="thumbnail active" data-image="images/calathea1.jpeg">
+                            <img src="images/roseopicta (1).jpeg" alt="Calathea Roseopicta Thumbnail 1">
+                        </div>
+                        <div class="thumbnail" data-image="images/calathea2.jpeg">
+                            <img src="images/roseopicta (2).jpeg" alt="Calathea Roseopicta Thumbnail 2">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Info -->
+                <div class="product-info">
+                    <h1 class="product-title">Calathea Roseopicta</h1>
+                    <div class="product-rating">
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                        </div>
+                        <span class="rating-count">(4.0)</span>
+                    </div>
+                    <div class="product-price">
+                        <span class="original-price">Rp 375.000</span>
+                        <span class="price">Rp 349.000</span>
+                    </div>
+                    <div class="product-stock">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Stok tersedia</span>
+                    </div>
+                    <div class="product-description">
+                        <p>Calathea Roseopicta, juga dikenal sebagai Tanaman Doa, adalah tanaman hias populer dengan daun bulat besar yang menampilkan pola menakjubkan berwarna hijau gelap dengan garis-garis merah muda dan ungu di bagian bawah. Tanaman ini dikenal dengan gerakan nyctinastic-nya, dimana daunnya bergerak naik turun mengikuti siklus siang-malam.</p>
+                    </div>
+                    <div class="product-quantity">
+                        <label>Jumlah:</label>
+                        <div class="quantity-input">
+                            <button class="quantity-btn minus">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <input type="number" value="1" min="1" max="10">
+                            <button class="quantity-btn plus">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="product-actions">
+                        <button id="add-to-cart-btn" class="btn primary-btn">
+                            <i class="fas fa-shopping-cart"></i>
+                            Tambahkan ke Keranjang
+                        </button>
+                        <button class="btn secondary-btn">
+                            <i class="fas fa-bolt"></i>
+                            Beli Sekarang
+                        </button>
+                    </div>
+                    <div class="product-delivery">
+                        <div class="delivery-item">
+                            <i class="fas fa-truck"></i>
+                            <span>Pengiriman gratis untuk pembelian di atas Rp 500.000</span>
+                        </div>
+                        <div class="delivery-item">
+                            <i class="fas fa-undo"></i>
+                            <span>Pengembalian gratis dalam 7 hari</span>
+                        </div>
+                        <div class="delivery-item">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Garansi tanaman sehat selama 30 hari</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Tabs -->
+    <section class="product-tabs">
+        <div class="container">
+            <div class="tabs-container">
+                <div class="tabs-header">
+                    <button class="tab-btn active" data-tab="description-tab">Deskripsi</button>
+                    <button class="tab-btn" data-tab="specifications-tab">Spesifikasi</button>
+                    <button class="tab-btn" data-tab="care-tab">Perawatan</button>
+                    <button class="tab-btn" data-tab="reviews-tab">Ulasan</button>
+                    <button class="tab-btn" data-tab="shipping-tab">Pengiriman & Pengembalian</button>
+                </div>
+                <div class="tabs-content">
+                    <!-- Description Tab -->
+                    <div id="description-tab" class="tab-panel active">
+                        <h3>Tentang Calathea Roseopicta</h3>
+                        <p>Calathea Roseopicta adalah tanaman hias tropis yang berasal dari hutan hujan Brasil. Tanaman ini termasuk dalam keluarga Marantaceae dan terkenal dengan daunnya yang sangat dekoratif dengan pola yang unik dan warna-warna mencolok. Daunnya yang besar dan bulat memiliki permukaan atas berwarna hijau gelap dengan garis-garis merah muda dan permukaan bawah berwarna ungu tua.</p>
+                        <p>Salah satu keunikan Calathea Roseopicta adalah kemampuannya untuk "berdoa" - gerakan nyctinastic dimana daunnya bergerak naik di malam hari dan turun di siang hari, menciptakan suara gemerisik yang lembut. Tanaman ini tumbuh hingga ketinggian sekitar 50-60 cm saat dewasa dan lebih menyukai kondisi lembab seperti habitat aslinya di hutan hujan.</p>
+                        <p>Selain keindahannya, Calathea Roseopicta juga dikenal sebagai tanaman pemurni udara yang efektif, membantu menghilangkan polutan dalam ruangan dan meningkatkan kualitas udara.</p>
+                        <h3>Fitur Utama</h3>
+                        <ul>
+                            <li>Daun besar dengan pola unik berwarna hijau gelap dan merah muda</li>
+                            <li>Permukaan bawah daun berwarna ungu tua yang kontras</li>
+                            <li>Gerakan daun naik-turun mengikuti siklus siang-malam</li>
+                            <li>Pemurni udara alami yang efektif</li>
+                            <li>Cocok untuk terrarium atau ruangan dengan kelembaban tinggi</li>
+                        </ul>
+                    </div>
+
+                    <!-- Specifications Tab -->
+                    <div id="specifications-tab" class="tab-panel">
+                        <h3>Spesifikasi Tanaman</h3>
+                        <table class="specs-table">
+                            <tr>
+                                <td>Nama Ilmiah</td>
+                                <td>Calathea Roseopicta</td>
+                            </tr>
+                            <tr>
+                                <td>Nama Umum</td>
+                                <td>Rose-Painted Calathea, Tanaman Doa</td>
+                            </tr>
+                            <tr>
+                                <td>Asal</td>
+                                <td>Hutan Hujan Brasil</td>
+                            </tr>
+                            <tr>
+                                <td>Keluarga</td>
+                                <td>Marantaceae</td>
+                            </tr>
+                            <tr>
+                                <td>Tinggi Maksimum</td>
+                                <td>50-60 cm (dalam ruangan)</td>
+                            </tr>
+                            <tr>
+                                <td>Lebar Maksimum</td>
+                                <td>50 cm</td>
+                            </tr>
+                            <tr>
+                                <td>Kecepatan Pertumbuhan</td>
+                                <td>Sedang</td>
+                            </tr>
+                            <tr>
+                                <td>Kebutuhan Cahaya</td>
+                                <td>Cahaya tidak langsung terang hingga sedang</td>
+                            </tr>
+                            <tr>
+                                <td>Kebutuhan Air</td>
+                                <td>Menjaga tanah tetap lembab (tidak basah)</td>
+                            </tr>
+                            <tr>
+                                <td>Kelembaban</td>
+                                <td>Tinggi (60-70% ideal)</td>
+                            </tr>
+                            <tr>
+                                <td>Suhu Ideal</td>
+                                <td>18-27°C (tidak di bawah 15°C)</td>
+                            </tr>
+                            <tr>
+                                <td>Jenis Tanah</td>
+                                <td>Campuran tanah porous dengan drainase baik</td>
+                            </tr>
+                            <tr>
+                                <td>Toksisitas</td>
+                                <td>Aman untuk manusia dan hewan peliharaan</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- Care Tab -->
+                    <div id="care-tab" class="tab-panel">
+                        <h3>Panduan Perawatan</h3>
+                        <div class="care-item">
+                            <div class="care-icon">
+                                <i class="fas fa-sun"></i>
+                            </div>
+                            <div class="care-content">
+                                <h4>Pencahayaan</h4>
+                                <p>Calathea Roseopicta tumbuh optimal dalam cahaya tidak langsung terang hingga sedang. Hindari sinar matahari langsung yang dapat menyebabkan daun terbakar dan memudarkan warna indahnya. Tempatkan di dekat jendela dengan tirai tipis atau di area yang mendapat cahaya terfilter. Tanaman ini juga dapat bertahan dalam kondisi cahaya rendah tetapi pertumbuhannya akan lebih lambat.</p>
+                            </div>
+                        </div>
+                        <div class="care-item">
+                            <div class="care-icon">
+                                <i class="fas fa-tint"></i>
+                            </div>
+                            <div class="care-content">
+                                <h4>Penyiraman</h4>
+                                <p>Siram ketika 1-2 cm tanah bagian atas terasa kering. Gunakan air suling atau air hujan karena Calathea sensitif terhadap fluoride dan klorin dalam air keran. Jaga tanah tetap lembab tetapi tidak basah. Di musim dingin, kurangi frekuensi penyiraman tetapi jangan biarkan tanah mengering sepenuhnya. Daun yang menggulung atau coklat di tepi seringkali menandakan kurangnya kelembaban.</p>
+                            </div>
+                        </div>
+                        <div class="care-item">
+                            <div class="care-icon">
+                                <i class="fas fa-temperature-high"></i>
+                            </div>
+                            <div class="care-content">
+                                <h4>Suhu & Kelembaban</h4>
+                                <p>Calathea Roseopicta menyukai suhu hangat antara 18-27°C dan kelembaban tinggi (60-70%). Hindari perubahan suhu mendadak dan aliran udara dingin/panas langsung. Untuk meningkatkan kelembaban, letakkan tanaman di atas nampan kerikil berisi air, kelompokkan dengan tanaman lain, atau gunakan humidifier. Daun yang kecoklatan di tepi sering menandakan kelembaban udara yang terlalu rendah.</p>
+                            </div>
+                        </div>
+                        <div class="care-item">
+                            <div class="care-icon">
+                                <i class="fas fa-seedling"></i>
+                            </div>
+                            <div class="care-content">
+                                <h4>Tanah & Pemupukan</h4>
+                                <p>Gunakan campuran tanah yang kaya bahan organik dengan drainase baik. Campuran tanah pot standar dengan tambahan perlite dan kulit kayu anggrek sangat ideal. Pupuk setiap 4-6 minggu selama musim tanam (musim semi dan musim panas) dengan pupuk tanaman hias cair yang diencerkan setengah dari dosis yang direkomendasikan. Hentikan pemupukan di musim gugur dan musim dingin.</p>
+                            </div>
+                        </div>
+                        <div class="care-item">
+                            <div class="care-icon">
+                                <i class="fas fa-cut"></i>
+                            </div>
+                            <div class="care-content">
+                                <h4>Pemangkasan & Perawatan</h4>
+                                <p>Pangkas daun yang menguning atau rusak di bagian pangkal dengan gunting tajam dan bersih. Bersihkan daun secara teratur dengan kain lembab untuk menghilangkan debu dan memungkinkan tanaman bernafas dengan baik. Ganti pot setiap 1-2 tahun di musim semi jika akar sudah memenuhi pot. Gunakan pot yang hanya sedikit lebih besar dari yang sebelumnya karena Calathea lebih suka sedikit padat dalam potnya.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Reviews Tab -->
+                    <div id="reviews-tab" class="tab-panel">
+                        <div class="reviews-summary">
+                            <div class="rating-summary">
+                                <div class="average-rating">
+                                    <div class="rating-number">4.5</div>
+                                    <div class="stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                    <div class="rating-count">186 ulasan</div>
+                                </div>
+                                <div class="rating-bars">
+                                    <div class="rating-bar">
+                                        <div class="rating-level">
+                                            <i class="fas fa-star"></i>
+                                            <span>5</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 75%"></div>
+                                        </div>
+                                        <div class="rating-percent">75%</div>
+                                    </div>
+                                    <div class="rating-bar">
+                                        <div class="rating-level">
+                                            <i class="fas fa-star"></i>
+                                            <span>4</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 18%"></div>
+                                        </div>
+                                        <div class="rating-percent">18%</div>
+                                    </div>
+                                    <div class="rating-bar">
+                                        <div class="rating-level">
+                                            <i class="fas fa-star"></i>
+                                            <span>3</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 5%"></div>
+                                        </div>
+                                        <div class="rating-percent">5%</div>
+                                    </div>
+                                    <div class="rating-bar">
+                                        <div class="rating-level">
+                                            <i class="fas fa-star"></i>
+                                            <span>2</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 1%"></div>
+                                        </div>
+                                        <div class="rating-percent">1%</div>
+                                    </div>
+                                    <div class="rating-bar">
+                                        <div class="rating-level">
+                                            <i class="fas fa-star"></i>
+                                            <span>1</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 1%"></div>
+                                        </div>
+                                        <div class="rating-percent">1%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="reviews-filter">
+                            <div class="filter-label">Filter Ulasan:</div>
+                            <div class="filter-options">
+                                <button class="filter-btn active">Semua</button>
+                                <button class="filter-btn">5 Bintang</button>
+                                <button class="filter-btn">4 Bintang</button>
+                                <button class="filter-btn">3 Bintang</button>
+                                <button class="filter-btn">2 Bintang</button>
+                                <button class="filter-btn">1 Bintang</button>
+                                <button class="filter-btn">Dengan Foto</button>
+                            </div>
+                        </div>
+                        <div class="reviews-list">
+                            <div class="review-item">
+                                <div class="review-header">
+                                    <div class="reviewer-info">
+                                        <img src="images/user4.jpg" alt="Reviewer" class="reviewer-avatar">
+                                        <div class="reviewer-details">
+                                            <h4>Maya Septiani</h4>
+                                            <div class="review-date">5 Desember 2023</div>
+                                        </div>
+                                    </div>
+                                    <div class="stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                </div>
+                                <div class="review-content">
+                                    <p>Calathea Roseopicta saya datang dalam kondisi prima! Pola daunnya sangat indah dan warnanya lebih cerah dari yang saya harapkan. Tanaman ini benar-benar menjadi pusat perhatian di ruang tamu saya. Meskipun membutuhkan perhatian lebih dibanding tanaman lain, hasilnya sepadan dengan usaha!</p>
+                                </div>
+                                <div class="review-images">
+                                    <img src="images/review-calathea1.jpg" alt="Review Image">
+                                </div>
+                                <div class="review-footer">
+                                    <div class="review-helpful">
+                                        <span>Apakah ulasan ini membantu?</span>
+                                        <button class="helpful-btn">
+                                            <i class="fas fa-thumbs-up"></i>
+                                            Ya (47)
+                                        </button>
+                                        <button class="helpful-btn">
+                                            <i class="fas fa-thumbs-down"></i>
+                                            Tidak (3)
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="review-item">
+                                <div class="review-header">
+                                    <div class="reviewer-info">
+                                        <img src="images/user5.jpg" alt="Reviewer" class="reviewer-avatar">
+                                        <div class="reviewer-details">
+                                            <h4>Budi Santoso</h4>
+                                            <div class="review-date">22 November 2023</div>
+                                        </div>
+                                    </div>
+                                    <div class="stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                </div>
+                                <div class="review-content">
+                                    <p>Saya sangat terkesan dengan kualitas tanaman ini. Daunnya besar dan pola warnanya sangat jelas. Pengemasan sangat baik dan tanaman tiba dalam kondisi sempurna. Saya menaruhnya di kamar mandi yang terang dan tumbuh subur dengan kelembaban alami di sana.</p>
+                                </div>
+                                <div class="review-footer">
+                                    <div class="review-helpful">
+                                        <span>Apakah ulasan ini membantu?</span>
+                                        <button class="helpful-btn">
+                                            <i class="fas fa-thumbs-up"></i>
+                                            Ya (35)
+                                        </button>
+                                        <button class="helpful-btn">
+                                            <i class="fas fa-thumbs-down"></i>
+                                            Tidak (1)
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="review-item">
+                                <div class="review-header">
+                                    <div class="reviewer-info">
+                                        <img src="images/user6.jpg" alt="Reviewer" class="reviewer-avatar">
+                                        <div class="reviewer-details">
+                                            <h4>Anisa Rahma</h4>
+                                            <div class="review-date">10 November 2023</div>
+                                        </div>
+                                    </div>
+                                    <div class="stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                    </div>
+                                </div>
+                                <div class="review-content">
+                                    <p>Tanaman yang cantik tetapi butuh perhatian khusus! Saya belajar bahwa Calathea ini benar-benar membutuhkan kelembaban tinggi. Setelah saya pindahkan ke terrarium dengan humidifier kecil, tanaman ini benar-benar berkembang dan mengeluarkan daun baru setiap minggu!</p>
+                                </div>
+                                <div class="review-images">
+                                    <img src="images/review-calathea2.jpg" alt="Review Image">
+                                </div>
+                                <div class="review-footer">
+                                    <div class="review-helpful">
+                                        <span>Apakah ulasan ini membantu?</span>
+                                        <button class="helpful-btn">
+                                            <i class="fas fa-thumbs-up"></i>
+                                            Ya (28)
+                                        </button>
+                                        <button class="helpful-btn">
+                                            <i class="fas fa-thumbs-down"></i>
+                                            Tidak (0)
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pagination">
+                            <button class="pagination-btn" disabled>
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <div class="pagination-numbers">
+                                <button class="pagination-number active">1</button>
+                                <button class="pagination-number">2</button>
+                                <button class="pagination-number">3</button>
+                                <span class="pagination-ellipsis">...</span>
+                                <button class="pagination-number">6</button>
+                            </div>
+                            <button class="pagination-btn">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Shipping Tab -->
+                    <div id="shipping-tab" class="tab-panel">
+                        <h3>Informasi Pengiriman & Pengembalian</h3>
+                        <div class="shipping-info">
+                            <div class="shipping-item">
+                                <h4>Pengiriman</h4>
+                                <p>Kami mengirimkan tanaman ke seluruh Indonesia menggunakan jasa pengiriman terpercaya untuk memastikan tanaman Anda tiba dengan aman dan sehat.</p>
+                                <ul>
+                                    <li>Pengiriman gratis untuk pembelian di atas Rp 500.000</li>
+                                    <li>Estimasi waktu pengiriman: 2-5 hari kerja</li>
+                                    <li>Tanaman dikemas dengan hati-hati untuk mencegah kerusakan selama pengiriman</li>
+                                    <li>Nomor pelacakan akan diberikan setelah pesanan dikirim</li>
+                                </ul>
+                            </div>
+                            <div class="shipping-item">
+                                <h4>Pengembalian & Penukaran</h4>
+                                <p>Kepuasan Anda adalah prioritas kami. Jika Anda tidak puas dengan pembelian Anda, kami menawarkan kebijakan pengembalian yang mudah.</p>
+                                <ul>
+                                    <li>Pengembalian gratis dalam 7 hari setelah penerimaan</li>
+                                    <li>Tanaman harus dikembalikan dalam kondisi aslinya</li>
+                                    <li>Biaya pengiriman untuk pengembalian ditanggung oleh pembeli, kecuali jika tanaman rusak saat tiba</li>
+                                    <li>Pengembalian dana akan diproses dalam 3-5 hari kerja setelah tanaman diterima kembali</li>
+                                </ul>
+                            </div>
+                            <div class="shipping-item">
+                                <h4>Garansi Tanaman</h4>
+                                <p>Kami menawarkan garansi tanaman sehat selama 30 hari untuk memberikan Anda ketenangan pikiran dengan pembelian Anda.</p>
+                                <ul>
+                                    <li>Jika tanaman Anda mati dalam 30 hari pertama, kami akan menggantinya secara gratis</li>
+                                    <li>Foto tanaman yang rusak diperlukan untuk klaim garansi</li>
+                                    <li>Garansi tidak berlaku jika tanaman rusak karena perawatan yang tidak tepat</li>
+                                    <li>Hubungi layanan pelanggan kami untuk mengajukan klaim garansi</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <!-- Feedback Section -->
+        <div class="feedback-section">
+            <div class="container">
+                <h2 class="feedback-title">Kirim kritik/saran untuk kami</h2>
+                <p class="feedback-subtitle">Ceritakan kepada kami kritik dan/atau saran Anda</p>
+                <div class="feedback-form">
+                    <input type="text" placeholder="Masukkan kritik/saran" class="feedback-input">
+                    <button class="feedback-btn">KIRIM</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Footer -->
+        <div class="main-footer">
+            <div class="container">
+                <div class="footer-content">
+                    <!-- Company Info -->
+                    <div class="footer-company">
+                        <div class="footer-logo">
+                            <img src="images/logo.png" alt="The Secret Garden">
+                        </div>
+                        <p class="company-description">
+                            Toko tanaman hias terpercaya dengan berbagai koleksi tanaman berkualitas untuk mempercantik rumah dan ruangan Anda.
+                        </p>
+                        <div class="social-links">
+                            <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Links -->
+                    <div class="footer-links">
+                        <h3 class="footer-heading">Tautan Cepat</h3>
+                        <ul class="footer-menu">
+                            <li><a href="index.html">BERANDA</a></li>
+                            <li><a href="produk.html">PRODUK</a></li>
+                            <li><a href="kontak.html">KONTAK</a></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Categories -->
+                    <div class="footer-categories">
+                        <h3 class="footer-heading">Kategori</h3>
+                        <ul class="footer-menu">
+                            <li><a href="#">Tanaman Hias Bunga</a></li>
+                            <li><a href="#">Tanaman Hias Daun</a></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Contact Info -->
+                    <div class="footer-contact">
+                        <h3 class="footer-heading">Kontak Kami</h3>
+                        <ul class="contact-info">
+                            <li>
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Jl. Tanaman Indah No. 123, Purwokerto</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-phone-alt"></i>
+                                <span>0812-3456-7890</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-envelope"></i>
+                                <span>thesecretgarden@gmail.com</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Copyright -->
+        <div class="copyright">
+            <div class="container">
+                <p>© 2023 The Secret Garden. Hak Cipta Dilindungi.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Toast Notification -->
+    <div id="notification-toast" class="toast">
+        <div class="toast-content">
+            <div class="toast-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="toast-message">Produk telah ditambahkan ke keranjang!</div>
+        </div>
+        <button class="toast-close">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="js/detail.js"></script>
+</body>
+</html>

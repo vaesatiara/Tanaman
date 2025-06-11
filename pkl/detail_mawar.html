@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mawar Pink - The Secret Garden</title>
+    <link rel="stylesheet" href="css/detail_produk.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="images/logo.png" alt="The Secret Garden">
+                </a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">BERANDA</a></li>
+                    <li><a href="produk.html" class="active">PRODUK</a></li>
+                    <li><a href="kontak.html">KONTAK</a></li>
+                    <li><a href="tentang-kami.html">TENTANG KAMI</a></li>
+                </ul>
+            </nav>
+            <div class="icons">
+                <a href="keranjang.html"><i class="fas fa-shopping-cart"></i></a>
+                <a href="#"><i class="fas fa-user"></i></a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-container">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="index.html">Beranda</a>
+                <span class="separator">/</span>
+                <a href="produk.html">Produk</a>
+                <span class="separator">/</span>
+                <span class="current">Mawar Pink</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Detail -->
+    <section class="product-detail">
+        <div class="container">
+            <div class="product-detail-container">
+                <!-- Product Gallery -->
+                <div class="product-gallery">
+                    <div class="main-image">
+                        <img id="main-product-image" src="images/mawar pink.jpg" alt="Mawar Pink">
+                    </div>
+                    <div class="thumbnail-images">
+                        <div class="thumbnail active" data-image="images/mawar-pink1.jpg">
+                            <img src="images/mawar (1).jpeg" alt="Mawar Pink Thumbnail 1">
+                        </div>
+                        <div class="thumbnail" data-image="images/mawar-pink2.jpg">
+                            <img src="images/mawar (2).jpeg" alt="Mawar Pink Thumbnail 2">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Info -->
+                <div class="product-info">
+                    <span class="product-badge">Baru</span>
+                    <h1 class="product-title">Mawar Pink</h1>
+                    <div class="product-rating">
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <span class="rating-count">(4.9)</span>
+                    </div>
+                    <div class="product-price">
+                        <span class="price">Rp 85.000</span>
+                    </div>
+                    <div class="product-stock">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Stok tersedia</span>
+                    </div>
+                    <div class="product-description">
+                        <p>Mawar Pink (Rosa hybrida) adalah tanaman hias berbunga yang sangat populer dengan kelopak berwarna pink lembut yang elegan. Varietas ini memiliki bunga besar dengan aroma harum yang khas, cocok untuk mempercantik taman atau sebagai tanaman pot. Mawar kami adalah hasil budidaya berkualitas tinggi dengan ketahanan penyakit yang baik dan kemampuan berbunga terus menerus sepanjang tahun.</p>
+                    </div>
+                    <div class="product-quantity">
+                        <label>Jumlah:</label>
+                        <div class="quantity-input">
+                            <button class="quantity-btn minus">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <input type="number" value="1" min="1" max="10">
+                            <button class="quantity-btn plus">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="product-actions">
+                        <button id="add-to-cart-btn" class="btn primary-btn">
+                            <i class="fas fa-shopping-cart"></i>
+                            Tambahkan ke Keranjang
+                        </button>
+                        <button class="btn secondary-btn">
+                            <i class="fas fa-bolt"></i>
+                            Beli Sekarang
+                        </button>
+                    </div>
+                    <div class="product-delivery">
+                        <div class="delivery-item">
+                            <i class="fas fa-truck"></i>
+                            <span>Pengiriman gratis untuk pembelian di atas Rp 500.000</span>
+                        </div>
+                        <div class="delivery-item">
+                            <i class="fas fa-undo"></i>
+                            <span>Pengembalian gratis dalam 7 hari</span>
+                        </div>
+                        <div class="delivery-item">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Garansi tanaman sehat selama 30 hari</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Tabs -->
+    <section class="product-tabs">
+        <div class="container">
+            <div class="tabs-container">
+                <div class="tabs-header">
+                    <button class="tab-btn active" data-tab="description-tab">Deskripsi</button>
+                    <button class="tab-btn" data-tab="specifications-tab">Spesifikasi</button>
+                    <button class="tab-btn" data-tab="care-tab">Perawatan</button>
+                    <button class="tab-btn" data-tab="reviews-tab">Ulasan</button>
+                </div>
+                <div class="tabs-content">
+                    <!-- Description Tab -->
+                    <div id="description-tab" class="tab-panel active">
+                        <h3>Tentang Mawar Pink</h3>
+                        <p>Mawar Pink adalah salah satu varietas mawar hibrida paling populer di dunia. Dengan warna pink yang lembut dan romantis, bunga ini sering digunakan untuk berbagai acara spesial maupun sebagai penghias taman. Mawar kami berasal dari stek berkualitas tinggi yang telah melalui proses seleksi ketat untuk memastikan kualitas berbunga optimal dan ketahanan terhadap hama penyakit.</p>
+                        <p>Tanaman ini dapat tumbuh hingga ketinggian 1-1.5 meter dengan percabangan yang baik. Setiap batang mampu menghasilkan beberapa bunga dengan diameter 8-12 cm ketika mekar sempurna. Mawar Pink kami telah diadaptasi untuk iklim tropis sehingga lebih mudah dirawat dibanding varietas impor.</p>
+                        <h3>Fitur Utama</h3>
+                        <ul>
+                            <li>Bunga besar dengan warna pink lembut yang elegan</li>
+                            <li>Aroma harum khas mawar yang menyenangkan</li>
+                            <li>Tanaman kuat dengan ketahanan penyakit baik</li>
+                            <li>Dapat berbunga terus menerus sepanjang tahun</li>
+                            <li>Cocok untuk taman maupun pot besar</li>
+                            <li>Batang kokoh dengan duri minimal</li>
+                        </ul>
+                    </div>
+
+                    <!-- Specifications Tab -->
+                    <div id="specifications-tab" class="tab-panel">
+                        <h3>Spesifikasi Tanaman</h3>
+                        <table class="specs-table">
+                            <tr>
+                                <td>Nama Ilmiah</td>
+                                <td>Rosa hybrida</td>
+                            </tr>
+                            <tr>
+                                <td>Nama Umum</td>
+                                <td>Mawar Pink</td>
+                            </tr>
+                            <tr>
+                                <td>Varietas</td>
+                                <td>Pink Promise Hybrid Tea</td>
+                            </tr>
+                            <tr>
+                                <td>Asal</td>
+                                <td>Hibrida (dikembangkan untuk iklim tropis)</td>
+                            </tr>
+                            <tr>
+                                <td>Keluarga</td>
+                                <td>Rosaceae</td>
+                            </tr>
+                            <tr>
+                                <td>Tinggi Tanaman</td>
+                                <td>80-150 cm</td>
+                            </tr>
+                            <tr>
+                                <td>Diameter Bunga</td>
+                                <td>8-12 cm saat mekar penuh</td>
+                            </tr>
+                            <tr>
+                                <td>Warna Bunga</td>
+                                <td>Pink muda dengan gradasi lebih tua di tepi kelopak</td>
+                            </tr>
+                            <tr>
+                                <td>Jumlah Kelopak</td>
+                                <td>25-30 kelopak per bunga</td>
+                            </tr>
+                            <tr>
+                                <td>Aroma</td>
+                                <td>Harum sedang dengan nada buah</td>
+                            </tr>
+                            <tr>
+                                <td>Musim Berbunga</td>
+                                <td>Sepanjang tahun (dengan perawatan tepat)</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- Care Tab -->
+                    <div id="care-tab" class="tab-panel">
+                        <h3>Panduan Perawatan</h3>
+                        <div class="care-item">
+                            <div class="care-icon">
+                                <i class="fas fa-sun"></i>
+                            </div>
+                            <div class="care-content">
+                                <h4>Pencahayaan</h4>
+                                <p>Mawar Pink membutuhkan sinar matahari langsung minimal 6 jam sehari untuk berbunga optimal. Pilih lokasi terbuka dengan sirkulasi udara baik. Jika ditanam di pot, pastikan dapat menerima cukup sinar matahari. Di daerah sangat panas, tanaman bisa menerima naungan parsial di siang hari.</p>
+                            </div>
+                        </div>
+                        <div class="care-item">
+                            <div class="care-icon">
+                                <i class="fas fa-tint"></i>
+                            </div>
+                            <div class="care-content">
+                                <h4>Penyiraman</h4>
+                                <p>Siram secara teratur saat permukaan tanah mulai kering. Penyiraman yang baik adalah menyiram tanah langsung (bukan daun) hingga air keluar dari dasar pot. Hindari penyiraman berlebihan yang membuat tanah tergenang. Waktu terbaik menyiram adalah pagi hari.</p>
+                            </div>
+                        </div>
+                        <div class="care-item">
+                            <div class="care-icon">
+                                <i class="fas fa-seedling"></i>
+                            </div>
+                            <div class="care-content">
+                                <h4>Media Tanam & Pemupukan</h4>
+                                <p>Gunakan media tanam porous dengan drainase baik. Campuran tanah kebun, kompos, dan sekam bakar (2:1:1) sangat ideal. Beri pupuk khusus mawar setiap 4-6 minggu selama musim tanam. Pupuk kandang yang sudah matang juga baik diberikan setiap 3 bulan.</p>
+                            </div>
+                        </div>
+                        <div class="care-item">
+                            <div class="care-icon">
+                                <i class="fas fa-cut"></i>
+                            </div>
+                            <div class="care-content">
+                                <h4>Pemangkasan & Perawatan</h4>
+                                <p>Pangkas ranting yang mati atau lemah secara rutin. Setelah bunga layu, pangkas 1/3 batang di atas daun menghadap keluar untuk merangsang pertumbuhan baru. Periksa secara rutin hama seperti kutu daun dan penyakit seperti jamur daun. Semprot dengan pestisida organik jika diperlukan.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Reviews Tab -->
+                    <div id="reviews-tab" class="tab-panel">
+                        <div class="reviews-summary">
+                            <div class="rating-summary">
+                                <div class="average-rating">
+                                    <div class="rating-number">4.9</div>
+                                    <div class="stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                    <div class="rating-count">342 ulasan</div>
+                                </div>
+                                <div class="rating-bars">
+                                    <div class="rating-bar">
+                                        <div class="rating-level">
+                                            <i class="fas fa-star"></i>
+                                            <span>5</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 85%"></div>
+                                        </div>
+                                        <div class="rating-percent">85%</div>
+                                    </div>
+                                    <div class="rating-bar">
+                                        <div class="rating-level">
+                                            <i class="fas fa-star"></i>
+                                            <span>4</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 12%"></div>
+                                        </div>
+                                        <div class="rating-percent">12%</div>
+                                    </div>
+                                    <div class="rating-bar">
+                                        <div class="rating-level">
+                                            <i class="fas fa-star"></i>
+                                            <span>3</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 2%"></div>
+                                        </div>
+                                        <div class="rating-percent">2%</div>
+                                    </div>
+                                    <div class="rating-bar">
+                                        <div class="rating-level">
+                                            <i class="fas fa-star"></i>
+                                            <span>2</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 1%"></div>
+                                        </div>
+                                        <div class="rating-percent">1%</div>
+                                    </div>
+                                    <div class="rating-bar">
+                                        <div class="rating-level">
+                                            <i class="fas fa-star"></i>
+                                            <span>1</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 0%"></div>
+                                        </div>
+                                        <div class="rating-percent">0%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="reviews-list">
+                            <div class="review-item">
+                                <div class="review-header">
+                                    <div class="reviewer-info">
+                                        <img src="images/user11.jpg" alt="Reviewer" class="reviewer-avatar">
+                                        <div class="reviewer-details">
+                                            <h4>Rina Amelia</h4>
+                                            <div class="review-date">15 Mei 2024</div>
+                                        </div>
+                                    </div>
+                                    <div class="stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                </div>
+                                <div class="review-content">
+                                    <p>Mawar Pink ini benar-benar cantik! Tanaman datang dengan beberapa kuncup bunga dan dalam kondisi sangat sehat. Setelah 2 minggu, kuncup pertama mekar dengan sempurna - warnanya pink lembut yang sangat indah dengan gradasi sempurna. Aromanya harum tapi tidak terlalu kuat, sempurna untuk taman depan rumah saya. Sudah memesan lagi untuk hadiah ulang tahun teman!</p>
+                                </div>
+                                <div class="review-footer">
+                                    <div class="review-helpful">
+                                        <span>Apakah ulasan ini membantu?</span>
+                                        <button class="helpful-btn">
+                                            <i class="fas fa-thumbs-up"></i>
+                                            Ya (124)
+                                        </button>
+                                        <button class="helpful-btn">
+                                            <i class="fas fa-thumbs-down"></i>
+                                            Tidak (2)
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="review-item">
+                                <div class="review-header">
+                                    <div class="reviewer-info">
+                                        <img src="images/user12.jpg" alt="Reviewer" class="reviewer-avatar">
+                                        <div class="reviewer-details">
+                                            <h4>Budi Santoso</h4>
+                                            <div class="review-date">3 Mei 2024</div>
+                                        </div>
+                                    </div>
+                                    <div class="stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                </div>
+                                <div class="review-content">
+                                    <p>Saya membeli 5 tanaman Mawar Pink untuk border taman dan hasilnya luar biasa! Semua tanaman tumbuh subur dan sudah berbunga dua kali dalam 3 bulan. Yang saya suka adalah ketahanannya terhadap hama - tidak seperti mawar lain yang sering terkena kutu daun. Warna pinknya persis seperti di foto, sangat fotogenik! Perawatan juga lebih mudah dari yang saya kira.</p>
+                                </div>
+                                <div class="review-footer">
+                                    <div class="review-helpful">
+                                        <span>Apakah ulasan ini membantu?</span>
+                                        <button class="helpful-btn">
+                                            <i class="fas fa-thumbs-up"></i>
+                                            Ya (98)
+                                        </button>
+                                        <button class="helpful-btn">
+                                            <i class="fas fa-thumbs-down"></i>
+                                            Tidak (1)
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <!-- Feedback Section -->
+        <div class="feedback-section">
+            <div class="container">
+                <h2 class="feedback-title">Kirim kritik/saran untuk kami</h2>
+                <p class="feedback-subtitle">Ceritakan kepada kami kritik dan/atau saran Anda</p>
+                <div class="feedback-form">
+                    <input type="text" placeholder="Masukkan kritik/saran" class="feedback-input">
+                    <button class="feedback-btn">KIRIM</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Footer -->
+        <div class="main-footer">
+            <div class="container">
+                <div class="footer-content">
+                    <!-- Company Info -->
+                    <div class="footer-company">
+                        <div class="footer-logo">
+                            <img src="images/logo.png" alt="The Secret Garden">
+                        </div>
+                        <p class="company-description">
+                            Toko tanaman hias terpercaya dengan berbagai koleksi tanaman berkualitas untuk mempercantik rumah dan ruangan Anda.
+                        </p>
+                        <div class="social-links">
+                            <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Links -->
+                    <div class="footer-links">
+                        <h3 class="footer-heading">Tautan Cepat</h3>
+                        <ul class="footer-menu">
+                            <li><a href="index.html">BERANDA</a></li>
+                            <li><a href="produk.html">PRODUK</a></li>
+                            <li><a href="kontak.html">KONTAK</a></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Categories -->
+                    <div class="footer-categories">
+                        <h3 class="footer-heading">Kategori</h3>
+                        <ul class="footer-menu">
+                            <li><a href="#">Tanaman Hias Bunga</a></li>
+                            <li><a href="#">Tanaman Hias Daun</a></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Contact Info -->
+                    <div class="footer-contact">
+                        <h3 class="footer-heading">Kontak Kami</h3>
+                        <ul class="contact-info">
+                            <li>
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Jl. Tanaman Indah No. 123, Purwokerto</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-phone-alt"></i>
+                                <span>0812-3456-7890</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-envelope"></i>
+                                <span>thesecretgarden@gmail.com</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Copyright -->
+        <div class="copyright">
+            <div class="container">
+                <p>© 2024 The Secret Garden. Hak Cipta Dilindungi.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Toast Notification -->
+    <div id="notification-toast" class="toast">
+        <div class="toast-content">
+            <div class="toast-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="toast-message">Produk telah ditambahkan ke keranjang!</div>
+        </div>
+        <button class="toast-close">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="js/detail.js"></script>
+</body>
+</html>

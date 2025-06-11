@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ficus Elastica - The Secret Garden</title>
+    <link rel="stylesheet" href="css/detail_produk.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="images/logo.png" alt="The Secret Garden">
+                </a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">BERANDA</a></li>
+                    <li><a href="produk.html" class="active">PRODUK</a></li>
+                    <li><a href="kontak.html">KONTAK</a></li>
+                    <li><a href="tentang-kami.html">TENTANG KAMI</a></li>
+                </ul>
+            </nav>
+            <div class="icons">
+                <a href="cart.html"><i class="fas fa-shopping-cart"></i></a>
+                <a href="account.html"><i class="fas fa-user"></i></a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-container">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="index.html">Beranda</a>
+                <span class="separator">/</span>
+                <a href="produk.html">Produk</a>
+                <span class="separator">/</span>
+                <span class="current">Ficus Elastica</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Detail -->
+    <section class="product-detail">
+        <div class="container">
+            <div class="product-detail-container">
+                <!-- Product Gallery -->
+                <div class="product-gallery">
+                    <div class="main-image">
+                        <img id="main-product-image" src="images/ficus.jpg" alt="Ficus Elastica">
+                    </div>
+                    <div class="thumbnail-images">
+                        <div class="thumbnail active" data-image="images/ficus1.jpeg">
+                            <img src="images/ficus (2).jpeg" alt="Ficus Elastica Thumbnail 1">
+                        </div>
+                        <div class="thumbnail" data-image="images/ficus2.jpeg">
+                            <img src="images/ficus (1).jpeg" alt="Ficus Elastica Thumbnail 2">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Info -->
+                <div class="product-info">
+                    <span class="product-badge">Terlaris</span>
+                    <h1 class="product-title">Ficus Elastica</h1>
+                    <div class="product-rating">
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                        </div>
+                        <span class="rating-count">(4.5)</span>
+                    </div>
+                    <div class="product-price">
+                        <span class="original-price">Rp 450.000</span>
+                        <span class="price">Rp 399.000</span>
+                    </div>
+                    <div class="product-stock">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Stok tersedia</span>
+                    </div>
+                    <div class="product-description">
+                        <p>Ficus Elastica, juga dikenal sebagai Rubber Plant atau Karet Kebo, adalah tanaman hias populer dengan daun besar, tebal, dan mengkilap berwarna hijau tua. Tanaman tropis ini mudah dirawat dan tumbuh dengan baik di dalam ruangan, menjadikannya pilihan sempurna untuk menghiasi sudut rumah atau kantor.</p>
+                    </div>
+                    <div class="product-quantity">
+                        <label>Jumlah:</label>
+                        <div class="quantity-input">
+                            <button class="quantity-btn minus">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <input type="number" value="1" min="1" max="10">
+                            <button class="quantity-btn plus">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="product-actions">
+                        <button id="add-to-cart-btn" class="btn primary-btn">
+                            <i class="fas fa-shopping-cart"></i>
+                            Tambahkan ke Keranjang
+                        </button>
+                        <button class="btn secondary-btn">
+                            <i class="fas fa-bolt"></i>
+                            Beli Sekarang
+                        </button>
+                    </div>
+                    <div class="product-delivery">
+                        <div class="delivery-item">
+                            <i class="fas fa-truck"></i>
+                            <span>Pengiriman gratis untuk pembelian di atas Rp 500.000</span>
+                        </div>
+                        <div class="delivery-item">
+                            <i class="fas fa-undo"></i>
+                            <span>Pengembalian gratis dalam 7 hari</span>
+                        </div>
+                        <div class="delivery-item">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Garansi tanaman sehat selama 30 hari</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="product-tabs">
+        <div class="container">
+            <div class="tabs-container">
+                <div class="tabs-header">
+                    <button class="tab-btn active" data-tab="description-tab">Deskripsi</button>
+                    <button class="tab-btn" data-tab="specifications-tab">Spesifikasi</button>
+                    <button class="tab-btn" data-tab="care-tab">Perawatan</button>
+                    <button class="tab-btn" data-tab="reviews-tab">Ulasan</button>
+                    <button class="tab-btn" data-tab="shipping-tab">Pengiriman & Pengembalian</button>
+                </div>
+                <div class="tabs-content">
+                    <!-- Description Tab -->
+                    <div id="description-tab" class="tab-panel active">
+                        <h3>Tentang Ficus Elastica</h3>
+                        <p>Ficus Elastica adalah tanaman hias yang berasal dari Asia Tenggara dan India, dikenal sebagai tanaman karet karena getahnya yang dahulu digunakan untuk membuat karet. Tanaman ini memiliki daun besar, tebal, dan mengkilap dengan warna hijau tua yang kaya, terkadang dengan semburat merah atau ungu di bagian bawah daun.</p>
+                        <p>Sebagai tanaman hias dalam ruangan, Ficus Elastica dapat tumbuh hingga ketinggian 2-3 meter dengan perawatan yang tepat. Tanaman ini memiliki pertumbuhan yang tegak dan kokoh, membuatnya cocok sebagai focal point dalam dekorasi ruangan. Daun baru biasanya muncul dengan selubung merah muda yang indah sebelum terbuka sepenuhnya.</p>
+                        <p>Ficus Elastica termasuk tanaman yang relatif mudah dirawat dan dapat mentolerir berbagai kondisi dalam ruangan. Selain keindahannya, tanaman ini juga dikenal sebagai pemurni udara yang efektif.</p>
+                        <h3>Fitur Utama</h3>
+                        <ul>
+                            <li>Daun besar, tebal, dan mengkilap berwarna hijau tua</li>
+                            <li>Pertumbuhan tegak yang kokoh dan elegan</li>
+                            <li>Tanaman pemurni udara yang efektif</li>
+                            <li>Relatif mudah dirawat dibanding ficus lainnya</li>
+                            <li>Dapat tumbuh besar menjadi focal point ruangan</li>
+                        </ul>
+                    </div>
+
+                    <!-- Specifications Tab -->
+                    <div id="specifications-tab" class="tab-panel">
+                        <h3>Spesifikasi Tanaman</h3>
+                        <table class="specs-table">
+                            <tr>
+                                <td>Nama Ilmiah</td>
+                                <td>Ficus Elastica</td>
+                            </tr>
+                            <tr>
+                                <td>Nama Umum</td>
+                                <td>Rubber Plant, Rubber Tree, Karet Kebo</td>
+                            </tr>
+                            <tr>
+                                <td>Asal</td>
+                                <td>Asia Tenggara dan India</td>
+                            </tr>
+                            <tr>
+                                <td>Keluarga</td>
+                                <td>Moraceae</td>
+                            </tr>
+                            <tr>
+                                <td>Tinggi Maksimum</td>
+                                <td>2-3 meter (dalam ruangan)</td>
+                            </tr>
+                            <tr>
+                                <td>Lebar Maksimum</td>
+                                <td>1-1.5 meter</td>
+                            </tr>
+                            <tr>
+                                <td>Kecepatan Pertumbuhan</td>
+                                <td>Sedang hingga cepat dalam kondisi ideal</td>
+                            </tr>
+                            <tr>
+                                <td>Kebutuhan Cahaya</td>
+                                <td>Cahaya tidak langsung terang hingga sedang</td>
+                            </tr>
+                            <tr>
+                                <td>Kebutuhan Air</td>
+                                <td>Siram ketika 3-5 cm tanah atas kering</td>
+                            </tr>
+                            <tr>
+                                <td>Kelembaban</td>
+                                <td>Kelembaban sedang (40-50%)</td>
+                            </tr>
+                            <tr>
+                                <td>Suhu Ideal</td>
+                                <td>15-29°C</td>
+                            </tr>
+                            <tr>
+                                <td>Jenis Tanah</td>
+                                <td>Campuran tanah yang kaya, gembur, dan drainase baik</td>
+                            </tr>
+                            <tr>
+                                <td>Toksisitas</td>
+                                <td>Beracun bagi kucing dan anjing jika dikonsumsi</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- Care Tab -->
+                    <div id="care-tab" class="tab-panel">
+                        <h3>Panduan Perawatan</h3>
+                        <div class="care-item">
+                            <div class="care-icon">
+                                <i class="fas fa-sun"></i>
+                            </div>
+                            <div class="care-content">
+                                <h4>Pencahayaan</h4>
+                                <p>Ficus Elastica tumbuh paling baik di bawah cahaya tidak langsung terang hingga sedang. Hindari sinar matahari langsung yang dapat menyebabkan daun terbakar. Tanaman ini dapat mentolerir cahaya rendah tetapi pertumbuhannya akan melambat. Jika daun mulai rontok atau jarak antar daun memanjang, itu pertanda tanaman membutuhkan lebih banyak cahaya.</p>
+                            </div>
+                        </div>
+                        <div class="care-item">
+                            <div class="care-icon">
+                                <i class="fas fa-tint"></i>
+                            </div>
+                            <div class="care-content">
+                                <h4>Penyiraman</h4>
+                                <p>Siram ketika 3-5 cm lapisan atas tanah telah mengering. Ficus Elastica lebih menyukai tanah yang lembab tetapi tidak basah. Pastikan pot memiliki lubang drainase yang baik. Kurangi penyiraman selama bulan-bulan musim dingin. Daun menguning biasanya menandakan penyiraman berlebihan, sementara daun keriput menunjukkan kekurangan air.</p>
+                            </div>
+                        </div>
+                        <div class="care-item">
+                            <div class="care-icon">
+                                <i class="fas fa-temperature-high"></i>
+                            </div>
+                            <div class="care-content">
+                                <h4>Suhu & Kelembaban</h4>
+                                <p>Ficus Elastica menyukai suhu antara 15-29°C dan kelembaban sedang (40-50%). Hindari perubahan suhu mendadak dan aliran udara dingin/panas langsung. Untuk meningkatkan kelembaban, Anda dapat menyemprotkan air pada daun secara berkala atau meletakkan tanaman di atas nampan kerikil berisi air.</p>
+                            </div>
+                        </div>
+                        <div class="care-item">
+                            <div class="care-icon">
+                                <i class="fas fa-seedling"></i>
+                            </div>
+                            <div class="care-content">
+                                <h4>Tanah & Pemupukan</h4>
+                                <p>Gunakan campuran tanah yang kaya bahan organik dengan drainase baik. Campuran tanah pot dengan tambahan perlite atau pasir kasar sangat ideal. Pupuk setiap 4-6 minggu selama musim tanam (musim semi dan musim panas) dengan pupuk tanaman hias cair yang diencerkan setengah dari dosis yang direkomendasikan.</p>
+                            </div>
+                        </div>
+                        <div class="care-item">
+                            <div class="care-icon">
+                                <i class="fas fa-cut"></i>
+                            </div>
+                            <div class="care-content">
+                                <h4>Pemangkasan & Perawatan</h4>
+                                <p>Pangkas daun yang menguning atau rusak untuk menjaga penampilan tanaman. Untuk mengontrol tinggi tanaman, Anda bisa memotong batang utama - ini akan mendorong percabangan. Bersihkan daun secara teratur dengan kain lembab untuk menghilangkan debu. Ganti pot setiap 2-3 tahun di musim semi jika akar sudah memenuhi pot.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Reviews Tab -->
+                    <div id="reviews-tab" class="tab-panel">
+                        <div class="reviews-summary">
+                            <div class="rating-summary">
+                                <div class="average-rating">
+                                    <div class="rating-number">4.4</div>
+                                    <div class="stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                    <div class="rating-count">156 ulasan</div>
+                                </div>
+                                <div class="rating-bars">
+                                    <div class="rating-bar">
+                                        <div class="rating-level">
+                                            <i class="fas fa-star"></i>
+                                            <span>5</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 65%"></div>
+                                        </div>
+                                        <div class="rating-percent">65%</div>
+                                    </div>
+                                    <div class="rating-bar">
+                                        <div class="rating-level">
+                                            <i class="fas fa-star"></i>
+                                            <span>4</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 20%"></div>
+                                        </div>
+                                        <div class="rating-percent">20%</div>
+                                    </div>
+                                    <div class="rating-bar">
+                                        <div class="rating-level">
+                                            <i class="fas fa-star"></i>
+                                            <span>3</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 8%"></div>
+                                        </div>
+                                        <div class="rating-percent">8%</div>
+                                    </div>
+                                    <div class="rating-bar">
+                                        <div class="rating-level">
+                                            <i class="fas fa-star"></i>
+                                            <span>2</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 4%"></div>
+                                        </div>
+                                        <div class="rating-percent">4%</div>
+                                    </div>
+                                    <div class="rating-bar">
+                                        <div class="rating-level">
+                                            <i class="fas fa-star"></i>
+                                            <span>1</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 3%"></div>
+                                        </div>
+                                        <div class="rating-percent">3%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="reviews-filter">
+                            <div class="filter-label">Filter Ulasan:</div>
+                            <div class="filter-options">
+                                <button class="filter-btn active">Semua</button>
+                                <button class="filter-btn">5 Bintang</button>
+                                <button class="filter-btn">4 Bintang</button>
+                                <button class="filter-btn">3 Bintang</button>
+                                <button class="filter-btn">2 Bintang</button>
+                                <button class="filter-btn">1 Bintang</button>
+                                <button class="filter-btn">Dengan Foto</button>
+                            </div>
+                        </div>
+                        <div class="reviews-list">
+                            <div class="review-item">
+                                <div class="review-header">
+                                    <div class="reviewer-info">
+                                        <img src="images/user1.jpg" alt="Reviewer" class="reviewer-avatar">
+                                        <div class="reviewer-details">
+                                            <h4>Andi Pratama</h4>
+                                            <div class="review-date">5 Agustus 2023</div>
+                                        </div>
+                                    </div>
+                                    <div class="stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                </div>
+                                <div class="review-content">
+                                    <p>Tanaman datang dalam kondisi sangat baik! Daunnya besar-besar dan mengkilap. Sudah 2 bulan dan tanaman tumbuh subur dengan 3 daun baru. Pengemasan sangat rapi dan aman. Sangat puas dengan pembelian ini!</p>
+                                </div>
+                                <div class="review-images">
+                                    <img src="images/review-ficus1.jpg" alt="Review Image">
+                                </div>
+                                <div class="review-footer">
+                                    <div class="review-helpful">
+                                        <span>Apakah ulasan ini membantu?</span>
+                                        <button class="helpful-btn">
+                                            <i class="fas fa-thumbs-up"></i>
+                                            Ya (28)
+                                        </button>
+                                        <button class="helpful-btn">
+                                            <i class="fas fa-thumbs-down"></i>
+                                            Tidak (2)
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="review-item">
+                                <div class="review-header">
+                                    <div class="reviewer-info">
+                                        <img src="images/user2.jpg" alt="Reviewer" class="reviewer-avatar">
+                                        <div class="reviewer-details">
+                                            <h4>Siti Rahmawati</h4>
+                                            <div class="review-date">22 Juli 2023</div>
+                                        </div>
+                                    </div>
+                                    <div class="stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                </div>
+                                <div class="review-content">
+                                    <p>Ficus Elastica saya sangat indah! Daunnya mengkilap dan sehat. Ada sedikit kerusakan pada satu daun saat datang, tapi itu tidak masalah karena tanaman sudah menghasilkan daun baru yang sempurna. Perawatannya mudah sekali.</p>
+                                </div>
+                                <div class="review-footer">
+                                    <div class="review-helpful">
+                                        <span>Apakah ulasan ini membantu?</span>
+                                        <button class="helpful-btn">
+                                            <i class="fas fa-thumbs-up"></i>
+                                            Ya (15)
+                                        </button>
+                                        <button class="helpful-btn">
+                                            <i class="fas fa-thumbs-down"></i>
+                                            Tidak (1)
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="review-item">
+                                <div class="review-header">
+                                    <div class="reviewer-info">
+                                        <img src="images/user3.jpg" alt="Reviewer" class="reviewer-avatar">
+                                        <div class="reviewer-details">
+                                            <h4>Budi Santoso</h4>
+                                            <div class="review-date">10 Juli 2023</div>
+                                        </div>
+                                    </div>
+                                    <div class="stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                    </div>
+                                </div>
+                                <div class="review-content">
+                                    <p>Ini adalah Ficus pertama saya dan saya sangat terkesan. Tanaman datang dengan baik dikemas dan dalam kondisi baik. Sudah 6 minggu dan tanaman tetap sehat dengan perawatan dasar. Daunnya yang mengkilap benar-benar menambah kesan elegan di ruang kerja saya.</p>
+                                </div>
+                                <div class="review-images">
+                                    <img src="images/review-ficus2.jpg" alt="Review Image">
+                                </div>
+                                <div class="review-footer">
+                                    <div class="review-helpful">
+                                        <span>Apakah ulasan ini membantu?</span>
+                                        <button class="helpful-btn">
+                                            <i class="fas fa-thumbs-up"></i>
+                                            Ya (22)
+                                        </button>
+                                        <button class="helpful-btn">
+                                            <i class="fas fa-thumbs-down"></i>
+                                            Tidak (0)
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pagination">
+                            <button class="pagination-btn" disabled>
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <div class="pagination-numbers">
+                                <button class="pagination-number active">1</button>
+                                <button class="pagination-number">2</button>
+                                <button class="pagination-number">3</button>
+                                <span class="pagination-ellipsis">...</span>
+                                <button class="pagination-number">7</button>
+                            </div>
+                            <button class="pagination-btn">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Shipping Tab -->
+                    <div id="shipping-tab" class="tab-panel">
+                        <h3>Informasi Pengiriman & Pengembalian</h3>
+                        <div class="shipping-info">
+                            <div class="shipping-item">
+                                <h4>Pengiriman</h4>
+                                <p>Kami mengirimkan tanaman ke seluruh Indonesia menggunakan jasa pengiriman terpercaya untuk memastikan tanaman Anda tiba dengan aman dan sehat.</p>
+                                <ul>
+                                    <li>Pengiriman gratis untuk pembelian di atas Rp 500.000</li>
+                                    <li>Estimasi waktu pengiriman: 2-5 hari kerja</li>
+                                    <li>Tanaman dikemas dengan hati-hati untuk mencegah kerusakan selama pengiriman</li>
+                                    <li>Nomor pelacakan akan diberikan setelah pesanan dikirim</li>
+                                </ul>
+                            </div>
+                            <div class="shipping-item">
+                                <h4>Pengembalian & Penukaran</h4>
+                                <p>Kepuasan Anda adalah prioritas kami. Jika Anda tidak puas dengan pembelian Anda, kami menawarkan kebijakan pengembalian yang mudah.</p>
+                                <ul>
+                                    <li>Pengembalian gratis dalam 7 hari setelah penerimaan</li>
+                                    <li>Tanaman harus dikembalikan dalam kondisi aslinya</li>
+                                    <li>Biaya pengiriman untuk pengembalian ditanggung oleh pembeli, kecuali jika tanaman rusak saat tiba</li>
+                                    <li>Pengembalian dana akan diproses dalam 3-5 hari kerja setelah tanaman diterima kembali</li>
+                                </ul>
+                            </div>
+                            <div class="shipping-item">
+                                <h4>Garansi Tanaman</h4>
+                                <p>Kami menawarkan garansi tanaman sehat selama 30 hari untuk memberikan Anda ketenangan pikiran dengan pembelian Anda.</p>
+                                <ul>
+                                    <li>Jika tanaman Anda mati dalam 30 hari pertama, kami akan menggantinya secara gratis</li>
+                                    <li>Foto tanaman yang rusak diperlukan untuk klaim garansi</li>
+                                    <li>Garansi tidak berlaku jika tanaman rusak karena perawatan yang tidak tepat</li>
+                                    <li>Hubungi layanan pelanggan kami untuk mengajukan klaim garansi</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <!-- Feedback Section -->
+        <div class="feedback-section">
+            <div class="container">
+                <h2 class="feedback-title">Kirim kritik/saran untuk kami</h2>
+                <p class="feedback-subtitle">Ceritakan kepada kami kritik dan/atau saran Anda</p>
+                <div class="feedback-form">
+                    <input type="text" placeholder="Masukkan kritik/saran" class="feedback-input">
+                    <button class="feedback-btn">KIRIM</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Footer -->
+        <div class="main-footer">
+            <div class="container">
+                <div class="footer-content">
+                    <!-- Company Info -->
+                    <div class="footer-company">
+                        <div class="footer-logo">
+                            <img src="images/logo.png" alt="The Secret Garden">
+                        </div>
+                        <p class="company-description">
+                            Toko tanaman hias terpercaya dengan berbagai koleksi tanaman berkualitas untuk mempercantik rumah dan ruangan Anda.
+                        </p>
+                        <div class="social-links">
+                            <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Links -->
+                    <div class="footer-links">
+                        <h3 class="footer-heading">Tautan Cepat</h3>
+                        <ul class="footer-menu">
+                            <li><a href="index.html">BERANDA</a></li>
+                            <li><a href="produk.html">PRODUK</a></li>
+                            <li><a href="kontak.html">KONTAK</a></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Categories -->
+                    <div class="footer-categories">
+                        <h3 class="footer-heading">Kategori</h3>
+                        <ul class="footer-menu">
+                            <li><a href="#">Tanaman Hias Bunga</a></li>
+                            <li><a href="#">Tanaman Hias Daun</a></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Contact Info -->
+                    <div class="footer-contact">
+                        <h3 class="footer-heading">Kontak Kami</h3>
+                        <ul class="contact-info">
+                            <li>
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Jl. Tanaman Indah No. 123, Purwokerto</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-phone-alt"></i>
+                                <span>0812-3456-7890</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-envelope"></i>
+                                <span>thesecretgarden@gmail.com</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Copyright -->
+        <div class="copyright">
+            <div class="container">
+                <p>© 2023 The Secret Garden. Hak Cipta Dilindungi.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Toast Notification -->
+    <div id="notification-toast" class="toast">
+        <div class="toast-content">
+            <div class="toast-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="toast-message">Produk telah ditambahkan ke keranjang!</div>
+        </div>
+        <button class="toast-close">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="js/detail.js"></script>
+</body>
+</html>

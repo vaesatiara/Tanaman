@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calathea Pinstripe - The Secret Garden</title>
+    <link rel="stylesheet" href="css/detail_produk.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="images/logo.png" alt="The Secret Garden">
+                </a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">BERANDA</a></li>
+                    <li><a href="produk.html" class="active">PRODUK</a></li>
+                    <li><a href="kontak.html">KONTAK</a></li>
+                    <li><a href="tentang-kami.html">TENTANG KAMI</a></li>
+                </ul>
+            </nav>
+            <div class="icons">
+                <a href="cart.html"><i class="fas fa-shopping-cart"></i></a>
+                <a href="account.html"><i class="fas fa-user"></i></a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-container">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="index.html">Beranda</a>
+                <span class="separator">/</span>
+                <a href="produk.html">Produk</a>
+                <span class="separator">/</span>
+                <span class="current">Calathea Pinstripe</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Detail -->
+    <section class="product-detail">
+        <div class="container">
+            <div class="product-detail-container">
+                <!-- Product Gallery -->
+                <div class="product-gallery">
+                    <div class="main-image">
+                        <img id="main-product-image" src="images/calathea pinstripe.jpg" alt="Calathea Pinstripe">
+                    </div>
+                    <div class="thumbnail-images">
+                        <div class="thumbnail active" data-image="images/pinstripe1.jpeg">
+                            <img src="images/pinstripe (1).jpeg" alt="Calathea Pinstripe Thumbnail 1">
+                        </div>
+                        <div class="thumbnail" data-image="images/pinstripe2.jpeg">
+                            <img src="images/pinstripe (2).jpeg" alt="Calathea Pinstripe Thumbnail 2">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Info -->
+                <div class="product-info">
+                    <h1 class="product-title">Calathea Pinstripe</h1>
+                    <div class="product-rating">
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <span class="rating-count">(4.3)</span>
+                    </div>
+                    <div class="product-price">
+                        <span class="original-price">Rp 425.000</span>
+                        <span class="price">Rp 375.000</span>
+                    </div>
+                    <div class="product-stock">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Stok tersedia (Hanya 5 tersisa)</span>
+                    </div>
+                    <div class="product-description">
+                        <p>Calathea Pinstripe (Calathea Ornata) adalah tanaman hias eksklusif dengan daun hijau gelap bergaris-garis pink halus seperti garis pensil. Tanaman tropis ini dikenal dengan gerakan daunnya yang unik (nyctinasty) dan membutuhkan perawatan khusus untuk mempertahankan keindahan garis-garisnya yang memukau.</p>
+                    </div>
+                    <div class="product-quantity">
+                        <label>Jumlah:</label>
+                        <div class="quantity-input">
+                            <button class="quantity-btn minus">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <input type="number" value="1" min="1" max="5">
+                            <button class="quantity-btn plus">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="product-actions">
+                        <button id="add-to-cart-btn" class="btn primary-btn">
+                            <i class="fas fa-shopping-cart"></i>
+                            Tambahkan ke Keranjang
+                        </button>
+                        <button class="btn secondary-btn">
+                            <i class="fas fa-bolt"></i>
+                            Beli Sekarang
+                        </button>
+                    </div>
+                    <div class="product-delivery">
+                        <div class="delivery-item">
+                            <i class="fas fa-truck"></i>
+                            <span>Pengiriman gratis untuk pembelian di atas Rp 500.000</span>
+                        </div>
+                        <div class="delivery-item">
+                            <i class="fas fa-undo"></i>
+                            <span>Pengembalian gratis dalam 7 hari</span>
+                        </div>
+                        <div class="delivery-item">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Garansi tanaman sehat selama 30 hari</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Tabs -->
+    <section class="product-tabs">
+        <div class="container">
+            <div class="tabs-container">
+                <div class="tabs-header">
+                    <button class="tab-btn active" data-tab="description-tab">Deskripsi</button>
+                    <button class="tab-btn" data-tab="specifications-tab">Spesifikasi</button>
+                    <button class="tab-btn" data-tab="care-tab">Perawatan</button>
+                    <button class="tab-btn" data-tab="reviews-tab">Ulasan</button>
+                    <button class="tab-btn" data-tab="shipping-tab">Pengiriman & Pengembalian</button>
+                </div>
+                <div class="tabs-content">
+                    <!-- Description Tab -->
+                    <div id="description-tab" class="tab-panel active">
+                        <h3>Tentang Calathea Pinstripe</h3>
+                        <p>Calathea Pinstripe (Calathea Ornata) adalah tanaman hias yang memukau dari keluarga Marantaceae, berasal dari hutan hujan tropis Amerika Selatan. Tanaman ini terkenal dengan daunnya yang berwarna hijau tua dengan garis-garis pink halus seperti goresan pensil, memberikan kesan elegan dan modern.</p>
+                        <p>Seperti semua Calathea, Pinstripe menunjukkan gerakan daun yang unik (nyctinasty) - daunnya akan menutup ke atas pada malam hari seperti tangan yang sedang berdoa, lalu terbuka kembali di pagi hari. Tanaman ini tumbuh hingga ketinggian sekitar 50-70 cm saat dewasa, dengan daun mencapai panjang 20-30 cm.</p>
+                        <p>Calathea Pinstripe termasuk tanaman yang membutuhkan perhatian khusus dalam perawatannya, terutama untuk menjaga kelembaban dan kualitas air. Namun, keindahannya yang memukau membuat semua usaha perawatan menjadi sangat berharga.</p>
+                        <h3>Fitur Utama</h3>
+                        <ul>
+                            <li>Daun hijau gelap dengan garis-garis pink halus seperti goresan pensil</li>
+                            <li>Gerakan daun unik (nyctinasty) yang merespon cahaya</li>
+                            <li>Ukuran ideal untuk tanaman hias dalam ruangan (50-70 cm)</li>
+                            <li>Tanaman pemurni udara yang efektif</li>
+                            <li>Memberikan sentuhan tropis elegan dengan nuansa modern</li>
+                        </ul>
+                    </div>
+
+                    <!-- Specifications Tab -->
+                    <div id="specifications-tab" class="tab-panel">
+                        <h3>Spesifikasi Tanaman</h3>
+                        <table class="specs-table">
+                            <tr>
+                                <td>Nama Ilmiah</td>
+                                <td>Calathea Ornata</td>
+                            </tr>
+                            <tr>
+                                <td>Nama Umum</td>
+                                <td>Pinstripe Calathea, Pinstripe Prayer Plant</td>
+                            </tr>
+                            <tr>
+                                <td>Asal</td>
+                                <td>Hutan hujan tropis Amerika Selatan (Kolombia, Venezuela)</td>
+                            </tr>
+                            <tr>
+                                <td>Keluarga</td>
+                                <td>Marantaceae</td>
+                            </tr>
+                            <tr>
+                                <td>Tinggi Maksimum</td>
+                                <td>50-70 cm (dalam ruangan)</td>
+                            </tr>
+                            <tr>
+                                <td>Lebar Maksimum</td>
+                                <td>40-50 cm</td>
+                            </tr>
+                            <tr>
+                                <td>Kecepatan Pertumbuhan</td>
+                                <td>Sedang</td>
+                            </tr>
+                            <tr>
+                                <td>Kebutuhan Cahaya</td>
+                                <td>Cahaya tidak langsung sedang hingga rendah</td>
+                            </tr>
+                            <tr>
+                                <td>Kebutuhan Air</td>
+                                <td>Tanah harus tetap lembab tetapi tidak basah</td>
+                            </tr>
+                            <tr>
+                                <td>Kelembaban</td>
+                                <td>Membutuhkan kelembaban tinggi (minimal 60%)</td>
+                            </tr>
+                            <tr>
+                                <td>Suhu Ideal</td>
+                                <td>18-27°C (tidak tahan suhu di bawah 15°C)</td>
+                            </tr>
+                            <tr>
+                                <td>Jenis Tanah</td>
+                                <td>Campuran tanah porous dengan banyak bahan organik</td>
+                            </tr>
+                            <tr>
+                                <td>Toksisitas</td>
+                                <td>Aman untuk manusia dan hewan peliharaan</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- Care Tab -->
+                    <div id="care-tab" class="tab-panel">
+                        <h3>Panduan Perawatan</h3>
+                        <div class="care-item">
+                            <div class="care-icon">
+                                <i class="fas fa-sun"></i>
+                            </div>
+                            <div class="care-content">
+                                <h4>Pencahayaan</h4>
+                                <p>Calathea Pinstripe tumbuh optimal di bawah cahaya tidak langsung sedang hingga rendah. Hindari sinar matahari langsung yang dapat memudarkan garis-garis pink dan menyebabkan daun terbakar. Tempat ideal adalah 2-3 meter dari jendela timur atau utara. Daun akan mengembangkan warna terbaik dalam cahaya terang tidak langsung.</p>
+                            </div>
+                        </div>
+                        <div class="care-item">
+                            <div class="care-icon">
+                                <i class="fas fa-tint"></i>
+                            </div>
+                            <div class="care-content">
+                                <h4>Penyiraman</h4>
+                                <p>Gunakan air suling, air hujan, atau air yang telah didiamkan semalaman. Siram ketika 2-3 cm lapisan atas tanah mulai mengering. Jaga tanah tetap lembab tetapi tidak basah. Calathea Pinstripe sangat sensitif terhadap fluoride dan klorin dalam air keran yang dapat menyebabkan ujung daun coklat. Kurangi penyiraman di musim dingin.</p>
+                            </div>
+                        </div>
+                        <div class="care-item">
+                            <div class="care-icon">
+                                <i class="fas fa-temperature-high"></i>
+                            </div>
+                            <div class="care-content">
+                                <h4>Suhu & Kelembaban</h4>
+                                <p>Suhu ideal 18-27°C dengan kelembaban minimal 60%. Gunakan humidifier atau letakkan tanaman di atas nampan kerikil berisi air. Kelompokkan dengan tanaman lain untuk menciptakan mikro-iklim lembab. Hindari aliran udara dingin/panas langsung dari AC atau pemanas. Semprot daun dengan air suling 2-3 kali seminggu.</p>
+                            </div>
+                        </div>
+                        <div class="care-item">
+                            <div class="care-icon">
+                                <i class="fas fa-seedling"></i>
+                            </div>
+                            <div class="care-content">
+                                <h4>Tanah & Pemupukan</h4>
+                                <p>Gunakan campuran tanah porous: 50% tanah pot, 30% perlite/orchid bark, 20% coco coir. Pupuk setiap 3-4 minggu di musim tanam (April-September) dengan pupuk cair seimbang yang diencerkan 1/2 dosis. Hindari pemupukan berlebihan yang dapat menyebabkan akumulasi garam. Flush tanah setiap 2-3 bulan dengan air mengalir.</p>
+                            </div>
+                        </div>
+                        <div class="care-item">
+                            <div class="care-icon">
+                                <i class="fas fa-cut"></i>
+                            </div>
+                            <div class="care-content">
+                                <h4>Pemangkasan & Perawatan</h4>
+                                <p>Pangkas daun yang menguning atau rusak dengan gunting steril. Bersihkan daun dengan kain lembab secara rutin. Rotasi tanaman 90° setiap minggu untuk pertumbuhan simetris. Ganti pot setiap 1-2 tahun di musim semi. Periksa hama seperti spider mites secara berkala, terutama di bawah daun.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Reviews Tab -->
+                    <div id="reviews-tab" class="tab-panel">
+                        <div class="reviews-summary">
+                            <div class="rating-summary">
+                                <div class="average-rating">
+                                    <div class="rating-number">4.3</div>
+                                    <div class="stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                    </div>
+                                    <div class="rating-count">97 ulasan</div>
+                                </div>
+                                <div class="rating-bars">
+                                    <div class="rating-bar">
+                                        <div class="rating-level">
+                                            <i class="fas fa-star"></i>
+                                            <span>5</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 68%"></div>
+                                        </div>
+                                        <div class="rating-percent">68%</div>
+                                    </div>
+                                    <div class="rating-bar">
+                                        <div class="rating-level">
+                                            <i class="fas fa-star"></i>
+                                            <span>4</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 18%"></div>
+                                        </div>
+                                        <div class="rating-percent">18%</div>
+                                    </div>
+                                    <div class="rating-bar">
+                                        <div class="rating-level">
+                                            <i class="fas fa-star"></i>
+                                            <span>3</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 8%"></div>
+                                        </div>
+                                        <div class="rating-percent">8%</div>
+                                    </div>
+                                    <div class="rating-bar">
+                                        <div class="rating-level">
+                                            <i class="fas fa-star"></i>
+                                            <span>2</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 4%"></div>
+                                        </div>
+                                        <div class="rating-percent">4%</div>
+                                    </div>
+                                    <div class="rating-bar">
+                                        <div class="rating-level">
+                                            <i class="fas fa-star"></i>
+                                            <span>1</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 2%"></div>
+                                        </div>
+                                        <div class="rating-percent">2%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="reviews-filter">
+                            <div class="filter-label">Filter Ulasan:</div>
+                            <div class="filter-options">
+                                <button class="filter-btn active">Semua</button>
+                                <button class="filter-btn">5 Bintang</button>
+                                <button class="filter-btn">4 Bintang</button>
+                                <button class="filter-btn">3 Bintang</button>
+                                <button class="filter-btn">2 Bintang</button>
+                                <button class="filter-btn">1 Bintang</button>
+                                <button class="filter-btn">Dengan Foto</button>
+                            </div>
+                        </div>
+                        <div class="reviews-list">
+                            <div class="review-item">
+                                <div class="review-header">
+                                    <div class="reviewer-info">
+                                        <img src="images/user1.jpg" alt="Reviewer" class="reviewer-avatar">
+                                        <div class="reviewer-details">
+                                            <h4>Maya Sari</h4>
+                                            <div class="review-date">15 Juni 2023</div>
+                                        </div>
+                                    </div>
+                                    <div class="stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                </div>
+                                <div class="review-content">
+                                    <p>Calathea Pinstripe saya datang dalam kondisi sempurna! Garis-garis pinknya sangat jelas dan indah. Sudah 3 minggu dan tanaman tetap sehat meskipun saya pemula. Pengiriman sangat cepat dan pengemasan sangat aman. Sangat direkomendasikan!</p>
+                                </div>
+                                <div class="review-images">
+                                    <img src="images/review-pinstripe1.jpg" alt="Review Image">
+                                </div>
+                                <div class="review-footer">
+                                    <div class="review-helpful">
+                                        <span>Apakah ulasan ini membantu?</span>
+                                        <button class="helpful-btn">
+                                            <i class="fas fa-thumbs-up"></i>
+                                            Ya (25)
+                                        </button>
+                                        <button class="helpful-btn">
+                                            <i class="fas fa-thumbs-down"></i>
+                                            Tidak (2)
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="review-item">
+                                <div class="review-header">
+                                    <div class="reviewer-info">
+                                        <img src="images/user2.jpg" alt="Reviewer" class="reviewer-avatar">
+                                        <div class="reviewer-details">
+                                            <h4>Budi Setiawan</h4>
+                                            <div class="review-date">2 Juni 2023</div>
+                                        </div>
+                                    </div>
+                                    <div class="stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                </div>
+                                <div class="review-content">
+                                    <p>Tanaman sangat cantik tapi butuh perhatian ekstra. Awalnya ada sedikit masalah dengan ujung daun coklat, tapi setelah saya gunakan air suling dan humidifier, tanaman tumbuh subur. Garis-garis pinknya benar-benar unik dan menjadi pusat perhatian di ruang tamu saya.</p>
+                                </div>
+                                <div class="review-footer">
+                                    <div class="review-helpful">
+                                        <span>Apakah ulasan ini membantu?</span>
+                                        <button class="helpful-btn">
+                                            <i class="fas fa-thumbs-up"></i>
+                                            Ya (17)
+                                        </button>
+                                        <button class="helpful-btn">
+                                            <i class="fas fa-thumbs-down"></i>
+                                            Tidak (1)
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="review-item">
+                                <div class="review-header">
+                                    <div class="reviewer-info">
+                                        <img src="images/user3.jpg" alt="Reviewer" class="reviewer-avatar">
+                                        <div class="reviewer-details">
+                                            <h4>Rina Wijaya</h4>
+                                            <div class="review-date">20 Mei 2023</div>
+                                        </div>
+                                    </div>
+                                    <div class="stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                    </div>
+                                </div>
+                                <div class="review-content">
+                                    <p>Saya jatuh cinta pada pandangan pertama dengan Calathea Pinstripe ini! Pola garis-garisnya seperti karya seni. Tanaman datang dengan beberapa daun kecil rusak tapi setelah 2 minggu sudah tumbuh 3 daun baru yang sempurna. Perawatannya memang tidak mudah tapi sangat memuaskan.</p>
+                                </div>
+                                <div class="review-images">
+                                    <img src="images/review-pinstripe2.jpg" alt="Review Image">
+                                    <img src="images/review-pinstripe3.jpg" alt="Review Image">
+                                </div>
+                                <div class="review-footer">
+                                    <div class="review-helpful">
+                                        <span>Apakah ulasan ini membantu?</span>
+                                        <button class="helpful-btn">
+                                            <i class="fas fa-thumbs-up"></i>
+                                            Ya (21)
+                                        </button>
+                                        <button class="helpful-btn">
+                                            <i class="fas fa-thumbs-down"></i>
+                                            Tidak (3)
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pagination">
+                            <button class="pagination-btn" disabled>
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <div class="pagination-numbers">
+                                <button class="pagination-number active">1</button>
+                                <button class="pagination-number">2</button>
+                                <button class="pagination-number">3</button>
+                                <span class="pagination-ellipsis">...</span>
+                                <button class="pagination-number">5</button>
+                            </div>
+                            <button class="pagination-btn">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Shipping Tab -->
+                    <div id="shipping-tab" class="tab-panel">
+                        <h3>Informasi Pengiriman & Pengembalian</h3>
+                        <div class="shipping-info">
+                            <div class="shipping-item">
+                                <h4>Pengiriman</h4>
+                                <p>Kami mengirimkan tanaman ke seluruh Indonesia menggunakan jasa pengiriman terpercaya untuk memastikan tanaman Anda tiba dengan aman dan sehat.</p>
+                                <ul>
+                                    <li>Pengiriman gratis untuk pembelian di atas Rp 500.000</li>
+                                    <li>Estimasi waktu pengiriman: 2-5 hari kerja</li>
+                                    <li>Tanaman dikemas dengan hati-hati untuk mencegah kerusakan selama pengiriman</li>
+                                    <li>Nomor pelacakan akan diberikan setelah pesanan dikirim</li>
+                                </ul>
+                            </div>
+                            <div class="shipping-item">
+                                <h4>Pengembalian & Penukaran</h4>
+                                <p>Kepuasan Anda adalah prioritas kami. Jika Anda tidak puas dengan pembelian Anda, kami menawarkan kebijakan pengembalian yang mudah.</p>
+                                <ul>
+                                    <li>Pengembalian gratis dalam 7 hari setelah penerimaan</li>
+                                    <li>Tanaman harus dikembalikan dalam kondisi aslinya</li>
+                                    <li>Biaya pengiriman untuk pengembalian ditanggung oleh pembeli, kecuali jika tanaman rusak saat tiba</li>
+                                    <li>Pengembalian dana akan diproses dalam 3-5 hari kerja setelah tanaman diterima kembali</li>
+                                </ul>
+                            </div>
+                            <div class="shipping-item">
+                                <h4>Garansi Tanaman</h4>
+                                <p>Kami menawarkan garansi tanaman sehat selama 30 hari untuk memberikan Anda ketenangan pikiran dengan pembelian Anda.</p>
+                                <ul>
+                                    <li>Jika tanaman Anda mati dalam 30 hari pertama, kami akan menggantinya secara gratis</li>
+                                    <li>Foto tanaman yang rusak diperlukan untuk klaim garansi</li>
+                                    <li>Garansi tidak berlaku jika tanaman rusak karena perawatan yang tidak tepat</li>
+                                    <li>Hubungi layanan pelanggan kami untuk mengajukan klaim garansi</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <!-- Feedback Section -->
+        <div class="feedback-section">
+            <div class="container">
+                <h2 class="feedback-title">Kirim kritik/saran untuk kami</h2>
+                <p class="feedback-subtitle">Ceritakan kepada kami kritik dan/atau saran Anda</p>
+                <div class="feedback-form">
+                    <input type="text" placeholder="Masukkan kritik/saran" class="feedback-input">
+                    <button class="feedback-btn">KIRIM</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Footer -->
+        <div class="main-footer">
+            <div class="container">
+                <div class="footer-content">
+                    <!-- Company Info -->
+                    <div class="footer-company">
+                        <div class="footer-logo">
+                            <img src="images/logo.png" alt="The Secret Garden">
+                        </div>
+                        <p class="company-description">
+                            Toko tanaman hias terpercaya dengan berbagai koleksi tanaman berkualitas untuk mempercantik rumah dan ruangan Anda.
+                        </p>
+                        <div class="social-links">
+                            <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Links -->
+                    <div class="footer-links">
+                        <h3 class="footer-heading">Tautan Cepat</h3>
+                        <ul class="footer-menu">
+                            <li><a href="index.html">BERANDA</a></li>
+                            <li><a href="produk.html">PRODUK</a></li>
+                            <li><a href="kontak.html">KONTAK</a></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Categories -->
+                    <div class="footer-categories">
+                        <h3 class="footer-heading">Kategori</h3>
+                        <ul class="footer-menu">
+                            <li><a href="#">Tanaman Hias Bunga</a></li>
+                            <li><a href="#">Tanaman Hias Daun</a></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Contact Info -->
+                    <div class="footer-contact">
+                        <h3 class="footer-heading">Kontak Kami</h3>
+                        <ul class="contact-info">
+                            <li>
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Jl. Tanaman Indah No. 123, Purwokerto</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-phone-alt"></i>
+                                <span>0812-3456-7890</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-envelope"></i>
+                                <span>thesecretgarden@gmail.com</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Copyright -->
+        <div class="copyright">
+            <div class="container">
+                <p>© 2023 The Secret Garden. Hak Cipta Dilindungi.</p>
+            </div>
+        </div>
+    </footer>
+<script>
+        function showTab(tabName) {
+            // Sembunyikan semua tab pane
+            const tabPanes = document.querySelectorAll('.tab-pane');
+            tabPanes.forEach(pane => {
+                pane.classList.remove('active');
+            });
+            
+            // Hapus class active dari semua button
+            const tabButtons = document.querySelectorAll('.tab-button');
+            tabButtons.forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // Tampilkan tab yang dipilih
+            document.getElementById(tabName).classList.add('active');
+            
+            // Tambahkan class active ke button yang diklik
+            event.target.classList.add('active');
+        }
+        
+        // Optional: Tambahkan keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+                const activeButton = document.querySelector('.tab-button.active');
+                const buttons = Array.from(document.querySelectorAll('.tab-button'));
+                const currentIndex = buttons.indexOf(activeButton);
+                
+                let newIndex;
+                if (e.key === 'ArrowLeft') {
+                    newIndex = currentIndex > 0 ? currentIndex - 1 : buttons.length - 1;
+                } else {
+                    newIndex = currentIndex < buttons.length - 1 ? currentIndex + 1 : 0;
+                }
+                
+                buttons[newIndex].click();
+            }
+        });
+    </script>
+</body>
+</html>

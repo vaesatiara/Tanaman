@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anggrek - The Secret Garden</title>
+    <link rel="stylesheet" href="css/detail_produk.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="images/logo.png" alt="The Secret Garden">
+                </a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">BERANDA</a></li>
+                    <li><a href="produk.html" class="active">PRODUK</a></li>
+                    <li><a href="kontak.html">KONTAK</a></li>
+                    <li><a href="tentang-kami.html">TENTANG KAMI</a></li>
+                </ul>
+            </nav>
+            <div class="icons">
+                <a href="cart.html"><i class="fas fa-shopping-cart"></i></a>
+                <a href="account.html"><i class="fas fa-user"></i></a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-container">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="index.html">Beranda</a>
+                <span class="separator">/</span>
+                <a href="produk.html">Produk</a>
+                <span class="separator">/</span>
+                <span class="current">Anggrek</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Detail -->
+    <section class="product-detail">
+        <div class="container">
+            <div class="product-detail-container">
+                <!-- Product Gallery -->
+                <div class="product-gallery">
+                    <div class="main-image">
+                        <img id="main-product-image" src="images/anggrek.jpg" alt="Anggrek">
+                    </div>
+                    <div class="thumbnail-images">
+                        <div class="thumbnail active" data-image="images/anggrek1.jpeg">
+                            <img src="images/anggrek (1).jpeg" alt="Anggrek Thumbnail 1">
+                        </div>
+                        <div class="thumbnail" data-image="images/anggrek2.jpeg">
+                            <img src="images/anggrek (2).jpeg" alt="Anggrek Thumbnail 2">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Info -->
+                <div class="product-info">
+                    <span class="product-badge">Terlaris</span>
+                    <h1 class="product-title">Anggrek</h1>
+                    <div class="product-rating">
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <span class="rating-count">(4.7)</span>
+                    </div>
+                    <div class="product-price">
+                        <span class="price">Rp 185.000</span>
+                    </div>
+                    <div class="product-stock">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Stok tersedia</span>
+                    </div>
+                    <div class="product-description">
+                        <p>Anggrek adalah salah satu tanaman hias bunga paling populer di dunia dengan keindahan dan keanggunan yang tak tertandingi. Tanaman ini memiliki bunga yang tahan lama dengan berbagai warna dan pola yang memukau. Anggrek kami ditanam dengan perawatan khusus untuk memastikan kualitas terbaik dan siap berbunga saat Anda terima.</p>
+                    </div>
+                    <div class="product-quantity">
+                        <label>Jumlah:</label>
+                        <div class="quantity-input">
+                            <button class="quantity-btn minus">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <input type="number" value="1" min="1" max="10">
+                            <button class="quantity-btn plus">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="product-actions">
+                        <button id="add-to-cart-btn" class="btn primary-btn">
+                            <i class="fas fa-shopping-cart"></i>
+                            Tambahkan ke Keranjang
+                        </button>
+                        <button class="btn secondary-btn">
+                            <i class="fas fa-bolt"></i>
+                            Beli Sekarang
+                        </button>
+                    </div>
+                    <div class="product-delivery">
+                        <div class="delivery-item">
+                            <i class="fas fa-truck"></i>
+                            <span>Pengiriman gratis untuk pembelian di atas Rp 500.000</span>
+                        </div>
+                        <div class="delivery-item">
+                            <i class="fas fa-undo"></i>
+                            <span>Pengembalian gratis dalam 7 hari</span>
+                        </div>
+                        <div class="delivery-item">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Garansi tanaman sehat selama 30 hari</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Tabs -->
+    <section class="product-tabs">
+        <div class="container">
+            <div class="tabs-container">
+                <div class="tabs-header">
+                    <button class="tab-btn active" data-tab="description-tab">Deskripsi</button>
+                    <button class="tab-btn" data-tab="specifications-tab">Spesifikasi</button>
+                    <button class="tab-btn" data-tab="care-tab">Perawatan</button>
+                    <button class="tab-btn" data-tab="reviews-tab">Ulasan</button>
+                </div>
+                <div class="tabs-content">
+                    <!-- Description Tab -->
+                    <div id="description-tab" class="tab-panel active">
+                        <h3>Tentang Anggrek</h3>
+                        <p>Anggrek (Orchidaceae) adalah keluarga tanaman berbunga terbesar di dunia dengan lebih dari 25.000 spesies alami dan lebih dari 100.000 hibrida. Tanaman ini terkenal karena keindahan bunganya yang simetris dan tahan lama, serta kemampuannya beradaptasi dengan berbagai lingkungan. Anggrek memiliki nilai estetika tinggi dan sering dijadikan tanaman hias atau bunga potong.</p>
+                        <p>Anggrek yang kami jamin adalah jenis Phalaenopsis (Anggrek Bulan), salah satu jenis yang paling populer untuk pemula karena relatif mudah dirawat dan memiliki masa berbunga yang panjang (2-3 bulan). Bunganya yang elegan tersedia dalam berbagai warna termasuk putih, pink, ungu, dan kuning, dengan pola dan corak yang unik pada setiap kelopaknya.</p>
+                        <h3>Fitur Utama</h3>
+                        <ul>
+                            <li>Bunga elegan dengan masa mekar panjang (2-3 bulan)</li>
+                            <li>Perawatan relatif mudah untuk jenis anggrek</li>
+                            <li>Tersedia dalam berbagai warna dan pola yang indah</li>
+                            <li>Tanaman sudah dewasa dan siap berbunga</li>
+                            <li>Pot transparan untuk memantau kesehatan akar</li>
+                        </ul>
+                    </div>
+
+                    <!-- Specifications Tab -->
+                    <div id="specifications-tab" class="tab-panel">
+                        <h3>Spesifikasi Tanaman</h3>
+                        <table class="specs-table">
+                            <tr>
+                                <td>Nama Ilmiah</td>
+                                <td>Phalaenopsis (spesies umum)</td>
+                            </tr>
+                            <tr>
+                                <td>Nama Umum</td>
+                                <td>Anggrek Bulan, Moth Orchid</td>
+                            </tr>
+                            <tr>
+                                <td>Asal</td>
+                                <td>Asia Tenggara, Filipina, Australia</td>
+                            </tr>
+                            <tr>
+                                <td>Keluarga</td>
+                                <td>Orchidaceae</td>
+                            </tr>
+                            <tr>
+                                <td>Tinggi Tanaman</td>
+                                <td>40-60 cm (termasuk tangkai bunga)</td>
+                            </tr>
+                            <tr>
+                                <td>Lebar Tanaman</td>
+                                <td>30-45 cm</td>
+                            </tr>
+                            <tr>
+                                <td>Warna Bunga</td>
+                                <td>Putih, Pink, Ungu, Kuning (tergantung varietas)</td>
+                            </tr>
+                            <tr>
+                                <td>Diameter Bunga</td>
+                                <td>5-10 cm per kuntum</td>
+                            </tr>
+                            <tr>
+                                <td>Kebutuhan Cahaya</td>
+                                <td>Cahaya terang tidak langsung</td>
+                            </tr>
+                            <tr>
+                                <td>Kebutuhan Air</td>
+                                <td>Seminggu sekali, rendam akar selama 15 menit</td>
+                            </tr>
+                            <tr>
+                                <td>Media Tanam</td>
+                                <td>Kulit kayu anggrek atau sphagnum moss</td>
+                            </tr>
+                            <tr>
+                                <td>Toksisitas</td>
+                                <td>Aman untuk manusia dan hewan peliharaan</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- Care Tab -->
+                    <div id="care-tab" class="tab-panel">
+                        <h3>Panduan Perawatan</h3>
+                        <div class="care-item">
+                            <div class="care-icon">
+                                <i class="fas fa-sun"></i>
+                            </div>
+                            <div class="care-content">
+                                <h4>Pencahayaan</h4>
+                                <p>Anggrek Phalaenopsis membutuhkan cahaya terang tetapi tidak langsung. Tempatkan di dekat jendela timur atau barat dengan tirai tipis. Hindari sinar matahari langsung yang dapat membakar daun. Daun yang sehat berwarna hijau olive - jika terlalu gelap berarti kurang cahaya, jika kekuningan atau kemerahan berarti terlalu banyak cahaya.</p>
+                            </div>
+                        </div>
+                        <div class="care-item">
+                            <div class="care-icon">
+                                <i class="fas fa-tint"></i>
+                            </div>
+                            <div class="care-content">
+                                <h4>Penyiraman</h4>
+                                <p>Siram anggrek seminggu sekali dengan merendam pot dalam air bersih selama 15 menit, lalu biarkan air mengalir seluruhnya. Gunakan air suhu ruangan. Anggrek lebih toleran terhadap kekeringan daripada kelebihan air. Akar yang sehat berwarna hijau keperakan setelah disiram dan berubah menjadi hijau tua ketika sudah kering.</p>
+                            </div>
+                        </div>
+                        <div class="care-item">
+                            <div class="care-icon">
+                                <i class="fas fa-temperature-high"></i>
+                            </div>
+                            <div class="care-content">
+                                <h4>Suhu & Kelembaban</h4>
+                                <p>Anggrek menyukai suhu antara 18-29°C di siang hari dan 15-18°C di malam hari. Perbedaan suhu siang-malam sekitar 6-8°C dapat merangsang pembungaan. Kelembaban ideal 50-70%. Untuk meningkatkan kelembaban, letakkan tanaman di atas nampan kerikil berisi air atau gunakan humidifier.</p>
+                            </div>
+                        </div>
+                        <div class="care-item">
+                            <div class="care-icon">
+                                <i class="fas fa-seedling"></i>
+                            </div>
+                            <div class="care-content">
+                                <h4>Pemupukan & Perawatan</h4>
+                                <p>Beri pupuk khusus anggrek setiap 2-3 minggu selama musim tanam (musim semi dan musim panas) dengan dosis setengah dari yang tertera. Setelah bunga layu, potong tangkai bunga di atas buku kedua atau ketiga dari bawah untuk merangsang pembungaan kembali. Ganti media tanam setiap 1-2 tahun ketika sudah mulai hancur.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Reviews Tab -->
+                    <div id="reviews-tab" class="tab-panel">
+                        <div class="reviews-summary">
+                            <div class="rating-summary">
+                                <div class="average-rating">
+                                    <div class="rating-number">4.7</div>
+                                    <div class="stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></

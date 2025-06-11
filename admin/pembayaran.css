@@ -1,0 +1,253 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f5f5f5;
+}
+
+.sidebar {
+    width: 240px;
+    background-color: #d3eee8;
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #c1dcd6;
+}
+
+.logo {
+    padding: 0 20px 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+}
+
+.logo h1 {
+    font-size: 24px;
+    color: #1f384c;
+    font-weight: normal;
+}
+
+.menu-label {
+    padding: 0 20px;
+    margin-bottom: 10px;
+    font-size: 12px;
+    color: #627b87;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.menu-items {
+    list-style: none;
+}
+
+.menu-item {
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    color: #1f384c;
+    transition: background-color 0.2s;
+}
+
+.menu-item:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+}
+
+.menu-item.active {
+    background-color: #fff;
+    color: #1f384c;
+    font-weight: 500;
+}
+
+.menu-item i {
+    width: 24px;
+    margin-right: 10px;
+    font-size: 18px;
+}
+
+.main-content {
+    flex: 1;
+    
+   
+  }
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  margin-bottom: 0; /* jangan terlalu besar */
+}
+
+
+.search-bar {
+    flex: 1;
+    max-width: 600px;
+    position: relative;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 10px 15px;
+    border-radius: 4px;
+    border: none;
+    background-color: #f6f6fb;
+    font-size: 14px;
+}
+
+.search-bar button {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #999;
+    cursor: pointer;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+}
+
+.user-profile span {
+    margin-right: 10px;
+    color: #1f384c;
+    font-weight: 500;
+}
+
+.user-profile img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.content {
+    padding: 30px;
+    flex: 1;
+}
+
+.content-title {
+    font-size: 24px;
+    color: #1f384c;
+    margin-bottom: 20px;
+}
+
+.data-table {
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border: 1px solid #bbe4e4;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th {
+    background-color: #bbe4e4;
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 500;
+    color: #1f384c;
+}
+
+.table td {
+    padding: 15px;
+    border-top: 1px solid #bbe4e4;
+    color: #1f384c;
+}
+
+.table tr:first-child td {
+    border-top: none;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-edit {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    background-color: #007ef2;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.btn-delete {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    background-color: #ff3c5f;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+.add-button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+    margin-top: -10px; /* Geser lebih dekat ke atas */
+}
+
+.btn-tambah {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn-tambah:hover {
+    background-color: #218838;
+}
+
+
+@media (max-width: 768px) {
+    body {
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        width: 100%;
+        padding: 10px 0;
+    }
+    
+    .header {
+        padding: 10px 15px;
+    }
+    
+    .content {
+        padding: 15px;
+    }
+    
+    .table {
+        display: block;
+        overflow-x: auto;
+    }
+}
