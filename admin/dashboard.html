@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - The Secret Garden</title>
+    
+    <!-- External CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="dashboard.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- jsPDF for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Mobile Menu Button -->
+        <button class="mobile-menu-btn" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="logo">
+                <img src="images/logo.png" alt="The Secret Garden">
+            </div>
+            <div class="menu-label">MENU</div>
+            <ul class="menu-items">
+                <li>
+                    <a class="menu-item active" href="dashboard.html">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="menu-item" href="manajemen_pesanan.html">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span>Management Pesanan</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="menu-item" href="manajemen_produk.html">
+                        <i class="fas fa-box"></i>
+                        <span>Management Produk</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="menu-item" href="manajemen_pengiriman.html">
+                        <i class="fas fa-truck"></i>
+                        <span>Management Pengiriman</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="menu-item" href="manajemen_akun.html">
+                        <i class="fas fa-user"></i>
+                        <span>Management Akun</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="menu-item" href="manajemen_admin.html">
+                        <i class="fas fa-user-shield"></i>
+                        <span>Management Admin</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="menu-item" href="manajemen_pembayaran.html">
+                        <i class="fas fa-credit-card"></i>
+                        <span>Management Pembayaran</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="menu-item" href="manajemen_diskon.html">
+                        <i class="fas fa-percent"></i>
+                        <span>Management Diskon</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="menu-item" href="manajemen_saran.html">
+                        <i class="fas fa-heart"></i>
+                        <span>Management Saran</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <div class="search-container">
+                    <input type="text" placeholder="Cari pesanan, customer, produk..." class="search-input" id="searchInput">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+                <div class="user-menu">
+                    <span>Admin</span>
+                    
+                    <div class="profile-pic">
+                        <img src="images/4396a60b-6455-40ed-8331-89a96395469f.jpeg" alt="Admin Profile">
+                    </div>
+                </div>
+            </div>
+
+            <h1 class="dashboard-title">
+                <i class="fas fa-chart-line"></i>
+                Dashboard Overview
+            </h1>
+
+            <!-- Report Button Section -->
+            <div class="report-section">
+                <button class="btn-report" onclick="console.log('Button clicked!'); generateMonthlyReport();">
+                    <i class="fas fa-file-pdf"></i>
+                    <span>Generate Laporan Bulanan</span>
+                    <div class="btn-loader">
+                        <div class="spinner"></div>
+                    </div>
+                </button>
+                <div class="report-info">
+                    <p>Unduh laporan lengkap untuk bulan ini dalam format PDF</p>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid" id="statsGrid">
+                <div class="stat-card">
+                    <h3><i class="fas fa-shopping-cart"></i> Total Pesanan</h3>
+                    <p class="value">1,250</p>
+                    <p class="info"><i class="fas fa-arrow-up"></i> +12% dari bulan lalu</p>
+                </div>
+                <div class="stat-card">
+                    <h3><i class="fas fa-users"></i> Total Customer</h3>
+                    <p class="value">890</p>
+                    <p class="info"><i class="fas fa-arrow-up"></i> +8% dari bulan lalu</p>
+                </div>
+                <div class="stat-card">
+                    <h3><i class="fas fa-box"></i> Total Produk</h3>
+                    <p class="value">156</p>
+                    <p class="info"><i class="fas fa-arrow-up"></i> +5% dari bulan lalu</p>
+                </div>
+                <div class="stat-card">
+                    <h3><i class="fas fa-money-bill-wave"></i> Total Revenue</h3>
+                    <p class="value">Rp 45,231,890</p>
+                    <p class="info"><i class="fas fa-arrow-up"></i> +15% dari bulan lalu</p>
+                </div>
+            </div>
+
+           
+
+            <!-- Recent Orders Table -->
+            <div class="table-container" id="recentOrdersTable">
+                <div class="table-header">
+                    <i class="fas fa-shopping-cart"></i>
+                    Pesanan Terbaru
+                </div>
+                <div class="table-content">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID Pesanan</th>
+                                <th>Customer</th>
+                                <th>Produk</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Tanggal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>#ORD-001</strong></td>
+                                <td>Budi Santoso</td>
+                                <td>Monstera Deliciosa</td>
+                                <td>Rp 250,000</td>
+                                <td><span class="status completed">Selesai</span></td>
+                                <td>15 Nov 2024</td>
+                            </tr>
+                            <tr>
+                                <td><strong>#ORD-002</strong></td>
+                                <td>Sari Dewi</td>
+                                <td>Fiddle Leaf Fig</td>
+                                <td>Rp 180,000</td>
+                                <td><span class="status processing">Proses</span></td>
+                                <td>14 Nov 2024</td>
+                            </tr>
+                            <tr>
+                                <td><strong>#ORD-003</strong></td>
+                                <td>Ahmad Rahman</td>
+                                <td>Snake Plant</td>
+                                <td>Rp 120,000</td>
+                                <td><span class="status shipped">Dikirim</span></td>
+                                <td>13 Nov 2024</td>
+                            </tr>
+                            <tr>
+                                <td><strong>#ORD-004</strong></td>
+                                <td>Maya Putri</td>
+                                <td>Peace Lily</td>
+                                <td>Rp 95,000</td>
+                                <td><span class="status pending">Pending</span></td>
+                                <td>12 Nov 2024</td>
+                            </tr>
+                            <tr>
+                                <td><strong>#ORD-005</strong></td>
+                                <td>Rizki Pratama</td>
+                                <td>Rubber Plant</td>
+                                <td>Rp 150,000</td>
+                                <td><span class="status completed">Selesai</span></td>
+                                <td>11 Nov 2024</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            
+
+            <!-- Footer -->
+            <div class="footer">
+                <p>&copy; 2024 The Secret Garden. All rights reserved.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <div class="toast-content">
+            <div class="toast-icon">
+                <i class="toast-icon-element"></i>
+            </div>
+            <div class="toast-message"></div>
+            <button class="toast-close" onclick="closeToast()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="dashboard.js"></script>
+</body>
+</html>
