@@ -21,7 +21,7 @@
             <div class="logo">
                 <img src="images/logo.png" alt="The Secret Garden">
             </div>
-            <div class="menu-label">MENU</div>
+            <div class="menu-label">HALO</div>
             <ul class="menu-items">
                 <li>
                     <a class="menu-item" onclick="location.href='dashboard.html'">
