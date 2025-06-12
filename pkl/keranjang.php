@@ -147,7 +147,7 @@ if(isset($_GET['id_produk'])) {
                     ?>
                     
                     <div class="cart-actions">
-                        <a href="produk.html" class="continue-shopping-btn">
+                        <a href="produk.php" class="continue-shopping-btn">
                             <i class="fas fa-arrow-left"></i> Lanjutkan Belanja
                         </a>
                         <a href="hapus_keranjang.php" class="empty-cart-btn">

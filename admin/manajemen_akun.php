@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="css/manajemen_akun.css">
 </head>
 <body>
     <div class="container">

@@ -44,7 +44,7 @@
             <div class="auth-right">
                 <div class="auth-form-container">
                     <h2>Masuk</h2>
-                    <p class="auth-subtitle">Belum punya akun? <a href="register.html">Daftar sekarang</a></p>
+                    <p class="auth-subtitle">Belum punya akun? <a href="register.php">Daftar sekarang</a></p>
                    
                  
                         <div class="form-group">

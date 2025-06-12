@@ -1,5 +1,5 @@
 <?php
-// session_start();
+session_start();
 include "koneksi.php";
 // if (!isset($_SESSION['username'])){
 //     header("Location:login.php?login dulu");
@@ -7,12 +7,13 @@ include "koneksi.php";
 // }
 $sql="SELECT * FROM pembayaran";
 $query=mysqli_query($koneksi,$sql);
-?><!DOCTYPE html>
+?>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manajemen Pembayaran</title>
+    <title>Manajemen Pembayaran - The Secret Garden</title>
     <link rel="stylesheet" href="css/manajemen_pembayaran.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -48,13 +49,13 @@ $query=mysqli_query($koneksi,$sql);
         </li>
         
         <li>
-            <a class="menu-item " onclick="location.href='manajemen_pembayaran.php'">
+            <a class="menu-item active" onclick="location.href='manajemen_pembayaran.php'">
             <i class="fas fa-percent"></i>
             <span>Management Pembayaran</span></a>
         </li>
         
         <li>
-            <a class="menu-item " onclick="location.href='manajemen_saran.php'">
+            <a class="menu-item" onclick="location.href='manajemen_saran.php'">
             <i class="fas fa-heart"></i>
             <span>Management Saran</span></a>
         </li>
@@ -84,33 +85,100 @@ $query=mysqli_query($koneksi,$sql);
                             <th>Id Pesanan</th>
                             <th>Tanggal Pembayaran</th>
                             <th>Waktu Pembayaran</th>
-                          <td>foto</td>
-                          <td>catatan</td>
+                            <th>Bukti Transfer</th>
+                            <th>Catatan</th>
                             <th>Action</th>
                         </tr>
                     </thead>
-                     <tbody>
-                            <tr>
-                     <?php while($pembayaran=mysqli_fetch_assoc($query)) { ?>
-                         <td><?=$pembayaran['id_pembayaran']?></td>
-            <td><?=$pembayaran['id_pesanan']?></td>
-           
-            <td><?=$pembayaran['tgl_bayar']?></td>
-            <td><?=$pembayaran['waktu_bayar']?></td>
-             <td><img src="admin/Admin_WebTanaman/uploads/pembayaran/<?=$pembayaran['file_image']?>"style="max-width:150px; height:100px;">
-            </td> 
-            <td><?=$pembayaran['catatan']?></td>
-                   
+                    <tbody>
+                        <?php while($pembayaran=mysqli_fetch_assoc($query)) { ?>
+                        <tr>
+                            <td><?=$pembayaran['id_pembayaran']?></td>
+                            <td><?=$pembayaran['id_pesanan']?></td>
+                            <td><?=$pembayaran['tgl_bayar']?></td>
+                            <td><?=$pembayaran['waktu_bayar']?></td>
+                            <td>
+                                <?php if(!empty($pembayaran['file_image'])): ?>
+                                    <img src="uploads/pembayaran/<?=$pembayaran['file_image']?>" 
+                                         alt="Bukti Transfer" 
+                                         class="payment-image" 
+                                         style="max-width:150px; height:100px; object-fit:cover; border-radius:8px; border:1px solid #ddd; cursor:pointer;"
+                                         onclick="showImageModal('uploads/pembayaran/<?=$pembayaran['file_image']?>')">
+                                <?php else: ?>
+                                    <span class="no-image">Tidak ada bukti</span>
+                                <?php endif; ?>
+                            </td> 
+                            <td><?=$pembayaran['catatan']?></td>
                             <td class="action-buttons">
-                                <button class="btn-edit"><i class="fas fa-check"></i></button>
-                                <button class="btn-delete"><i class="fas fa-trash"></i></button>
+                                <button class="btn-edit" title="Konfirmasi Pembayaran">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                                <button class="btn-delete" title="Hapus Pembayaran" onclick="return confirm('Apakah Anda yakin ingin menghapus pembayaran ini?');">
+                                    <i class="fas fa-trash"></i>
+                                </button>
                             </td>
                         </tr>
+                        <?php } ?>
                     </tbody>
-                    <?php } ?>
                 </table>
             </div>
         </div>
     </div>
+
+    <!-- Modal untuk menampilkan gambar besar -->
+    <div id="imageModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-image"></i> Bukti Transfer</h3>
+                <span class="modal-close" onclick="closeImageModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <img id="modalImage" src="/placeholder.svg" alt="Bukti Transfer" style="width: 100%; height: auto; border-radius: 8px;">
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // Fungsi untuk memeriksa apakah gambar berhasil dimuat
+    document.addEventListener('DOMContentLoaded', function() {
+        const images = document.querySelectorAll('.payment-image');
+        
+        images.forEach(img => {
+            img.onerror = function() {
+                console.error('Gambar bukti transfer gagal dimuat:', this.src);
+                this.style.background = '#f0f0f0';
+                this.style.display = 'flex';
+                this.style.alignItems = 'center';
+                this.style.justifyContent = 'center';
+                this.innerHTML = '<span style="color:#999; font-size:12px;">Gambar tidak ditemukan</span>';
+            };
+            
+            // Log untuk debugging
+            console.log('Mencoba memuat gambar bukti transfer:', img.src);
+        });
+    });
+
+    // Fungsi untuk menampilkan modal gambar
+    function showImageModal(imageSrc) {
+        const modal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+        modalImage.src = imageSrc;
+        modal.classList.add('show');
+    }
+
+    // Fungsi untuk menutup modal gambar
+    function closeImageModal() {
+        const modal = document.getElementById('imageModal');
+        modal.classList.remove('show');
+    }
+
+    // Tutup modal jika diklik di luar gambar
+    window.onclick = function(event) {
+        const modal = document.getElementById('imageModal');
+        if (event.target == modal) {
+            modal.classList.remove('show');
+        }
+    }
+    </script>
 </body>
 </html>
