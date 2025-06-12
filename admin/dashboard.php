@@ -107,7 +107,7 @@ if ($currentMonthNumber == 2) { // February as example of no orders
                     </a>
                 </li>
                 <li>
-                    <a class="menu-item" href="manajemen_produk.php">
+                    <a class="menu-item" href="manajemen_produk.html">
                         <i class="fas fa-box"></i>
                         <span>Management Produk</span>
                     </a>
