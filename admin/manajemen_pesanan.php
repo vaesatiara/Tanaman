@@ -1,5 +1,5 @@
 <?php
-session_start();
+//session_start();
 include "koneksi.php";
 
 // // Check if user is logged in

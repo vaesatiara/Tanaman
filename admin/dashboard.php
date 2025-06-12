@@ -1,6 +1,6 @@
 <?php
 // Start session for potential user authentication
-session_start();
+//session_start();
 
 // Database connection (if needed)
 // $conn = mysqli_connect("localhost", "username", "password", "database");
