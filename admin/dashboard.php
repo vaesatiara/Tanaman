@@ -24,8 +24,9 @@ $currentDate = date('d M Y');
 $salesData = [12, 19, 15, 25, 22, 30];
 $salesLabels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"];
 
-$categoryData = [60, 30, 10];
-$categoryLabels = ["Tanaman Hias Daun", "Tanaman Hias Bunga", "Pot & Aksesoris"];
+// Updated category data - removed "Pot & Aksesoris"
+$categoryData = [70, 30];
+$categoryLabels = ["Tanaman Hias Daun", "Tanaman Hias Bunga"];
 
 $recentOrders = [
     ["id" => "#ORD-001", "customer" => "Budi Santoso", "product" => "Monstera Deliciosa", "total" => "Rp 250,000", "status" => "Selesai", "date" => "15 Nov 2024"],
@@ -438,7 +439,7 @@ if ($currentMonthNumber == 2) { // February as example of no orders
             });
         }
 
-        // Category Chart
+        // Category Chart - Updated to only show 2 categories
         function initializeCategoryChart() {
             const categoryCtx = document.getElementById("categoryChart")?.getContext("2d");
             if (!categoryCtx) return;
@@ -450,7 +451,7 @@ if ($currentMonthNumber == 2) { // February as example of no orders
                     datasets: [
                         {
                             data: <?php echo json_encode($categoryData); ?>,
-                            backgroundColor: ["#8ed7a9", "#ffb6c1", "#b5c8e0"],
+                            backgroundColor: ["#8ed7a9", "#ffb6c1"],
                             borderWidth: 0,
                             hoverOffset: 10,
                         },
@@ -772,7 +773,7 @@ if ($currentMonthNumber == 2) { // February as example of no orders
                 });
             }
 
-            // Initialize preview category chart
+            // Initialize preview category chart - Updated for 2 categories
             const previewCategoryCtx = document.getElementById("previewCategoryChart")?.getContext("2d");
             if (previewCategoryCtx) {
                 new Chart(previewCategoryCtx, {
@@ -781,7 +782,7 @@ if ($currentMonthNumber == 2) { // February as example of no orders
                         labels: <?php echo json_encode($categoryLabels); ?>,
                         datasets: [{
                             data: <?php echo json_encode($categoryData); ?>,
-                            backgroundColor: ["#8ed7a9", "#ffb6c1", "#b5c8e0"],
+                            backgroundColor: ["#8ed7a9", "#ffb6c1"],
                             borderWidth: 0,
                         }],
                     },
