@@ -1,10 +1,10 @@
 <?php
 session_start();
 include "koneksi.php";
-if (!isset($_SESSION['username'])){
-    header("Location:login.php?login dulu");
-    exit;
-}
+// if (!isset($_SESSION['username'])){
+//     header("Location:login.php?login dulu");
+//     exit;
+//}
 $sql="SELECT * FROM produk";
 $query=mysqli_query($koneksi,$sql);
 ?>
