@@ -18,10 +18,10 @@
             </div>
             <nav>
                 <ul>
-                    <li><a href="index.html">BERANDA</a></li>
-                    <li><a href="produk.html">PRODUK</a></li>
-                    <li><a href="kontak.html">KONTAK</a></li>
-                    <li><a href="tentang_kami.html">TENTANG KAMI</a></li>
+                    <li><a href="index.php">BERANDA</a></li>
+                    <li><a href="produk.php">PRODUK</a></li>
+                    <li><a href="kontak.php">KONTAK</a></li>
+                    <li><a href="tentang_kami.php">TENTANG KAMI</a></li>
                 </ul>
             </nav>
             <div class="icons">

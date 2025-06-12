@@ -18,10 +18,10 @@
             </div>
             <nav>
                 <ul>
-                    <li><a href="index.html">BERANDA</a></li>
-                    <li><a href="produk.html">PRODUK</a></li>
-                    <li><a href="kontak.html">KONTAK</a></li>
-                    <li><a href="tentang-kami.html">TENTANG KAMI</a></li>
+                    <li><a href="index.php">BERANDA</a></li>
+                    <li><a href="produk.php">PRODUK</a></li>
+                    <li><a href="kontak.php">KONTAK</a></li>
+                    <li><a href="tentang_kami.php">TENTANG KAMI</a></li>
                 </ul>
             </nav>
             <div class="icons">
@@ -44,7 +44,7 @@
             <div class="auth-right">
                 <div class="auth-form-container">
                     <h2>Masuk</h2>
-                    <p class="auth-subtitle">Belum punya akun? <a href="register.html">Daftar sekarang</a></p>
+                    <p class="auth-subtitle">Belum punya akun? <a href="register.php">Daftar sekarang</a></p>
                    
                  
                         <div class="form-group">

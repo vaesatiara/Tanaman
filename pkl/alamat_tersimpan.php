@@ -2,35 +2,8 @@
 session_start();
 include "koneksi.php";
 
-if (!isset($_SESSION['username'])){
-    header("Location:login.php?login_dulu");
-    exit;
-}
-
-$username = $_SESSION['username'];
-
-// Ambil data pelanggan
-$sql = "SELECT * FROM pelanggan WHERE username= '$username'";
-$query = mysqli_query($koneksi, $sql);
-$pelanggan = mysqli_fetch_assoc($query);
-
-// Proses set alamat utama
-if (isset($_GET['set_primary'])) {
-    $id_pengiriman = $_GET['set_primary'];
-    
-    // Reset semua alamat menjadi tidak utama
-    $reset_sql = "UPDATE pengiriman SET is_primary = 0 WHERE username '$username'";
-    mysqli_query($koneksi, $reset_sql);
-    
-    // Set alamat terpilih menjadi utama
-   
-    
-    header("Location: alamat_tersimpan.php");
-    exit;
-}
-
 // Ambil semua alamat pelanggan
-$sql_alamat = "SELECT * FROM pengiriman ";
+$sql_alamat = "SELECT * FROM pengiriman WHERE pelanggan= '$id_pelanggan'";
 $query_alamat = mysqli_query($koneksi, $sql_alamat);
 ?>
 
