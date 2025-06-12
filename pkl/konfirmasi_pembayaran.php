@@ -55,6 +55,29 @@ if (!$id_pelanggan) {
     die("Error: ID pelanggan tidak ditemukan. Silakan login ulang.");
 }
 
+
+if (isset($_POST['product_id']) && isset($_POST['quantity'])) {
+    $id_produk = $_POST['product_id'];
+    $jumlah = $_POST['quantity'];
+    $tanggal = date("Y-m-d H:i:s");
+
+    // Insert ke tabel pesanan
+    $query = "INSERT INTO pesanan (id_produk, jumlah, tanggal_pesan) VALUES ('$id_produk', '$jumlah', '$tanggal')";
+    $result = mysqli_query($koneksi, $query);
+
+    if ($result) {
+        $id_pesanan = mysqli_insert_id($koneksi);
+        // Redirect ke konfirmasi pembayaran
+        header("Location: konfirmasi_pembayaran.php?id_pesanan=$id_pesanan");
+        exit;
+    } else {
+        die("Gagal membuat pesanan: " . mysqli_error($koneksi));
+    }
+} else {
+    die("Data tidak lengkap.");
+}
+?>
+
 // Inisialisasi variabel
 $pesanan_data = null;
 $error_message = '';
@@ -277,6 +300,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['konfirmasi_pembayaran
         }
     }
 }
+$cek = mysqli_query($koneksi, "SELECT * FROM pesanan WHERE id_pesanan = '$id_pesanan'");
+if (mysqli_num_rows($cek) == 0) {
+    die("ID Pesanan tidak ditemukan.");
+}
 ?>
 
 <!DOCTYPE html>
@@ -362,15 +389,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['konfirmasi_pembayaran
                         <?php if ($show_payment_form && !$success_message): ?>
                         <!-- FORM PEMBAYARAN - TAMPIL UNTUK PESANAN YANG BELUM DIBAYAR -->
                         <h3>Silakan isi form konfirmasi pembayaran di bawah ini:</h3>
-                        <form action="" method="post" enctype="multipart/form-data">
+                        <form action="proses_pembayaran.php" method="post" enctype="multipart/form-data">
                             <div class="form-group">
-                                <label for="tgl_pembayaran">Tanggal Pembayaran *</label>
-                                <input type="date" id="tgl_pembayaran" name="tgl_pembayaran" required max="<?= date('Y-m-d') ?>">
-                            </div>
+                            <label for="tgl_pembayaran">Tanggal Pembayaran *</label>
+                             <input type="date" id="tgl_pembayaran" name="tgl_pembayaran" readonly>
+                                </div>
+
                             
                             <div class="form-group">
                                 <label for="waktu_bayar">Waktu Pembayaran *</label>
-                                <input type="time" id="waktu_bayar" name="waktu_bayar" required>
+                                <input type="time" id="waktu_bayar" name="waktu_bayar" value="<?= date('H:i:s') ?>" readonly>
                             </div>
                             
                             <div class="form-group">

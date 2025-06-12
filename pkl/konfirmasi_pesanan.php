@@ -61,6 +61,9 @@ if (!$id_pelanggan) {
     die("Error: ID pelanggan tidak ditemukan. Silakan login ulang.");
 }
 
+$sql_produk="SELECT * FROM produk";
+$query=mysqli_query($koneksi,$sql_produk);
+
 // Fungsi helper
 function getPaymentMethodName($method) {
     $paymentNames = [

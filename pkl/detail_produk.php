@@ -7,6 +7,35 @@ $sql="SELECT * FROM produk WHERE id_produk= '$id'";
 $query = mysqli_query($koneksi, $sql);
 
 $produk=mysqli_fetch_assoc($query);
+
+// Handle buy now action
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['buy_now'])) {
+    if (!isset($_SESSION['username'])) {
+        header("Location: login.php");
+        exit();
+    }
+    
+    $product_id = intval($_POST['product_id']);
+    $quantity = intval($_POST['quantity']);
+    
+    // Validasi stok
+    if ($quantity > $produk['stok']) {
+        $_SESSION['error_message'] = "Stok tidak mencukupi. Stok tersedia: " . $produk['stok'];
+        header("Location: detail_produk.php?id_produk=" . $product_id);
+        exit();
+    }
+    
+    // Simpan data buy now ke session
+    $_SESSION['buy_now_data'] = [
+        'product_id' => $product_id,
+        'quantity' => $quantity,
+        'source' => 'buy_now'
+    ];
+    
+    // Redirect ke alamat pengiriman
+    header("Location: alamat_pengiriman.php?source=buy_now&id_produk=" . $product_id . "&qty=" . $quantity);
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -206,6 +235,30 @@ $produk=mysqli_fetch_assoc($query);
             opacity: 0.5;
             pointer-events: none;
         }
+
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+        }
+
+        .alert i {
+            margin-right: 10px;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
     </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -264,6 +317,23 @@ $produk=mysqli_fetch_assoc($query);
     <!-- Product Detail -->
     <section class="product-detail">
         <div class="container">
+            <!-- Alert Messages -->
+            <?php if(isset($_SESSION['success_message'])): ?>
+            <div class="alert alert-success">
+                <i class="fas fa-check-circle"></i>
+                <?= $_SESSION['success_message']; ?>
+                <?php unset($_SESSION['success_message']); ?>
+            </div>
+            <?php endif; ?>
+            
+            <?php if(isset($_SESSION['error_message'])): ?>
+            <div class="alert alert-error">
+                <i class="fas fa-exclamation-circle"></i>
+                <?= $_SESSION['error_message']; ?>
+                <?php unset($_SESSION['error_message']); ?>
+            </div>
+            <?php endif; ?>
+
             <div class="product-detail-container">
                 <!-- Product Gallery -->
                 <div class="product-gallery">
@@ -322,9 +392,16 @@ $produk=mysqli_fetch_assoc($query);
                                 <i class="fas fa-shopping-cart"></i>
                                 Tambahkan ke Keranjang</a>
                             
-                            <a href="#" class="btn secondary-btn" id="buy-now-btn">
-                                <i class="fas fa-bolt"></i>
-                                Beli Sekarang</a>
+                            <!-- Form untuk Buy Now -->
+                            <form method="POST" style="display: inline;" id="buy-now-form">
+                                <input type="hidden" name="product_id" value="<?php echo $produk['id_produk']; ?>">
+                                <input type="hidden" name="quantity" id="buy-now-quantity" value="1">
+                                <input type="hidden" name="buy_now" value="1">
+                                <button type="submit" class="btn secondary-btn" id="buy-now-btn" <?php echo $produk['stok'] <= 0 ? 'disabled' : ''; ?>>
+                                    <i class="fas fa-bolt"></i>
+                                    Beli Sekarang
+                                </button>
+                            </form>
                            
                         <?php else: ?>
                             <a href="login.php" onclick="alert('Silakan login terlebih dahulu untuk menambahkan ke keranjang.');" class="btn primary-btn">
@@ -596,7 +673,8 @@ $produk=mysqli_fetch_assoc($query);
             const plusBtn = document.getElementById('btn-plus');
             const stockInfo = document.getElementById('stock-info');
             const addToCartBtn = document.getElementById('add-to-cart-btn');
-            const buyNowBtn = document.getElementById('buy-now-btn');
+            const buyNowForm = document.getElementById('buy-now-form');
+            const buyNowQuantity = document.getElementById('buy-now-quantity');
             
             // Ambil nilai stok maksimal dari PHP
             const maxStock = <?php echo $produk['stok']; ?>;
@@ -618,6 +696,11 @@ $produk=mysqli_fetch_assoc($query);
                     plusBtn.disabled = true;
                 } else {
                     plusBtn.disabled = false;
+                }
+                
+                // Update buy now quantity
+                if (buyNowQuantity) {
+                    buyNowQuantity.value = currentValue;
                 }
                 
                 // Update stock info
@@ -705,15 +788,29 @@ $produk=mysqli_fetch_assoc($query);
                 });
             }
 
-            // Buy Now functionality - langsung ke alamat pengiriman
-            if (buyNowBtn) {
-                buyNowBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const productId = <?php echo $produk['id_produk']; ?>;
-                    const quantity = document.getElementById('quantity-input').value;
+            // Buy Now form validation
+            if (buyNowForm) {
+                buyNowForm.addEventListener('submit', function(e) {
+                    const currentQuantity = parseInt(quantityInput.value);
                     
-                    // Redirect langsung ke alamat pengiriman dengan parameter buy_now
-                    window.location.href = 'alamat_pengiriman.php?source=buy_now&id_produk=' + productId + '&qty=' + quantity;
+                    // Validasi stok sebelum submit
+                    if (currentQuantity > maxStock) {
+                        e.preventDefault();
+                        alert('Stok tidak mencukupi! Stok tersedia: ' + maxStock);
+                        return false;
+                    }
+                    
+                    if (currentQuantity < 1) {
+                        e.preventDefault();
+                        alert('Jumlah minimal adalah 1');
+                        return false;
+                    }
+                    
+                    // Update hidden input quantity
+                    buyNowQuantity.value = currentQuantity;
+                    
+                    // Form akan submit secara normal ke PHP handler
+                    return true;
                 });
             }
         });

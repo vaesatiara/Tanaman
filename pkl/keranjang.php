@@ -43,10 +43,10 @@ if(isset($_GET['id_produk'])) {
             </div>
             <nav>
                 <ul>
-                    <li><a href="index.html">BERANDA</a></li>
-                    <li><a href="produk.html">PRODUK</a></li>
-                    <li><a href="kontak.html">KONTAK</a></li>
-                    <li><a href="tentang.html">TENTANG KAMI</a></li>
+                    <li><a href="index.php">BERANDA</a></li>
+                    <li><a href="produk.php">PRODUK</a></li>
+                    <li><a href="kontak.php">KONTAK</a></li>
+                    <li><a href="tentang_kami.php">TENTANG KAMI</a></li>
                 </ul>
             </nav>
             <div class="icons">
@@ -234,16 +234,17 @@ if(isset($_GET['id_produk'])) {
                 <div class="footer-links">
                     <h3 class="footer-title">Tautan Cepat</h3>
                     <ul>
-                        <li><a href="index.html">Beranda</a></li>
-                        <li><a href="produk.html">Produk</a></li>
-                        <li><a href="tentang.html">Tentang Kami</a></li>
+                        <li><a href="index.php">BERANDA</a></li>
+                        <li><a href="produk.php">PRODUK</a></li>
+                        <li><a href="kontak.php">KONTAK</a></li>
+                        <li><a href="tentang_kami.php">TENTANG KAMI</a></li>
                     </ul>
                 </div>
                 <div class="footer-links">
                     <h3 class="footer-title">Kategori</h3>
                     <ul>
-                        <li><a href="#">Tanaman Hias Daun</a></li>
-                        <li><a href="#">Tanaman Hias Bunga</a></li>
+                        <li><a href="tanaman_hias_daun.php">Tanaman Hias Daun</a></li>
+                        <li><a href="tanaman_hias_bunga.php">Tanaman Hias Bunga</a></li>
                     </ul>
                 </div>
                 <div class="footer-contact">
