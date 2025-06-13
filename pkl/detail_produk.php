@@ -447,9 +447,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['buy_now'])) {
             <div id="deskripsi" class="tab-pane active">
                 <div class="content-section">
                     <h3>Deskripsi Produk</h3>
-                    <p><?php echo isset($produk['deskripsi_lengkap']) ? $produk['deskripsi_lengkap'] : $produk['deskripsi']; ?></p>
-                    <p>Tanaman berkualitas tinggi yang telah melalui proses seleksi ketat untuk memastikan kesehatan dan kualitas terbaik. Cocok untuk mempercantik rumah dan memberikan suasana segar alami.</p>
+                    <p><?php echo isset($produk['deskripsi_lengkap']) && !empty($produk['deskripsi_lengkap']) ? nl2br(htmlspecialchars($produk['deskripsi_lengkap'])) : nl2br(htmlspecialchars($produk['deskripsi'])); ?></p>
                     
+                    <?php if(isset($produk['keunggulan']) && !empty($produk['keunggulan'])): ?>
+                    <h3>Keunggulan Utama</h3>
+                    <ul class="feature-list">
+                        <?php 
+                        $keunggulan_items = explode("\n", $produk['keunggulan']);
+                        foreach($keunggulan_items as $item): 
+                            if(trim($item) !== ''): 
+                        ?>
+                            <li><?php echo htmlspecialchars(trim($item)); ?></li>
+                        <?php 
+                            endif;
+                        endforeach; 
+                        ?>
+                    </ul>
+                    <?php else: ?>
                     <h3>Keunggulan Utama</h3>
                     <ul class="feature-list">
                         <li>Tanaman sehat dan berkualitas premium</li>
@@ -458,6 +472,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['buy_now'])) {
                         <li>Garansi tanaman sehat</li>
                         <li>Ramah lingkungan dan aman</li>
                     </ul>
+                    <?php endif; ?>
                 </div>
             </div>
 
@@ -467,6 +482,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['buy_now'])) {
                     <h3>Panduan Perawatan</h3>
                     <p>Untuk menjaga kesehatan dan keindahan tanaman, ikuti panduan perawatan berikut:</p>
                     
+                    <?php if(isset($produk['perawatan_harian']) && !empty($produk['perawatan_harian'])): ?>
+                    <h3>Perawatan Harian</h3>
+                    <ul class="feature-list">
+                        <?php 
+                        $perawatan_harian_items = explode("\n", $produk['perawatan_harian']);
+                        foreach($perawatan_harian_items as $item): 
+                            if(trim($item) !== ''): 
+                        ?>
+                            <li><?php echo htmlspecialchars(trim($item)); ?></li>
+                        <?php 
+                            endif;
+                        endforeach; 
+                        ?>
+                    </ul>
+                    <?php else: ?>
                     <h3>Perawatan Harian</h3>
                     <ul class="feature-list">
                         <li>Siram secukupnya sesuai kebutuhan tanaman</li>
@@ -474,7 +504,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['buy_now'])) {
                         <li>Jaga kelembaban udara di sekitar tanaman</li>
                         <li>Bersihkan debu pada daun secara berkala</li>
                     </ul>
+                    <?php endif; ?>
                     
+                    <?php if(isset($produk['perawatan_berkala']) && !empty($produk['perawatan_berkala'])): ?>
+                    <h3>Perawatan Berkala</h3>
+                    <ul class="feature-list">
+                        <?php 
+                        $perawatan_berkala_items = explode("\n", $produk['perawatan_berkala']);
+                        foreach($perawatan_berkala_items as $item): 
+                            if(trim($item) !== ''): 
+                        ?>
+                            <li><?php echo htmlspecialchars(trim($item)); ?></li>
+                        <?php 
+                            endif;
+                        endforeach; 
+                        ?>
+                    </ul>
+                    <?php else: ?>
                     <h3>Perawatan Berkala</h3>
                     <ul class="feature-list">
                         <li>Berikan pupuk sesuai jadwal yang direkomendasikan</li>
@@ -482,6 +528,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['buy_now'])) {
                         <li>Ganti media tanam jika diperlukan</li>
                         <li>Periksa kondisi akar secara berkala</li>
                     </ul>
+                    <?php endif; ?>
+                    
+                    <?php if(isset($produk['perawatan']) && !empty($produk['perawatan'])): ?>
+                    <h3>Informasi Perawatan Tambahan</h3>
+                    <p><?php echo nl2br(htmlspecialchars($produk['perawatan'])); ?></p>
+                    <?php endif; ?>
                     
                     <p><strong>Catatan:</strong> Setiap tanaman memiliki kebutuhan perawatan yang berbeda. Konsultasikan dengan ahli tanaman jika diperlukan.</p>
                 </div>

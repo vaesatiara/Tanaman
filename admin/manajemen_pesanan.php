@@ -193,7 +193,7 @@ $query = mysqli_query($koneksi, $sql);
             </div>
             <div class="user-profile">
                 <span>Admin</span>
-                <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Admin Profile">
+                <img src="images/4396a60b-6455-40ed-8331-89a96395469f.jpeg" alt="Admin Profile">
             </div>
         </div>
 

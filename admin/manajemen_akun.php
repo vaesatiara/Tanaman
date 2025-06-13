@@ -52,8 +52,7 @@
                 </li>
                 
                 <li>
-                    <a class="menu-item" href="manajemen
-                    _pembayaran.php">
+                    <a class="menu-item" href="manajemen_pembayaran.php">
                         <i class="fas fa-credit-card"></i>
                         <span>Management Pembayaran</span>
                     </a>
