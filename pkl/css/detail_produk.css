@@ -1,39 +1,4 @@
-/* ======================================
-   TABLE OF CONTENTS
-   ======================================
-   
-   1. CSS VARIABLES
-   2. GLOBAL STYLES
-   3. HEADER & NAVIGATION
-   4. BREADCRUMB
-   5. PRODUCT DETAIL
-      5.1 Product Gallery
-      5.2 Product Info
-      5.3 Product Options
-      5.4 Product Actions
-      5.5 Product Delivery
-      5.6 Product Share
-   6. PRODUCT TABS
-      6.1 Tab Navigation
-      6.2 Tab Content
-      6.3 Specifications Tab
-      6.4 Care Tab
-      6.5 Reviews Tab
-      6.6 Shipping Tab
-   7. RELATED PRODUCTS
-   8. UTILITY COMPONENTS
-      8.1 Back to Top Button
-      8.2 Toast Notifications
-   9. RESPONSIVE STYLES
-      9.1 Large Devices (992px and below)
-      9.2 Medium Devices (768px and below)
-      9.3 Small Devices (576px and below)
-      9.4 Extra Small Devices (480px and below)
-   ====================================== */
 
-/* ====================================== */
-/* 1. CSS VARIABLES */
-/* ====================================== */
 :root {
     /* Colors */
     --primary-color: #8ed7a9;

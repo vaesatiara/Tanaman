@@ -17,6 +17,16 @@ function getOrderDataFromDatabase($id_pelanggan, $source = 'cart') {
     $orderItems = [];
     $totalHarga = 0;
     
+    // Periksa apakah kolom id_pelanggan ada dalam tabel
+    $check_column = "SHOW COLUMNS FROM ringkasan_pesanan LIKE 'id_pelanggan'";
+    $column_result = mysqli_query($koneksi, $check_column);
+    
+    if (mysqli_num_rows($column_result) == 0) {
+        // Jika kolom tidak ada, gunakan fallback ke session
+        error_log("Column id_pelanggan not found in ringkasan_pesanan table. Using session fallback.");
+        return getOrderDataFromSession($source);
+    }
+    
     // Query untuk mengambil data ringkasan pesanan dari database
     $query = "SELECT r.*, p.nama_tanaman, p.foto 
               FROM ringkasan_pesanan r 
@@ -163,7 +173,7 @@ $total = $orderData['subtotal'] + $shippingCost;
 
 // Proses jika alamat dipilih
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pilih_alamat'])) {
-    $selected_address_id = $_POST['id_pengiriman'];
+    $selected_address_id = $_POST['alamat_id'];
     $_SESSION['alamat_terpilih'] = $selected_address_id;
     
     // Simpan data pesanan ke session
@@ -205,414 +215,9 @@ if ($query_alamat === false) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alamat Pengiriman - Toko Tanaman</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/alamat_pengiriman.css">
+    <link rel="stylesheet" href="css/style-additions.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        .address-form {
-    background: #f9f9f9;
-    padding: 20px;
-    border-radius: 8px;
-    margin-top: 20px;
-    display: none;
-    animation: slideDown 0.3s ease;
-}
-
-.address-form.show {
-    display: block;
-}
-
-@keyframes slideDown {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.form-grid {
-    display: grid;
-    gap: 20px;
-}
-
-.form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-}
-
-.form-group.full-width {
-    grid-column: 1 / -1;
-}
-
-.form-group label {
-    margin-bottom: 5px;
-    font-weight: 500;
-    color: #333;
-}
-
-.form-group label.required::after {
-    content: " *";
-    color: #dc3545;
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea {
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 14px;
-}
-
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-    outline: none;
-    border-color: #4CAF50;
-    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
-}
-
-.field-help {
-    font-size: 12px;
-    color: #666;
-    margin-top: 5px;
-}
-
-.char-counter {
-    font-size: 12px;
-    color: #666;
-    text-align: right;
-    margin-top: 5px;
-}
-
-.form-check {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.form-check-input {
-    width: auto;
-}
-
-.form-actions {
-    display: flex;
-    gap: 10px;
-    justify-content: flex-end;
-    margin-top: 20px;
-}
-
-.btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    transition: all 0.3s ease;
-}
-
-.btn-primary {
-    background: #4CAF50;
-    color: white;
-}
-
-.btn-primary:hover {
-    background: #45a049;
-}
-
-.btn-outline {
-    background: transparent;
-    color: #666;
-    border: 1px solid #ddd;
-}
-
-.btn-outline:hover {
-    background: #f5f5f5;
-}
-
-.checkout-section {
-    padding: 40px 0;
-    background-color: #f8f9fa;
-}
-
-.checkout-steps {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 40px;
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-
-.step {
-    display: flex;
-    align-items: center;
-    margin: 0 30px;
-    color: #999;
-}
-
-.step.active {
-    color: #4CAF50;
-}
-
-.step-number {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    background: #e0e0e0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 10px;
-    font-weight: bold;
-}
-
-.step.active .step-number {
-    background: #4CAF50;
-    color: white;
-}
-
-.checkout-content {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 30px;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.checkout-form {
-    background: white;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-
-.order-summary {
-    background: white;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    height: fit-content;
-    position: sticky;
-    top: 20px;
-}
-
-.address-card {
-    border: 2px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 15px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    position: relative;
-}
-
-.address-card:hover {
-    border-color: #4CAF50;
-    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
-}
-
-.address-card.selected {
-    border-color: #4CAF50;
-    background-color: #f8fff8;
-}
-
-.address-card.selected::before {
-    content: '✓';
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: #4CAF50;
-    color: white;
-    border-radius: 50%;
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    font-weight: bold;
-}
-
-.use-address-btn {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 6px;
-    cursor: pointer;
-    margin-top: 15px;
-    display: block;
-    width: 100%;
-    text-align: center;
-    font-weight: bold;
-    font-size: 14px;
-    transition: background 0.3s ease;
-}
-
-.use-address-btn:hover {
-    background-color: #45a049;
-}
-
-.alert {
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-}
-
-.alert i {
-    margin-right: 10px;
-}
-
-.alert-success {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-}
-
-.alert-error {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-}
-
-.empty-state {
-    text-align: center;
-    padding: 50px;
-    color: #666;
-    background: #f9f9f9;
-    border-radius: 8px;
-    margin: 20px 0;
-}
-
-.empty-state i {
-    font-size: 48px;
-    margin-bottom: 20px;
-    color: #ccc;
-}
-
-.form-toggle {
-    background: #4CAF50;
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    border-radius: 6px;
-    cursor: pointer;
-    margin-top: 15px;
-    font-size: 14px;
-    transition: background 0.3s ease;
-    text-decoration: none;
-    display: inline-block;
-}
-
-.form-toggle:hover {
-    background: #45a049;
-}
-
-.summary-items {
-    margin-bottom: 20px;
-}
-
-.summary-item {
-    display: flex;
-    align-items: center;
-    padding: 15px 0;
-    border-bottom: 1px solid #eee;
-}
-
-.item-image {
-    width: 60px;
-    height: 60px;
-    object-fit: cover;
-    border-radius: 6px;
-    margin-right: 15px;
-}
-
-.item-info {
-    flex: 1;
-}
-
-.item-info h3 {
-    margin: 0 0 5px 0;
-    font-size: 14px;
-    color: #333;
-}
-
-.item-info p {
-    margin: 0;
-    font-size: 12px;
-    color: #666;
-}
-
-.item-price {
-    font-weight: bold;
-    color: #4CAF50;
-}
-
-.summary-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 0;
-    border-bottom: 1px solid #eee;
-}
-
-.summary-row.total {
-    border-bottom: none;
-    font-weight: bold;
-    font-size: 16px;
-    color: #4CAF50;
-    margin-top: 10px;
-    padding-top: 15px;
-    border-top: 2px solid #4CAF50;
-}
-
-.address-actions {
-    margin-top: 10px;
-}
-
-.address-actions .btn {
-    margin-right: 5px;
-}
-
-.btn-sm {
-    padding: 5px 10px;
-    font-size: 12px;
-}
-
-.btn-danger {
-    color: #dc3545;
-}
-
-.btn-danger:hover {
-    background: #fff1f1;
-}
-
-@media (max-width: 768px) {
-    .checkout-content {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-    
-    .form-row {
-        grid-template-columns: 1fr;
-    }
-}
-    </style>
 </head>
 <body>
     <header>
@@ -639,6 +244,7 @@ if ($query_alamat === false) {
 
     <main class="checkout-section">
         <div class="container">
+            <!-- Enhanced Checkout Steps -->
             <div class="checkout-steps">
                 <div class="step active">
                     <div class="step-number">1</div>
@@ -652,13 +258,18 @@ if ($query_alamat === false) {
                     <div class="step-number">3</div>
                     <div class="step-label">Pembayaran</div>
                 </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-label">Konfirmasi</div>
+                </div>
             </div>
             
             <div class="checkout-content">
                 <div class="checkout-form">
-                    <h2>Pilih Alamat Pengiriman</h2>
+                    <h2><i class="fas fa-map-marker-alt"></i> Pilih Alamat Pengiriman</h2>
                     
-                    <div style="background: #e3f2fd; padding: 10px 15px; border-radius: 6px; margin-bottom: 20px; font-size: 14px;">
+                    <!-- Source Info Banner -->
+                    <div class="source-info-banner">
                         <i class="fas fa-<?= $source === 'cart' ? 'shopping-cart' : 'bolt' ?>"></i>
                         <?php if ($source === 'cart'): ?>
                             Checkout dari Keranjang Belanja
@@ -667,10 +278,11 @@ if ($query_alamat === false) {
                         <?php endif; ?>
                     </div>
                     
+                    <!-- Alert Messages -->
                     <?php if(isset($_SESSION['success_message'])): ?>
                     <div class="alert alert-success">
                         <i class="fas fa-check-circle"></i>
-                        <?= $_SESSION['success_message']; ?>
+                        <span><?= $_SESSION['success_message']; ?></span>
                         <?php unset($_SESSION['success_message']); ?>
                     </div>
                     <?php endif; ?>
@@ -678,11 +290,12 @@ if ($query_alamat === false) {
                     <?php if(isset($_SESSION['error_message'])): ?>
                     <div class="alert alert-error">
                         <i class="fas fa-exclamation-circle"></i>
-                        <?= $_SESSION['error_message']; ?>
+                        <span><?= $_SESSION['error_message']; ?></span>
                         <?php unset($_SESSION['error_message']); ?>
                     </div>
                     <?php endif; ?>
                     
+                    <!-- Address List -->
                     <div class="address-list">
                         <?php if ($query_alamat && mysqli_num_rows($query_alamat) > 0) :  ?>
                             <?php while($alamat = mysqli_fetch_assoc($query_alamat)): ?>
@@ -696,26 +309,37 @@ if ($query_alamat === false) {
                                 <input type="hidden" name="pilih_alamat" value="1">
                                 
                                 <div class="address-card <?= (isset($_SESSION['alamat_terpilih']) && $_SESSION['alamat_terpilih'] == $alamat['id_pengiriman']) ? 'selected' : '' ?>" 
-                                     onclick="selectAndSubmit(<?= $alamat['id_pengiriman'] ?>)">
+                                     onclick="selectAddress(<?= $alamat['id_pengiriman'] ?>)">
+                                    
+                                    <?php if (isset($alamat['is_primary']) && $alamat['is_primary']): ?>
+                                        <span class="address-badge">Utama</span>
+                                    <?php endif; ?>
+                                    
                                     <h3>
+                                        <i class="fas fa-home"></i>
                                         <?= htmlspecialchars($alamat['label_alamat']) ?>
-                                        <?php if (isset($alamat['is_primary']) && $alamat['is_primary']): ?>
-                                            <span style="background: #28a745; color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px; margin-left: 8px;">Utama</span>
-                                        <?php endif; ?>
                                     </h3>
                                     
-                                    <p class="address-name"><strong><?= htmlspecialchars($alamat['nama_penerima']) ?></strong></p>
-                                    <p class="address-phone"><i class="fas fa-phone"></i> <?= htmlspecialchars($alamat['no_telepon']) ?></p>
-                                    <p class="address-detail"><i class="fas fa-map-marker-alt"></i> 
+                                    <p class="address-name">
+                                        <strong><?= htmlspecialchars($alamat['nama_penerima']) ?></strong>
+                                    </p>
+                                    
+                                    <p class="address-phone">
+                                        <i class="fas fa-phone"></i> 
+                                        <?= htmlspecialchars($alamat['no_telepon']) ?>
+                                    </p>
+                                    
+                                    <p class="address-detail">
+                                        <i class="fas fa-map-marker-alt"></i> 
                                         <?= htmlspecialchars($alamat['alamat_lengkap'] . ', ' . $alamat['kecamatan'] . ', ' . $alamat['kota'] . ', ' . $alamat['provinsi']) ?>
                                     </p>
                                     
                                     <div class="address-actions" onclick="event.stopPropagation();">
-                                        <a href="edit_alamat.php?id=<?= $alamat['id_pengiriman'] ?>" class="btn btn-outline btn-sm">
+                                        <a href="edit_alamat.php?id=<?= $alamat['id_pengiriman'] ?>" class="btn btn-outline">
                                             <i class="fas fa-edit"></i> Ubah
                                         </a>
                                         <a href="hapus_alamat.php?id_pengiriman=<?= $alamat['id_pengiriman'] ?>" 
-                                           class="btn btn-outline btn-sm btn-danger"
+                                           class="btn btn-outline btn-danger"
                                            onclick="return confirm('Yakin ingin menghapus alamat ini?')">
                                             <i class="fas fa-trash"></i> Hapus
                                         </a>
@@ -736,10 +360,12 @@ if ($query_alamat === false) {
                         <?php endif; ?>
                     </div>
                     
+                    <!-- Add Address Button -->
                     <button type="button" class="form-toggle" onclick="toggleAddressForm()">
                         <i class="fas fa-plus"></i> Tambah Alamat Baru
                     </button>
 
+                    <!-- New Address Form -->
                     <div class="address-form" id="addressForm">
                         <form action="prosesT_pengiriman.php" method="POST">
                             <div class="form-grid">
@@ -828,6 +454,7 @@ if ($query_alamat === false) {
                     </div>
                 </div>
 
+                <!-- Enhanced Order Summary -->
                 <div class="order-summary">
                     <h2><i class="fas fa-receipt"></i> Ringkasan Pesanan</h2>
                     
@@ -840,7 +467,7 @@ if ($query_alamat === false) {
                                     <h3><?= htmlspecialchars($item['nama_tanaman']) ?></h3>
                                     <p><?= $item['jumlah'] ?> x Rp<?= number_format($item['harga'], 0, ',', '.') ?></p>
                                     <?php if (isset($item['id_ringkasan'])): ?>
-                                    <small style="color: #666;">ID Ringkasan: <?= $item['id_ringkasan'] ?></small>
+                                    <small>ID Ringkasan: <?= $item['id_ringkasan'] ?></small>
                                     <?php endif; ?>
                                 </div>
                                 <div class="item-price">Rp<?= number_format($item['subtotal'], 0, ',', '.') ?></div>
@@ -863,7 +490,7 @@ if ($query_alamat === false) {
                             <span>Rp<?= number_format($total, 0, ',', '.') ?></span>
                         </div>
                         
-                        <div style="text-align: center; margin-top: 20px; padding: 15px; background: #e8f5e8; border-radius: 6px;">
+                        <div class="checkout-info">
                             <p><i class="fas fa-info-circle"></i> Pilih alamat untuk melanjutkan</p>
                         </div>
                     <?php else: ?>
@@ -878,14 +505,43 @@ if ($query_alamat === false) {
     </main>
 
     <footer>
+        <section class="feedback">
+            <div class="container">
+                <h2>Kirim kritik/saran untuk kami</h2>
+                <p>Ceritakan kepada kami kritik dan/atau saran Anda</p>
+                
+                <div class="feedback-form">
+                    <input type="text" placeholder="Masukkan kritik/saran">
+                    <button type="submit">KIRIM</button>
+                </div>
+            </div>
+        </section>
+        
         <div class="container">
             <div class="footer-content">
                 <div class="footer-logo">
                     <img src="images/logo.png" alt="Toko Tanaman">
-                    <p>Toko tanaman hias terpercaya</p>
+                    <p>Toko tanaman hias terpercaya dengan berbagai koleksi tanaman berkualitas untuk mempercantik rumah dan ruangan Anda.</p>
+                </div>
+                <div class="footer-links">
+                    <h3 class="footer-title">Tautan Cepat</h3>
+                    <ul>
+                        <li><a href="index.php">BERANDA</a></li>
+                        <li><a href="produk.php">PRODUK</a></li>
+                        <li><a href="kontak.php">KONTAK</a></li>
+                        <li><a href="tentang_kami.php">TENTANG KAMI</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h3 class="footer-title">Kategori</h3>
+                    <ul>
+                        <li><a href="tanaman_hias_daun.php">Tanaman Hias Daun</a></li>
+                        <li><a href="tanaman_hias_bunga.php">Tanaman Hias Bunga</a></li>
+                    </ul>
                 </div>
                 <div class="footer-contact">
-                    <h3>Kontak Kami</h3>
+                    <h3 class="footer-title">Kontak Kami</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> Jl. Tanaman Indah No. 123, Purwokerto</p>
                     <p><i class="fas fa-phone"></i> +62 812 3456 7890</p>
                     <p><i class="fas fa-envelope"></i> info@tokotanaman.com</p>
                 </div>
@@ -897,7 +553,7 @@ if ($query_alamat === false) {
     </footer>
 
     <script>
-        function selectAndSubmit(id) {
+        function selectAddress(id) {
             // Remove selected class from all cards
             document.querySelectorAll('.address-card').forEach(card => {
                 card.classList.remove('selected');
@@ -906,8 +562,10 @@ if ($query_alamat === false) {
             // Add selected class to clicked card
             event.currentTarget.classList.add('selected');
             
-            // Submit the form automatically
-            document.getElementById('form_' + id).submit();
+            // Add a small delay for visual feedback before submitting
+            setTimeout(() => {
+                document.getElementById('form_' + id).submit();
+            }, 200);
         }
         
         function toggleAddressForm() {
@@ -920,7 +578,7 @@ if ($query_alamat === false) {
             } else {
                 form.classList.add('show');
                 button.innerHTML = '<i class="fas fa-minus"></i> Tutup Form';
-                // Scroll to form
+                // Smooth scroll to form
                 form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }
         }
@@ -933,17 +591,61 @@ if ($query_alamat === false) {
             if (alamatTextarea && alamatCount) {
                 alamatTextarea.addEventListener('input', function() {
                     alamatCount.textContent = this.value.length;
+                    
+                    // Change color based on character count
+                    if (this.value.length > 180) {
+                        alamatCount.style.color = 'var(--danger)';
+                    } else if (this.value.length > 150) {
+                        alamatCount.style.color = 'var(--warning)';
+                    } else {
+                        alamatCount.style.color = 'var(--text-muted)';
+                    }
                 });
             }
             
             // Mark selected address if exists in session
             <?php if(isset($_SESSION['alamat_terpilih'])): ?>
             const selectedAddressId = <?= $_SESSION['alamat_terpilih'] ?>;
-            const selectedCard = document.querySelector(`.address-card[data-id="${selectedAddressId}"]`);
+            const selectedCard = document.querySelector(`#form_${selectedAddressId} .address-card`);
             if (selectedCard) {
                 selectedCard.classList.add('selected');
             }
             <?php endif; ?>
+            
+            // Add loading state to form submission
+            const forms = document.querySelectorAll('.address-form-select');
+            forms.forEach(form => {
+                form.addEventListener('submit', function() {
+                    const button = this.querySelector('.use-address-btn');
+                    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
+                    button.disabled = true;
+                });
+            });
+            
+            // Phone number formatting
+            const phoneInput = document.getElementById('no_telepon');
+            if (phoneInput) {
+                phoneInput.addEventListener('input', function() {
+                    // Remove non-numeric characters
+                    let value = this.value.replace(/\D/g, '');
+                    
+                    // Ensure it starts with 08
+                    if (value.length > 0 && !value.startsWith('08')) {
+                        if (value.startsWith('8')) {
+                            value = '0' + value;
+                        } else if (value.startsWith('62')) {
+                            value = '0' + value.substring(2);
+                        }
+                    }
+                    
+                    // Limit to reasonable phone number length
+                    if (value.length > 13) {
+                        value = value.substring(0, 13);
+                    }
+                    
+                    this.value = value;
+                });
+            }
         });
         
         // Debug logging
@@ -951,6 +653,19 @@ if ($query_alamat === false) {
         console.log('Product ID:', '<?= $product_id ?>');
         console.log('Quantity:', <?= $quantity ?>);
         console.log('Order Items:', <?= json_encode($orderData['items']) ?>);
+        
+        // Add smooth transitions for better UX
+        document.querySelectorAll('.address-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-2px)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                if (!this.classList.contains('selected')) {
+                    this.style.transform = 'translateY(0)';
+                }
+            });
+        });
     </script>
 </body>
 </html>
