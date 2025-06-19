@@ -18,7 +18,7 @@
             <li>
                 <a class="menu-item" onclick="location.href='dashboard.php'">
                     <i class="fas fa-tachometer-alt"></i>
-                    <span>Dashboard</span>
+                    <span>DASHBOARD</span>
                 </a>
             </li>
             <li>
