@@ -143,14 +143,14 @@ function getOrderProducts($koneksi, $id_pesanan) {
     }
     
     // Cara 3: Jika produk disimpan dalam kolom terpisah di tabel pesanan
-    $query3 = $koneksi->query("SELECT nama_produk, foto_produk, harga_produk FROM pesanan WHERE id_pesanan = '$id_pesanan'");
+    $query3 = $koneksi->query("SELECT nama_produk, foto, harga_produk FROM pesanan WHERE id_pesanan = '$id_pesanan'");
     
     if ($query3 && $query3->num_rows > 0) {
         $row = $query3->fetch_assoc();
         if (!empty($row['nama_produk'])) {
             $products[] = [
                 'nama_tanaman' => $row['nama_produk'],
-                'foto' => $row['foto_produk'] ?? 'default.jpg',
+                'foto' => $row['foto'] ?? 'default.jpg',
                 'harga' => $row['harga_produk'] ?? 0
             ];
         }
@@ -480,7 +480,7 @@ function getOrderProducts($koneksi, $id_pesanan) {
                                                 if ($index < 3) { // Tampilkan maksimal 3 item
                                         ?>
                                                     <div class="order-item">
-                                                        <img src="uploads/<?= htmlspecialchars($produk['foto']) ?>" 
+                                                        <img src="admin/images/<?= htmlspecialchars($produk['foto']) ?>" 
                                                             alt="<?= htmlspecialchars($produk['nama_tanaman']) ?>"
                                                             onerror="this.src='images/default-product.jpg'">
                                                         <div class="item-details">

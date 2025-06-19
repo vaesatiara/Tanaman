@@ -2,8 +2,35 @@
 session_start();
 include "koneksi.php";
 
+if (!isset($_SESSION['username'])){
+    header("Location:login.php?login_dulu");
+    exit;
+}
+
+$username = $_SESSION['username'];
+
+// Ambil data pelanggan
+$sql = "SELECT * FROM pelanggan WHERE username= '$username'";
+$query = mysqli_query($koneksi, $sql);
+$pelanggan = mysqli_fetch_assoc($query);
+
+// Proses set alamat utama
+if (isset($_GET['set_primary'])) {
+    $id_pengiriman = $_GET['set_primary'];
+    
+    // Reset semua alamat menjadi tidak utama
+    $reset_sql = "UPDATE pengiriman SET is_primary = 0 WHERE username '$username'";
+    mysqli_query($koneksi, $reset_sql);
+    
+    // Set alamat terpilih menjadi utama
+   
+    
+    header("Location: alamat_tersimpan.php");
+    exit;
+}
+
 // Ambil semua alamat pelanggan
-$sql_alamat = "SELECT * FROM pengiriman WHERE pelanggan= '$id_pelanggan'";
+$sql_alamat = "SELECT * FROM pengiriman ";
 $query_alamat = mysqli_query($koneksi, $sql_alamat);
 ?>
 
@@ -16,7 +43,40 @@ $query_alamat = mysqli_query($koneksi, $sql_alamat);
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/notif.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
- 
+    <style>
+        .badge-primary {
+            background: #4CAF50;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+        
+        .alert {
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+        
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #ccc;
+        }
+    </style>
 </head>
 <body>
     <header>

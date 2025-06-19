@@ -125,18 +125,7 @@ $query=mysqli_query($koneksi,$sql);
         </div>
     </div>
 
-    <!-- Modal untuk menampilkan gambar besar -->
-    <div id="imageModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3><i class="fas fa-image"></i> Bukti Transfer</h3>
-                <span class="modal-close" onclick="closeImageModal()">&times;</span>
-            </div>
-            <div class="modal-body">
-                <img id="modalImage" src="/placeholder.svg" alt="Bukti Transfer" style="width: 100%; height: auto; border-radius: 8px;">
-            </div>
-        </div>
-    </div>
+    
 
     <script>
     // Fungsi untuk memeriksa apakah gambar berhasil dimuat

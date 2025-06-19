@@ -96,6 +96,51 @@ function getShippingName($method = 'jne') {
     return isset($shippingNames[$method]) ? $shippingNames[$method] : 'JNE Regular';
 }
 
+// Fungsi untuk menyimpan ringkasan pesanan ke database
+function saveOrderSummary($orderData, $shippingAddress, $shippingMethod, $shippingCost, $paymentMethod, $totalAmount) {
+    global $koneksi;
+    
+    // Generate order ID unik
+    $orderId = 'ORD-' . date('YmdHis') . '-' . rand(1000, 9999);
+    
+    // Simpan setiap item pesanan ke tabel ringkasan_pesanan
+    foreach ($orderData['items'] as $item) {
+        $id_produk = $item['id_produk'];
+        $nama_tanaman = $koneksi->real_escape_string($item['nama_tanaman']);
+        $foto = $koneksi->real_escape_string($item['foto']);
+        $harga = $item['harga'];
+        $jumlah = $item['jumlah'];
+        
+        // Query untuk insert ke database
+        $insertQuery = "INSERT INTO ringkasan_pesanan (id_produk, nama_tanaman, foto, harga, jumlah) 
+                       VALUES ('$id_produk', '$nama_tanaman', '$foto', '$harga', '$jumlah')";
+        
+        if (!$koneksi->query($insertQuery)) {
+            // Jika ada error, tampilkan pesan error
+            echo "Error: " . $insertQuery . "<br>" . $koneksi->error;
+            return false;
+        }
+    }
+    
+    // Opsional: Bisa juga menyimpan data pesanan lengkap ke tabel pesanan terpisah
+    // Ini untuk menyimpan informasi lengkap pesanan termasuk alamat pengiriman, metode pembayaran, dll
+    /*
+    $alamat_lengkap = $koneksi->real_escape_string($shippingAddress['alamat_lengkap']);
+    $metode_pengiriman = $koneksi->real_escape_string($shippingMethod);
+    $metode_pembayaran = $koneksi->real_escape_string($paymentMethod);
+    $tanggal_pesan = date('Y-m-d H:i:s');
+    
+    $orderQuery = "INSERT INTO pesanan (order_id, alamat_pengiriman, metode_pengiriman, biaya_pengiriman, 
+                   metode_pembayaran, subtotal, total_amount, tanggal_pesan, status) 
+                   VALUES ('$orderId', '$alamat_lengkap', '$metode_pengiriman', '$shippingCost', 
+                   '$metode_pembayaran', '{$orderData['subtotal']}', '$totalAmount', '$tanggal_pesan', 'pending')";
+    
+    $koneksi->query($orderQuery);
+    */
+    
+    return true;
+}
+
 // Ambil data dari POST (dikirim dari metode_pengiriman.php)
 $source = isset($_POST['order_source']) ? $_POST['order_source'] : 'cart';
 $product_id = isset($_POST['product_id']) ? $_POST['product_id'] : null;
@@ -129,23 +174,36 @@ $shippingName = getShippingName($selectedShipping);
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['payment_method'])) {
     $payment_method = $_POST['payment_method'];
     
-    // Simpan ke session untuk halaman konfirmasi
-    $_SESSION['order_data'] = [
-        'source' => $source,
-        'product_id' => $product_id,
-        'quantity' => $quantity,
-        'shipping_address_id' => $shipping_address_id,
-        'shipping_method' => $selectedShipping,
-        'shipping_cost' => $shippingCost,
-        'payment_method' => $payment_method,
-        'total_amount' => $total_amount,
-        'order_items' => $orderData['items'],
-        'subtotal' => $orderData['subtotal']
-    ];
+    // Simpan ringkasan pesanan ke database
+    $saveResult = saveOrderSummary($orderData, $shippingAddress, $selectedShipping, $shippingCost, $payment_method, $total_amount);
     
-    // Redirect ke halaman konfirmasi
-    header("Location: konfirmasi_pesanan.php");
-    exit();
+    if ($saveResult) {
+        // Simpan ke session untuk halaman konfirmasi
+        $_SESSION['order_data'] = [
+            'source' => $source,
+            'product_id' => $product_id,
+            'quantity' => $quantity,
+            'shipping_address_id' => $shipping_address_id,
+            'shipping_method' => $selectedShipping,
+            'shipping_cost' => $shippingCost,
+            'payment_method' => $payment_method,
+            'total_amount' => $total_amount,
+            'order_items' => $orderData['items'],
+            'subtotal' => $orderData['subtotal']
+        ];
+        
+        // Jika pesanan dari keranjang, hapus keranjang setelah berhasil disimpan
+        if ($source === 'cart') {
+            unset($_SESSION['keranjang']);
+        }
+        
+        // Redirect ke halaman konfirmasi
+        header("Location: konfirmasi_pesanan.php");
+        exit();
+    } else {
+        // Jika gagal menyimpan, tampilkan pesan error
+        $error_message = "Terjadi kesalahan saat menyimpan pesanan. Silakan coba lagi.";
+    }
 }
 ?>
 
@@ -199,6 +257,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['payment_method'])) {
             font-size: 14px;
             color: #666;
         }
+        
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 12px;
+            border: 1px solid #f5c6cb;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border: 1px solid #c3e6cb;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
     </style>
 </head>
 <body>
@@ -248,6 +324,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['payment_method'])) {
             <div class="checkout-content">
                 <div class="checkout-form">
                     <h2>Metode Pembayaran</h2>
+                    
+                    <!-- Display error message if any -->
+                    <?php if (isset($error_message)): ?>
+                        <div class="error-message">
+                            <i class="fas fa-exclamation-triangle"></i> <?= $error_message ?>
+                        </div>
+                    <?php endif; ?>
                     
                     <!-- Back to Shipping Method button -->
                     <a href="metode_pengiriman.php?source=<?= $source ?><?= $product_id ? '&id_produk='.$product_id.'&qty='.$quantity : '' ?>" class="btn btn-outline" style="margin-bottom: 20px; display: inline-block;">
@@ -366,7 +449,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['payment_method'])) {
                         </div>
 
                         <button type="submit" form="paymentForm" class="checkout-btn" id="paymentBtn" disabled>
-                            Lanjutkan ke Konfirmasi
+                            <i class="fas fa-credit-card"></i> Konfirmasi Pembayaran
                         </button>
                     <?php else: ?>
                         <div class="empty-order">
@@ -484,6 +567,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['payment_method'])) {
         // Initially disable button
         paymentBtn.style.opacity = '0.5';
         paymentBtn.style.cursor = 'not-allowed';
+        
+        // Form submission confirmation
+        document.getElementById('paymentForm').addEventListener('submit', function(e) {
+            // Show loading state
+            paymentBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
+            paymentBtn.disabled = true;
+        });
     });
     </script>
 </body>

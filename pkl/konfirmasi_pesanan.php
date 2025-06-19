@@ -27,7 +27,7 @@ function getOrderDataFromDatabase($koneksi, $temp_order_id = null, $session_id =
             SELECT r.*, p.nama_tanaman as produk_nama, p.harga as produk_harga, p.foto as produk_foto
             FROM ringkasan_pesanan r 
             LEFT JOIN produk p ON r.id_produk = p.id_produk 
-            WHERE r.temp_order_id = '$temp_order_id' AND r.status = 'temp' 
+            WHERE r.temp_order_id = '$temp_order_id' AND r.status_pesanan = 'temp' 
             ORDER BY r.id_ringkasan
         ");
     } else if ($session_id) {
@@ -35,7 +35,7 @@ function getOrderDataFromDatabase($koneksi, $temp_order_id = null, $session_id =
             SELECT r.*, p.nama_tanaman as produk_nama, p.harga as produk_harga, p.foto as produk_foto
             FROM ringkasan_pesanan r 
             LEFT JOIN produk p ON r.id_produk = p.id_produk 
-            WHERE r.session_id = '$session_id' AND r.status = 'temp' 
+            WHERE r.session_id = '$session_id' AND r.status_pesanan = 'temp' 
             ORDER BY r.id_ringkasan
         ");
     } else {
@@ -56,11 +56,6 @@ function getOrderDataFromDatabase($koneksi, $temp_order_id = null, $session_id =
                     'subtotal' => (float)$row['subtotal']
                 ];
                 $subtotal += $row['subtotal'];
-                
-                // Log untuk debugging
-                error_log("Product ID found: " . $row['id_produk'] . " - " . $row['nama_tanaman']);
-            } else {
-                error_log("WARNING: Product ID is NULL or empty for row: " . json_encode($row));
             }
             
             // Ambil info pesanan dari record pertama
@@ -69,7 +64,7 @@ function getOrderDataFromDatabase($koneksi, $temp_order_id = null, $session_id =
                     'shipping_method' => $row['shipping_method'],
                     'shipping_cost' => $row['shipping_cost'],
                     'payment_method' => $row['payment_method'],
-                    'total_amount' => $row['total_amount'],
+                    'total' => $row['total'], // PERBAIKAN: Ubah dari total_amount ke total
                     'subtotal' => $subtotal
                 ];
             }
@@ -87,11 +82,9 @@ $databaseData = getOrderDataFromDatabase($koneksi, $temp_order_id, $session_id);
 
 // Jika tidak ada data di database, fallback ke session data
 if (empty($databaseData['items']) && isset($sessionData['order_items'])) {
-    error_log("Fallback ke session data karena tidak ada data di database");
     $orderItems = $sessionData['order_items'];
     $orderInfo = $sessionData;
 } else {
-    error_log("Menggunakan data dari database ringkasan_pesanan");
     $orderItems = $databaseData['items'];
     $orderInfo = $databaseData['info'];
     
@@ -104,7 +97,6 @@ if (empty($databaseData['items']) && isset($sessionData['order_items'])) {
 
 // PERBAIKAN: Validasi data item pesanan sebelum menyimpan
 if (empty($orderItems)) {
-    error_log("Error: Tidak ada data order items");
     header("Location: keranjang.php?error=no_order_data");
     exit();
 }
@@ -211,7 +203,7 @@ function calculateOrderTotal($orderItems, $shippingCost = 0) {
 // Variabel untuk menampung data pesanan
 $nomor_pesanan = '';
 $tanggal_pesanan = '';
-$status_pesanan = 'menunggu_pembayaran';
+$status_pesanan = 'menunggu pembayaran';
 $order_saved = false;
 $error_message = '';
 
@@ -221,10 +213,7 @@ $orderCalculation = calculateOrderTotal(
     isset($orderInfo['shipping_cost']) ? $orderInfo['shipping_cost'] : (isset($sessionData['shipping_cost']) ? $sessionData['shipping_cost'] : 0)
 );
 
-// Debugging data item sebelum penyimpanan
-error_log("Data order items dari database: " . json_encode($orderItems));
-
-// PERBAIKAN: Proses penyimpanan pesanan ke database (TANPA INSERT KE detail_pesanan)
+// PERBAIKAN: Proses penyimpanan pesanan ke database
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['konfirmasi_pesanan'])) {
     
     try {
@@ -243,7 +232,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['konfirmasi_pesanan'])
         
         // Generate nomor pesanan unik
         $nomor_pesanan = "TN" . date("YmdHis") . rand(100, 999);
-        $tanggal_pesanan = date("Y-m-d H:i:s");
+        
+        // PERBAIKAN: Set tanggal dan status pesanan dengan benar
+        $tanggal_pesanan = date("Y-m-d H:i:s"); // Format datetime untuk database
+        $status_pesanan = 'menunggu pembayaran'; // Set status default
         
         // Hitung ulang total untuk memastikan akurasi
         $finalCalculation = calculateOrderTotal(
@@ -260,12 +252,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['konfirmasi_pesanan'])
             throw new Exception("Total pesanan tidak valid: Rp" . number_format($total_pesanan, 0, ',', '.'));
         }
         
-        // PERBAIKAN: Insert pesanan utama dengan ID produk dan jumlah
-        // Ambil produk pertama sebagai representasi pesanan (jika ada multiple produk, bisa disesuaikan)
-        $first_item = $sessionData['order_items'][0]; // Ambil item pertama
+        // PERBAIKAN: Insert pesanan utama dengan tanggal dan status yang benar
+        $first_item = $sessionData['order_items'][0];
         $id_produk_utama = $first_item['id_produk'];
         $jumlah_utama = $first_item['jumlah'];
 
+        // PERBAIKAN: Pastikan semua field required terisi
         $sql_pesanan = "INSERT INTO pesanan (id_pelanggan, id_produk, nomor_pesanan, tgl_pesanan, jumlah, total, status_pesanan) 
                         VALUES (?, ?, ?, ?, ?, ?, ?)";
 
@@ -274,100 +266,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['konfirmasi_pesanan'])
             throw new Exception("Prepare statement gagal: " . $koneksi->error);
         }
 
-        $stmt->bind_param("iisiids", $id_pelanggan, $id_produk_utama, $nomor_pesanan, $tanggal_pesanan, $jumlah_utama, $total_pesanan, $status_pesanan);
+        // PERBAIKAN: Bind parameter dengan tipe data yang tepat
+        $stmt->bind_param("iisiids", 
+            $id_pelanggan,          // integer
+            $id_produk_utama,       // integer  
+            $nomor_pesanan,         // string
+            $tgl_pesanan,       // string (datetime)
+            $jumlah_utama,          // integer
+            $total_pesanan,         // double/float
+            $status_pesanan         // string
+        );
 
         if (!$stmt->execute()) {
             throw new Exception("Gagal menyimpan pesanan: " . $stmt->error);
         }
 
         $id_pesanan = $koneksi->insert_id;
-        error_log("Pesanan berhasil disimpan dengan ID: $id_pesanan, ID Produk: $id_produk_utama, Jumlah: $jumlah_utama");
-
-        // PERBAIKAN: Insert detail pesanan dengan ID produk yang valid
-        foreach ($orderItems as $item) {
-            // Validasi ulang ID produk sebelum insert
-            if (empty($item['id_produk']) || $item['id_produk'] <= 0) {
-                throw new Exception("ID produk tidak valid: " . $item['id_produk']);
-            }
-            
-            $sql_detail = "INSERT INTO detail_pesanan (id_pesanan, id_produk, jumlah, harga, subtotal) 
-                           VALUES (?, ?, ?, ?, ?)";
-            
-            $stmt_detail = $koneksi->prepare($sql_detail);
-            if (!$stmt_detail) {
-                throw new Exception("Prepare statement detail gagal: " . $koneksi->error);
-            }
-            
-            $stmt_detail->bind_param("iiidd", 
-                $id_pesanan, 
-                $item['id_produk'],  // PERBAIKAN: Pastikan ID produk valid
-                $item['jumlah'], 
-                $item['harga'], 
-                $item['subtotal']
-            );
-            
-            if (!$stmt_detail->execute()) {
-                throw new Exception("Gagal menyimpan detail pesanan untuk produk ID " . $item['id_produk'] . ": " . $stmt_detail->error);
-            }
-            
-            error_log("Detail pesanan berhasil disimpan - Produk ID: " . $item['id_produk'] . ", Nama: " . $item['nama_tanaman']);
-        }
-        
-        // PERBAIKAN: Simpan data pengiriman dengan validasi
-        if (isset($sessionData['shipping_address_id']) && !empty($sessionData['shipping_address_id'])) {
-            // Validasi alamat pengiriman ada
-            $check_address = $koneksi->prepare("SELECT id_pengiriman FROM pengiriman WHERE id_pengiriman = ?");
-            $check_address->bind_param("i", $sessionData['shipping_address_id']);
-            $check_address->execute();
-            $address_result = $check_address->get_result();
-            
-            if ($address_result->num_rows > 0) {
-                $sql_pengiriman = "INSERT INTO detail_pengiriman (id_pesanan, id_alamat, metode_pengiriman, biaya_pengiriman) 
-                                  VALUES (?, ?, ?, ?)";
-                
-                $sql_pengiriman_string = $sql_pengiriman;
-                error_log("SQL Query: " . $sql_pengiriman_string);
-
-                $stmt_pengiriman = $koneksi->prepare($sql_pengiriman);
-                
-                if (!$stmt_pengiriman) {
-                    error_log("Prepare failed: " . $koneksi->error);
-                    throw new Exception("Prepare statement gagal: " . $koneksi->error);
-                }
-                
-                if ($stmt_pengiriman) {
-                    $shipping_method = isset($orderInfo['shipping_method']) ? $orderInfo['shipping_method'] : (isset($sessionData['shipping_method']) ? $sessionData['shipping_method'] : 'jne');
-                    $shipping_cost = isset($orderInfo['shipping_cost']) ? $orderInfo['shipping_cost'] : (isset($sessionData['shipping_cost']) ? $sessionData['shipping_cost'] : 0);
-                    
-                    $stmt_pengiriman->bind_param("iisd", $id_pesanan, $sessionData['shipping_address_id'], $shipping_method, $shipping_cost);
-                    
-                    if (!$stmt_pengiriman->execute()) {
-                        error_log("Warning: Gagal menyimpan detail pengiriman: " . $stmt_pengiriman->error);
-                    } else {
-                        error_log("Detail pengiriman berhasil disimpan");
-                    }
-                }
-            } else {
-                error_log("Warning: Alamat pengiriman dengan ID {$sessionData['shipping_address_id']} tidak ditemukan");
-            }
-        }
         
         // Commit transaksi
         $koneksi->commit();
-        error_log("Transaksi pesanan berhasil di-commit");
-        
-        // PERBAIKAN: TIDAK menghapus data dari ringkasan_pesanan karena itu adalah sumber data utama
-        // Data ringkasan_pesanan dengan status 'confirmed' akan menjadi detail pesanan permanent
+
+        // PERBAIKAN: Ambil data pesanan terbaru dari database untuk konfirmasi
+        $sql_get_saved_order = "SELECT nomor_pesanan, tgl_pesanan, status_pesanan FROM pesanan WHERE id_pesanan = ?";
+        $stmt_get_order = $koneksi->prepare($sql_get_saved_order);
+        if ($stmt_get_order) {
+            $stmt_get_order->bind_param("i", $id_pesanan);
+            $stmt_get_order->execute();
+            $result_saved = $stmt_get_order->get_result();
+            
+            if ($result_saved->num_rows > 0) {
+                $saved_order = $result_saved->fetch_assoc();
+                $nomor_pesanan = $saved_order['nomor_pesanan'];
+                $tanggal_pesanan = date("d M Y, H:i", strtotime($saved_order['tgl_pesanan']));
+                $status_pesanan = $saved_order['status_pesanan'];
+                $display_status = getStatusLabel($status_pesanan);
+            }
+        }
         
         // Bersihkan keranjang jika pembelian dari keranjang
         if (isset($sessionData['source']) && $sessionData['source'] === 'cart') {
             unset($_SESSION['keranjang']);
-            error_log("Keranjang berhasil dibersihkan");
         }
         
         // Set flag bahwa pesanan berhasil disimpan
         $order_saved = true;
-        $tanggal_pesanan = date("d M Y, H:i");
         
         // PERBAIKAN: Simpan data pesanan untuk halaman konfirmasi pembayaran
         $_SESSION['last_order_number'] = $nomor_pesanan;
@@ -378,17 +320,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['konfirmasi_pesanan'])
             'id_pesanan' => $id_pesanan,
             'nomor_pesanan' => $nomor_pesanan,
             'total' => $total_pesanan,
-            'status' => $status_pesanan,
-            'items' => $orderItems // Simpan juga detail items dari database
+            'status_pesanan' => $status_pesanan,
+            'items' => $orderItems
         ];
-        
-        error_log("Data pesanan berhasil disimpan ke session untuk referensi pembayaran");
         
     } catch (Exception $e) {
         $koneksi->rollback();
         $error_message = $e->getMessage();
-        error_log("Error konfirmasi pesanan: " . $e->getMessage());
-        error_log("Stack trace: " . $e->getTraceAsString());
     }
 }
 
@@ -427,7 +365,7 @@ $total = $orderCalculation['total'];
 // Fungsi untuk mendapatkan label status yang user-friendly
 function getStatusLabel($status) {
     $labels = [
-        'menunggu_pembayaran' => 'Menunggu Pembayaran',
+        'menunggu pembayaran' => 'Menunggu Pembayaran',
         'menunggu_konfirmasi' => 'Menunggu Konfirmasi',
         'diproses' => 'Sedang Diproses',
         'dikirim' => 'Sedang Dikirim',
@@ -486,7 +424,6 @@ $display_status = getStatusLabel($status_pesanan);
                         </div>
                         <h1>Konfirmasi Pesanan Anda</h1>
                         <p>Periksa kembali detail pesanan sebelum melanjutkan</p>
-                        <p><small>Data diambil dari database ringkasan_pesanan (single source of truth)</small></p>
                     </div>
                     
                     <?php if (!empty($error_message)): ?>
@@ -516,14 +453,14 @@ $display_status = getStatusLabel($status_pesanan);
                         </div>
                     </div>
                     
-                    <!-- Ringkasan Pesanan - DATA DARI DATABASE RINGKASAN_PESANAN -->
+                    <!-- Ringkasan Pesanan -->
                     <div class="order-summary">
-                        <h3>Ringkasan Pesanan <small>(dari ringkasan_pesanan)</small></h3>
+                        <h3>Ringkasan Pesanan</h3>
                         
                         <div class="summary-items">
                             <?php foreach ($orderData['items'] as $item): ?>
                             <div class="summary-item">
-                                <img src="uploads/<?= htmlspecialchars($item['foto']) ?>" alt="<?= htmlspecialchars($item['nama_tanaman']) ?>" class="item-image">
+                                <img src="/admin/Admin_WebTanaman/uploads<?= htmlspecialchars($item['foto']) ?>" alt="<?= htmlspecialchars($item['nama_tanaman']) ?>" class="item-image">
                                 <div class="item-info">
                                     <h4><?= htmlspecialchars($item['nama_tanaman']) ?></h4>
                                     <p><?= $item['jumlah'] ?> x Rp<?= number_format($item['harga'], 0, ',', '.') ?></p>
@@ -570,7 +507,6 @@ $display_status = getStatusLabel($status_pesanan);
                     </div>
                     <h1>Pesanan Berhasil Dibuat!</h1>
                     <p>Terima kasih telah berbelanja di TOKO TANAMAN</p>
-                    <p><small>Detail pesanan tersimpan di tabel ringkasan_pesanan</small></p>
                 </div>
                 
                 <div class="receipt-details">
@@ -608,13 +544,12 @@ $display_status = getStatusLabel($status_pesanan);
                     
                     <p class="payment-note">Catatan: Mohon transfer tepat hingga 3 digit terakhir untuk memudahkan verifikasi.</p>
                     
-                    <!-- PERBAIKAN: Link ke konfirmasi pembayaran dengan parameter yang tepat -->
-                    <a href="proses_pembayaran.php?id_pesanan=<?= $id_pesanan ?>" class="btn btn-primary">Konfirmasi Pembayaran</a>
+                    <a href="konfirmasi_pembayaran.php?id_pesanan=<?= $id_pesanan ?>" class="btn btn-primary">Konfirmasi Pembayaran</a>
                 </div>
                 
-                <!-- DETAIL PESANAN - DATA DARI RINGKASAN_PESANAN -->
+                <!-- DETAIL PESANAN -->
                 <div class="order-details">
-                    <h2>Detail Pesanan <small>(dari ringkasan_pesanan - single source)</small></h2>
+                    <h2>Detail Pesanan</h2>
                     
                     <div class="order-summary">
                         <h2 class="summary-title">Ringkasan Pesanan</h2>

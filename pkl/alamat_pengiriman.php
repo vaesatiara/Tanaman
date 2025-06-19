@@ -11,110 +11,126 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['id_pelanggan'])) {
 $username = $_SESSION['username'] ?? '';
 $id_pelanggan = $_SESSION['id_pelanggan'] ?? '';
 
-// Fungsi untuk mendapatkan data pesanan dari database
-function getOrderDataFromDatabase($id_pelanggan, $source = 'cart') {
-    global $koneksi;
-    $orderItems = [];
-    $totalHarga = 0;
-    
-    // Periksa apakah kolom id_pelanggan ada dalam tabel
-    $check_column = "SHOW COLUMNS FROM ringkasan_pesanan LIKE 'id_pelanggan'";
-    $column_result = mysqli_query($koneksi, $check_column);
-    
-    if (mysqli_num_rows($column_result) == 0) {
-        // Jika kolom tidak ada, gunakan fallback ke session
-        error_log("Column id_pelanggan not found in ringkasan_pesanan table. Using session fallback.");
-        return getOrderDataFromSession($source);
-    }
-    
-    // Query untuk mengambil data ringkasan pesanan dari database
-    $query = "SELECT r.*, p.nama_tanaman, p.foto 
-              FROM ringkasan_pesanan r 
-              JOIN produk p ON r.id_produk = p.id_produk 
-              WHERE r.id_pelanggan = '$id_pelanggan'";
-              
-    if ($source === 'buy_now' && isset($_GET['id_produk'])) {
-        $id_produk = $_GET['id_produk'];
-        $query .= " AND r.id_produk = '$id_produk'";
-    }
-    
-    $result = mysqli_query($koneksi, $query);
-    
-    if ($result && mysqli_num_rows($result) > 0) {
-        while ($row = mysqli_fetch_assoc($result)) {
-            $subtotal = $row['harga'] * $row['jumlah'];
-            $orderItems[] = [
-                'id_produk' => $row['id_produk'],
-                'nama_tanaman' => $row['nama_tanaman'],
-                'harga' => $row['harga'],
-                'foto' => $row['foto'],
-                'jumlah' => $row['jumlah'],
-                'subtotal' => $subtotal,
-                'id_ringkasan' => $row['id_ringkasan']
-            ];
-            $totalHarga += $subtotal;
-        }
-    } else {
-        // Fallback ke metode lama jika tidak ada data di database
-        return getOrderDataFromSession($source);
-    }
-    
-    return [
-        'items' => $orderItems,
-        'subtotal' => $totalHarga
-    ];
-}
+// Enhanced debugging
+error_log("=== ALAMAT PENGIRIMAN DEBUG START ===");
+error_log("GET: " . print_r($_GET, true));
+error_log("POST: " . print_r($_POST, true));
+error_log("SESSION keranjang: " . print_r($_SESSION['keranjang'] ?? [], true));
+error_log("SESSION order_data: " . print_r($_SESSION['order_data'] ?? [], true));
 
-// Fungsi fallback untuk mendapatkan data dari session jika database kosong
-function getOrderDataFromSession($source = 'cart') {
+// Get parameters with comprehensive fallback
+$source = $_GET['source'] ?? $_POST['order_source'] ?? $_SESSION['order_data']['source'] ?? 'cart';
+$product_id = $_GET['id_produk'] ?? $_POST['product_id'] ?? $_SESSION['order_data']['product_id'] ?? null;
+$quantity = (int)($_GET['qty'] ?? $_POST['quantity'] ?? $_SESSION['order_data']['quantity'] ?? 1);
+
+error_log("Processed params - Source: $source, Product ID: $product_id, Quantity: $quantity");
+
+// PERBAIKAN: Enhanced function to get complete order data with proper product ID handling
+function getCompleteOrderData($id_pelanggan, $source = 'cart', $product_id = null, $quantity = 1) {
     global $koneksi;
     $orderItems = [];
     $totalHarga = 0;
     
-    if ($source === 'cart') {
-        // Ambil dari keranjang
-        if (isset($_SESSION['keranjang']) && !empty($_SESSION['keranjang'])) {
-            foreach ($_SESSION['keranjang'] as $id_produk => $jumlah) {
-                if (empty($id_produk)) continue;
-                
-                $query = $koneksi->query("SELECT * FROM produk WHERE id_produk='$id_produk'");
-                $produk = $query->fetch_assoc();
-                
-                if ($produk) {
-                    $subtotal = $produk['harga'] * $jumlah;
-                    $orderItems[] = [
-                        'id_produk' => $id_produk,
-                        'nama_tanaman' => $produk['nama_tanaman'],
-                        'harga' => $produk['harga'],
-                        'foto' => $produk['foto'],
-                        'jumlah' => $jumlah,
-                        'subtotal' => $subtotal
-                    ];
-                    $totalHarga += $subtotal;
-                }
-            }
-        }
-    } else if ($source === 'buy_now' && isset($_GET['id_produk'])) {
-        // Ambil dari beli sekarang
-        $id_produk = $_GET['id_produk'];
-        $quantity = isset($_GET['qty']) ? (int)$_GET['qty'] : 1;
+    error_log("getCompleteOrderData called - Source: $source, Product ID: $product_id, Quantity: $quantity");
+    
+    if ($source === 'buy_now' && $product_id) {
+        // Handle Buy Now - get specific product
+        error_log("Processing BUY NOW for product ID: $product_id");
         
-        $query = $koneksi->query("SELECT * FROM produk WHERE id_produk='$id_produk'");
-        $produk = $query->fetch_assoc();
+        $stmt = $koneksi->prepare("SELECT * FROM produk WHERE id_produk = ?");
+        $stmt->bind_param("i", $product_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $produk = $result->fetch_assoc();
         
         if ($produk) {
             $subtotal = $produk['harga'] * $quantity;
             $orderItems[] = [
-                'id_produk' => $id_produk,
+                'id_produk' => (int)$product_id, // PERBAIKAN: Pastikan integer
                 'nama_tanaman' => $produk['nama_tanaman'],
-                'harga' => $produk['harga'],
+                'harga' => (float)$produk['harga'],
                 'foto' => $produk['foto'],
-                'jumlah' => $quantity,
-                'subtotal' => $subtotal
+                'jumlah' => (int)$quantity,
+                'subtotal' => (float)$subtotal,
+                'source' => 'buy_now'
             ];
             $totalHarga = $subtotal;
+            
+            error_log("Buy now product found: " . $produk['nama_tanaman'] . " - Price: " . $produk['harga']);
+        } else {
+            error_log("ERROR: Product not found for ID: $product_id");
+        }
+        
+    } else if ($source === 'cart' || $source === 'individual_checkout') {
+        // Handle Cart or Individual Item Checkout
+        error_log("Processing CART checkout");
+        
+        if ($source === 'individual_checkout' && $product_id) {
+            // Individual item from cart
+            error_log("Individual checkout for product: $product_id");
+            
+            if (isset($_SESSION['keranjang'][$product_id])) {
+                $cart_quantity = (int)$_SESSION['keranjang'][$product_id];
+                
+                $stmt = $koneksi->prepare("SELECT * FROM produk WHERE id_produk = ?");
+                $stmt->bind_param("i", $product_id);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                $produk = $result->fetch_assoc();
+                
+                if ($produk) {
+                    $subtotal = $produk['harga'] * $cart_quantity;
+                    $orderItems[] = [
+                        'id_produk' => (int)$product_id, // PERBAIKAN: Pastikan integer
+                        'nama_tanaman' => $produk['nama_tanaman'],
+                        'harga' => (float)$produk['harga'],
+                        'foto' => $produk['foto'],
+                        'jumlah' => $cart_quantity,
+                        'subtotal' => (float)$subtotal,
+                        'source' => 'individual_checkout'
+                    ];
+                    $totalHarga = $subtotal;
+                }
+            }
+        } else {
+            // Full cart checkout
+            error_log("Full cart checkout");
+            
+            if (isset($_SESSION['keranjang']) && !empty($_SESSION['keranjang'])) {
+                foreach ($_SESSION['keranjang'] as $id_produk => $jumlah) {
+                    if (empty($id_produk) || $jumlah <= 0) continue;
+                    
+                    $stmt = $koneksi->prepare("SELECT * FROM produk WHERE id_produk = ?");
+                    $stmt->bind_param("i", $id_produk);
+                    $stmt->execute();
+                    $result = $stmt->get_result();
+                    $produk = $result->fetch_assoc();
+                    
+                    if ($produk) {
+                        $subtotal = $produk['harga'] * $jumlah;
+                        $orderItems[] = [
+                            'id_produk' => (int)$id_produk, // PERBAIKAN: Pastikan integer
+                            'nama_tanaman' => $produk['nama_tanaman'],
+                            'harga' => (float)$produk['harga'],
+                            'foto' => $produk['foto'],
+                            'jumlah' => (int)$jumlah,
+                            'subtotal' => (float)$subtotal,
+                            'source' => 'cart'
+                        ];
+                        $totalHarga += $subtotal;
+                        
+                        error_log("Cart item added: " . $produk['nama_tanaman'] . " x " . $jumlah);
+                    }
+                }
+            } else {
+                error_log("WARNING: Cart is empty or not set");
+            }
         }
     }
+    
+    error_log("Total items found: " . count($orderItems));
+    error_log("Total amount: $totalHarga");
+    error_log("=== ALAMAT PENGIRIMAN DEBUG END ===");
     
     return [
         'items' => $orderItems,
@@ -122,24 +138,21 @@ function getOrderDataFromSession($source = 'cart') {
     ];
 }
 
-// Tentukan sumber data berdasarkan parameter
-$source = isset($_GET['source']) ? $_GET['source'] : (isset($_POST['order_source']) ? $_POST['order_source'] : (isset($_SESSION['order_data']['source']) ? $_SESSION['order_data']['source'] : 'cart'));
-$product_id = isset($_GET['id_produk']) ? $_GET['id_produk'] : (isset($_POST['product_id']) ? $_POST['product_id'] : (isset($_SESSION['order_data']['product_id']) ? $_SESSION['order_data']['product_id'] : null));
-$quantity = isset($_GET['qty']) ? (int)$_GET['qty'] : (isset($_POST['quantity']) ? (int)$_POST['quantity'] : (isset($_SESSION['order_data']['quantity']) ? $_SESSION['order_data']['quantity'] : 1));
+// Get order data
+$orderData = getCompleteOrderData($id_pelanggan, $source, $product_id, $quantity);
 
-// Ambil data pesanan dari database
-$orderData = getOrderDataFromDatabase($id_pelanggan, $source);
-
-// Simpan data pesanan ke session untuk persistensi
+// PERBAIKAN: Enhanced session storage with complete order data
 $_SESSION['order_data'] = [
-    'items' => $orderData['items'],
+    'order_items' => $orderData['items'], // PERBAIKAN: Gunakan key yang konsisten
     'subtotal' => $orderData['subtotal'],
     'source' => $source,
     'product_id' => $product_id,
-    'quantity' => $quantity
+    'quantity' => $quantity,
+    'timestamp' => time(),
+    'id_pelanggan' => $id_pelanggan // PERBAIKAN: Tambahkan ID pelanggan
 ];
 
-// Fungsi untuk menghitung biaya pengiriman berdasarkan metode
+// Shipping functions
 function getShippingCost($method = 'jne') {
     $shippingCosts = [
         'jne' => 25000,
@@ -147,11 +160,9 @@ function getShippingCost($method = 'jne') {
         'ninja' => 28000,
         'anteraja' => 26000
     ];
-    
     return isset($shippingCosts[$method]) ? $shippingCosts[$method] : 25000;
 }
 
-// Fungsi untuk mendapatkan nama metode pengiriman
 function getShippingName($method = 'jne') {
     $shippingNames = [
         'jne' => 'JNE Regular',
@@ -159,54 +170,48 @@ function getShippingName($method = 'jne') {
         'ninja' => 'Ninja Xpress',
         'anteraja' => 'AnterAja Regular'
     ];
-    
     return isset($shippingNames[$method]) ? $shippingNames[$method] : 'JNE Regular';
 }
 
-// Tentukan metode pengiriman (default atau dari session)
-$selectedShipping = isset($_SESSION['shipping_method']) ? $_SESSION['shipping_method'] : 'jne';
+// Calculate totals
+$selectedShipping = $_SESSION['shipping_method'] ?? 'jne';
 $shippingCost = getShippingCost($selectedShipping);
 $shippingName = getShippingName($selectedShipping);
-
-// Hitung total
 $total = $orderData['subtotal'] + $shippingCost;
 
-// Proses jika alamat dipilih
+// PERBAIKAN: Process address selection with enhanced data preservation
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pilih_alamat'])) {
-    $selected_address_id = $_POST['alamat_id'];
+    $selected_address_id = (int)$_POST['alamat_id'];
     $_SESSION['alamat_terpilih'] = $selected_address_id;
     
-    // Simpan data pesanan ke session
+    // PERBAIKAN: Update session order data with complete information
     $_SESSION['order_data']['shipping_address_id'] = $selected_address_id;
     $_SESSION['order_data']['shipping_method'] = $selectedShipping;
     $_SESSION['order_data']['shipping_cost'] = $shippingCost;
-    $_SESSION['order_data']['total'] = $total;
+    $_SESSION['order_data']['total_amount'] = $total;
     
-    // Simpan metode pengiriman ke database untuk setiap item
-    if (!empty($orderData['items'])) {
-        foreach ($orderData['items'] as $item) {
-            if (isset($item['id_ringkasan'])) {
-                $id_ringkasan = $item['id_ringkasan'];
-                $update_query = "UPDATE ringkasan_pesanan SET 
-                                metode_pengiriman = '$selectedShipping'
-                                WHERE id_ringkasan = '$id_ringkasan'";
-                mysqli_query($koneksi, $update_query);
-            }
-        }
+    // PERBAIKAN: Validasi data sebelum redirect
+    if (empty($_SESSION['order_data']['order_items'])) {
+        $_SESSION['error_message'] = "Data pesanan tidak valid. Silakan coba lagi.";
+        header("Location: " . $_SERVER['PHP_SELF'] . "?source=$source" . ($product_id ? "&id_produk=$product_id&qty=$quantity" : ""));
+        exit;
     }
     
-    // Redirect ke halaman metode pengiriman
+    // Log untuk debugging
+    error_log("Address selected: $selected_address_id");
+    error_log("Order data before redirect: " . json_encode($_SESSION['order_data']));
+    
+    // Redirect to next step
     header("Location: metode_pengiriman.php");
     exit;
 }
 
-// Query alamat milik user
-$sql_alamat = "SELECT * FROM pengiriman WHERE id_pelanggan = '$id_pelanggan' ORDER BY is_primary DESC, id_pengiriman DESC";
-$query_alamat = mysqli_query($koneksi, $sql_alamat);
-
-if ($query_alamat === false) {
-    $_SESSION['error_message'] = "Terjadi kesalahan saat mengambil data alamat: " . mysqli_error($koneksi);
-}
+// Get user addresses
+$sql_alamat = "SELECT * FROM pengiriman WHERE id_pelanggan = ? ORDER BY is_primary DESC, id_pengiriman DESC";
+$stmt_alamat = $koneksi->prepare($sql_alamat);
+$stmt_alamat->bind_param("s", $id_pelanggan);
+$stmt_alamat->execute();
+$query_alamat = $stmt_alamat->get_result();
 ?>
 
 <!DOCTYPE html>
@@ -244,7 +249,7 @@ if ($query_alamat === false) {
 
     <main class="checkout-section">
         <div class="container">
-            <!-- Enhanced Checkout Steps -->
+            <!-- Checkout Steps -->
             <div class="checkout-steps">
                 <div class="step active">
                     <div class="step-number">1</div>
@@ -268,14 +273,33 @@ if ($query_alamat === false) {
                 <div class="checkout-form">
                     <h2><i class="fas fa-map-marker-alt"></i> Pilih Alamat Pengiriman</h2>
                     
-                    <!-- Source Info Banner -->
-                    <div class="source-info-banner">
-                        <i class="fas fa-<?= $source === 'cart' ? 'shopping-cart' : 'bolt' ?>"></i>
-                        <?php if ($source === 'cart'): ?>
-                            Checkout dari Keranjang Belanja
-                        <?php else: ?>
-                            Beli Sekarang - <?= isset($orderData['items'][0]) ? htmlspecialchars($orderData['items'][0]['nama_tanaman']) : 'Produk' ?>
-                        <?php endif; ?>
+                    <!-- Enhanced Source Info Banner -->
+                    <div class="source-info-banner <?= $source === 'cart' ? 'cart-source' : ($source === 'individual_checkout' ? 'individual-source' : 'buy-now-source') ?>">
+                        <i class="fas fa-<?= $source === 'cart' ? 'shopping-cart' : ($source === 'individual_checkout' ? 'shopping-bag' : 'bolt') ?>"></i>
+                        <div class="source-details">
+                            <?php if ($source === 'buy_now'): ?>
+                                <strong>Beli Sekarang</strong>
+                                <span>
+                                    <?php if (!empty($orderData['items'])): ?>
+                                        <?= htmlspecialchars($orderData['items'][0]['nama_tanaman']) ?> (<?= $quantity ?> pcs)
+                                    <?php else: ?>
+                                        Produk (<?= $quantity ?> pcs)
+                                    <?php endif; ?>
+                                </span>
+                            <?php elseif ($source === 'individual_checkout'): ?>
+                                <strong>Checkout Item Terpisah</strong>
+                                <span>
+                                    <?php if (!empty($orderData['items'])): ?>
+                                        <?= htmlspecialchars($orderData['items'][0]['nama_tanaman']) ?> (<?= $orderData['items'][0]['jumlah'] ?> pcs)
+                                    <?php else: ?>
+                                        1 item dari keranjang
+                                    <?php endif; ?>
+                                </span>
+                            <?php else: ?>
+                                <strong>Checkout dari Keranjang Belanja</strong>
+                                <span><?= count($orderData['items']) ?> item dalam keranjang</span>
+                            <?php endif; ?>
+                        </div>
                     </div>
                     
                     <!-- Alert Messages -->
@@ -295,14 +319,32 @@ if ($query_alamat === false) {
                     </div>
                     <?php endif; ?>
                     
+                    <!-- Validation for empty order -->
+                    <?php if (empty($orderData['items'])): ?>
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>Tidak ada item dalam pesanan. Silakan kembali ke halaman produk.</span>
+                    </div>
+                    <div class="empty-order-actions">
+                        <a href="produk.php" class="btn btn-primary">
+                            <i class="fas fa-arrow-left"></i> Kembali ke Produk
+                        </a>
+                        <?php if ($source === 'cart' || $source === 'individual_checkout'): ?>
+                        <a href="keranjang.php" class="btn btn-outline">
+                            <i class="fas fa-shopping-cart"></i> Lihat Keranjang
+                        </a>
+                        <?php endif; ?>
+                    </div>
+                    <?php else: ?>
+                    
                     <!-- Address List -->
                     <div class="address-list">
-                        <?php if ($query_alamat && mysqli_num_rows($query_alamat) > 0) :  ?>
-                            <?php while($alamat = mysqli_fetch_assoc($query_alamat)): ?>
+                        <?php if ($query_alamat && $query_alamat->num_rows > 0) :  ?>
+                            <?php while($alamat = $query_alamat->fetch_assoc()): ?>
                             <form method="POST" class="address-form-select" id="form_<?= $alamat['id_pengiriman'] ?>">
                                 <input type="hidden" name="alamat_id" value="<?= $alamat['id_pengiriman'] ?>">
                                 <input type="hidden" name="order_source" value="<?= htmlspecialchars($source) ?>">
-                                <?php if ($source === 'buy_now'): ?>
+                                <?php if ($source === 'buy_now' || $source === 'individual_checkout'): ?>
                                     <input type="hidden" name="product_id" value="<?= htmlspecialchars($product_id) ?>">
                                     <input type="hidden" name="quantity" value="<?= $quantity ?>">
                                 <?php endif; ?>
@@ -436,7 +478,7 @@ if ($query_alamat === false) {
                                 
                                 <!-- Hidden fields for order data -->
                                 <input type="hidden" name="order_source" value="<?= htmlspecialchars($source) ?>">
-                                <?php if ($source === 'buy_now'): ?>
+                                <?php if ($source === 'buy_now' || $source === 'individual_checkout'): ?>
                                     <input type="hidden" name="product_id" value="<?= htmlspecialchars($product_id) ?>">
                                     <input type="hidden" name="quantity" value="<?= $quantity ?>">
                                 <?php endif; ?>
@@ -452,49 +494,56 @@ if ($query_alamat === false) {
                             </div>
                         </form>
                     </div>
+                    
+                    <?php endif; ?>
                 </div>
 
-                <!-- Enhanced Order Summary -->
+                <!-- PERBAIKAN: Enhanced Order Summary dengan data produk yang lengkap -->
                 <div class="order-summary">
                     <h2><i class="fas fa-receipt"></i> Ringkasan Pesanan</h2>
                     
                     <?php if (!empty($orderData['items'])): ?>
                         <div class="summary-items">
                             <?php foreach ($orderData['items'] as $item): ?>
-                            <div class="summary-item">
-                                <img src="/admin/uploads/<?= htmlspecialchars($item['foto']) ?>" alt="<?= htmlspecialchars($item['nama_tanaman']) ?>" class="item-image">
+                            <div class="summary-item" data-product-id="<?= $item['id_produk'] ?>">
+                                <img src="/admin/uploads/<?= htmlspecialchars($item['foto']) ?>" 
+                                     alt="<?= htmlspecialchars($item['nama_tanaman']) ?>" 
+                                     class="item-image"
+                                     onerror="this.src='/images/placeholder-product.jpg'">
                                 <div class="item-info">
                                     <h3><?= htmlspecialchars($item['nama_tanaman']) ?></h3>
-                                    <p><?= $item['jumlah'] ?> x Rp<?= number_format($item['harga'], 0, ',', '.') ?></p>
-                                    <?php if (isset($item['id_ringkasan'])): ?>
-                                    <small>ID Ringkasan: <?= $item['id_ringkasan'] ?></small>
-                                    <?php endif; ?>
+                                    <p class="item-quantity"><?= $item['jumlah'] ?> x Rp<?= number_format($item['harga'], 0, ',', '.') ?></p>
+                                    <p class="item-source"><?= ucfirst($item['source'] ?? $source) ?></p>
+                                    <!-- PERBAIKAN: Hidden data untuk JavaScript -->
+                                    <input type="hidden" class="item-data" value="<?= htmlspecialchars(json_encode($item)) ?>">
                                 </div>
-                                <div class="item-price">Rp<?= number_format($item['subtotal'], 0, ',', '.') ?></div>
+                                <div class="item-price">
+                                    <strong>Rp<?= number_format($item['subtotal'], 0, ',', '.') ?></strong>
+                                </div>
                             </div>
                             <?php endforeach; ?>
                         </div>
                         
-                        <div class="summary-row">
-                            <span>Subtotal</span>
-                            <span>Rp<?= number_format($orderData['subtotal'], 0, ',', '.') ?></span>
-                        </div>
-                        
-                        <div class="summary-row">
-                            <span>Pengiriman (<?= $shippingName ?>)</span>
-                            <span>Rp<?= number_format($shippingCost, 0, ',', '.') ?></span>
-                        </div>
-                        
-                        <div class="summary-row total">
-                            <span>Total</span>
-                            <span>Rp<?= number_format($total, 0, ',', '.') ?></span>
+                        <div class="summary-calculations">
+                            <div class="summary-row">
+                                <span>Subtotal (<?= count($orderData['items']) ?> item)</span>
+                                <span>Rp<?= number_format($orderData['subtotal'], 0, ',', '.') ?></span>
+                            </div>
+                            
+                            
+                            <div class="summary-row total">
+                                <span><strong>Total</strong></span>
+                                <span><strong>Rp<?= number_format($total, 0, ',', '.') ?></strong></span>
+                            </div>
                         </div>
                         
                         <div class="checkout-info">
-                            <p><i class="fas fa-info-circle"></i> Pilih alamat untuk melanjutkan</p>
+                            <p><i class="fas fa-info-circle"></i> Pilih alamat untuk melanjutkan ke pengiriman</p>
                         </div>
                     <?php else: ?>
                         <div class="empty-order">
+                            <i class="fas fa-shopping-cart"></i>
+                            <h3>Pesanan Kosong</h3>
                             <p>Tidak ada item dalam pesanan</p>
                             <a href="produk.php" class="btn btn-primary">Belanja Sekarang</a>
                         </div>
@@ -562,10 +611,34 @@ if ($query_alamat === false) {
             // Add selected class to clicked card
             event.currentTarget.classList.add('selected');
             
-            // Add a small delay for visual feedback before submitting
+            // Add loading state
+            const button = event.currentTarget.querySelector('.use-address-btn');
+            const originalText = button.innerHTML;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
+            button.disabled = true;
+            
+            // PERBAIKAN: Validasi data sebelum submit
+            const orderItems = [];
+            document.querySelectorAll('.item-data').forEach(input => {
+                try {
+                    const itemData = JSON.parse(input.value);
+                    orderItems.push(itemData);
+                } catch (e) {
+                    console.error('Error parsing item data:', e);
+                }
+            });
+            
+            if (orderItems.length === 0) {
+                alert('Data pesanan tidak valid. Silakan refresh halaman dan coba lagi.');
+                button.innerHTML = originalText;
+                button.disabled = false;
+                return;
+            }
+            
+            // Submit form after short delay for visual feedback
             setTimeout(() => {
                 document.getElementById('form_' + id).submit();
-            }, 200);
+            }, 500);
         }
         
         function toggleAddressForm() {
@@ -578,13 +651,12 @@ if ($query_alamat === false) {
             } else {
                 form.classList.add('show');
                 button.innerHTML = '<i class="fas fa-minus"></i> Tutup Form';
-                // Smooth scroll to form
                 form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }
         }
         
-        // Character counter for alamat_lengkap
         document.addEventListener('DOMContentLoaded', function() {
+            // Character counter
             const alamatTextarea = document.getElementById('alamat_lengkap');
             const alamatCount = document.getElementById('alamat-count');
             
@@ -592,7 +664,6 @@ if ($query_alamat === false) {
                 alamatTextarea.addEventListener('input', function() {
                     alamatCount.textContent = this.value.length;
                     
-                    // Change color based on character count
                     if (this.value.length > 180) {
                         alamatCount.style.color = 'var(--danger)';
                     } else if (this.value.length > 150) {
@@ -603,7 +674,7 @@ if ($query_alamat === false) {
                 });
             }
             
-            // Mark selected address if exists in session
+            // Mark selected address
             <?php if(isset($_SESSION['alamat_terpilih'])): ?>
             const selectedAddressId = <?= $_SESSION['alamat_terpilih'] ?>;
             const selectedCard = document.querySelector(`#form_${selectedAddressId} .address-card`);
@@ -612,24 +683,12 @@ if ($query_alamat === false) {
             }
             <?php endif; ?>
             
-            // Add loading state to form submission
-            const forms = document.querySelectorAll('.address-form-select');
-            forms.forEach(form => {
-                form.addEventListener('submit', function() {
-                    const button = this.querySelector('.use-address-btn');
-                    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
-                    button.disabled = true;
-                });
-            });
-            
             // Phone number formatting
             const phoneInput = document.getElementById('no_telepon');
             if (phoneInput) {
                 phoneInput.addEventListener('input', function() {
-                    // Remove non-numeric characters
                     let value = this.value.replace(/\D/g, '');
                     
-                    // Ensure it starts with 08
                     if (value.length > 0 && !value.startsWith('08')) {
                         if (value.startsWith('8')) {
                             value = '0' + value;
@@ -638,7 +697,6 @@ if ($query_alamat === false) {
                         }
                     }
                     
-                    // Limit to reasonable phone number length
                     if (value.length > 13) {
                         value = value.substring(0, 13);
                     }
@@ -648,24 +706,187 @@ if ($query_alamat === false) {
             }
         });
         
-        // Debug logging
-        console.log('Order Source:', '<?= $source ?>');
+        // PERBAIKAN: Enhanced debug logging
+        console.log('=== Order Data Debug ===');
+        console.log('Source:', '<?= $source ?>');
         console.log('Product ID:', '<?= $product_id ?>');
         console.log('Quantity:', <?= $quantity ?>);
         console.log('Order Items:', <?= json_encode($orderData['items']) ?>);
-        
-        // Add smooth transitions for better UX
-        document.querySelectorAll('.address-card').forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-2px)';
-            });
-            
-            card.addEventListener('mouseleave', function() {
-                if (!this.classList.contains('selected')) {
-                    this.style.transform = 'translateY(0)';
-                }
-            });
-        });
+        console.log('Subtotal:', <?= $orderData['subtotal'] ?>);
+        console.log('Total:', <?= $total ?>);
+        console.log('Cart Session:', <?= json_encode($_SESSION['keranjang'] ?? []) ?>);
+        console.log('Session Order Data:', <?= json_encode($_SESSION['order_data'] ?? []) ?>);
+        console.log('========================');
     </script>
+
+    <style>
+        /* Enhanced source info banner styles */
+        .source-info-banner {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid;
+        }
+        
+        .cart-source {
+            background-color: #e8f5e8;
+            border-left-color: #28a745;
+            color: #155724;
+        }
+        
+        .individual-source {
+            background-color: #e1ecf4;
+            border-left-color: #007bff;
+            color: #004085;
+        }
+        
+        .buy-now-source {
+            background-color: #fff3cd;
+            border-left-color: #ffc107;
+            color: #856404;
+        }
+        
+        .source-info-banner i {
+            font-size: 24px;
+            margin-right: 15px;
+        }
+        
+        .source-details strong {
+            display: block;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+        
+        .source-details span {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+        /* Enhanced summary styles */
+        .summary-calculations {
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+            margin-top: 15px;
+        }
+        
+        .summary-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+            position: relative;
+        }
+        
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+        
+        .item-image {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-right: 15px;
+        }
+        
+        .item-info {
+            flex: 1;
+        }
+        
+        .item-info h3 {
+            margin: 0 0 5px 0;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .item-quantity {
+            margin: 0;
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .item-source {
+            margin: 2px 0 0 0;
+            font-size: 10px;
+            color: #999;
+            text-transform: capitalize;
+        }
+        
+        .item-price {
+            font-weight: 600;
+            color: #28a745;
+        }
+        
+        .item-data {
+            display: none;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+        }
+        
+        .summary-row.total {
+            border-top: 2px solid #28a745;
+            margin-top: 10px;
+            padding-top: 15px;
+            font-size: 18px;
+        }
+        
+        /* Empty order actions */
+        .empty-order-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        /* Loading states */
+        .use-address-btn:disabled,
+        #submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        /* Enhanced address card hover effects */
+        .address-card {
+            transition: all 0.3s ease;
+        }
+        
+        .address-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .address-card.selected {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
+            border-color: #28a745;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .checkout-content {
+                flex-direction: column;
+            }
+            
+            .order-summary {
+                margin-top: 30px;
+            }
+            
+            .summary-item {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .item-image {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
 </body>
 </html>

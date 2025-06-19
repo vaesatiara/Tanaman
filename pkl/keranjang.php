@@ -6,20 +6,54 @@ include "koneksi.php";
 if(isset($_GET['id_produk'])) {
     $id_produk = $_GET['id_produk'];
     
-    // If product doesn't exist in cart, initialize it
+    // If user is logged in, save to database as well
+    if (isset($_SESSION['user_id'])) {
+        $user_id = $_SESSION['user_id'];
+        
+        // Check if product already exists in database cart
+        $check_cart = $koneksi->prepare("SELECT * FROM keranjang WHERE id_user = ? AND id_produk = ?");
+        $check_cart->bind_param("ss", $user_id, $id_produk);
+        $check_cart->execute();
+        $result = $check_cart->get_result();
+        
+        if ($result->num_rows > 0) {
+            // Update quantity
+            $update_cart = $koneksi->prepare("UPDATE keranjang SET jumlah = jumlah + 1 WHERE id_user = ? AND id_produk = ?");
+            $update_cart->bind_param("ss", $user_id, $id_produk);
+            $update_cart->execute();
+        } else {
+            // Insert new item
+            $insert_cart = $koneksi->prepare("INSERT INTO keranjang (id_user, id_produk, jumlah) VALUES (?, ?, 1)");
+            $insert_cart->bind_param("ss", $user_id, $id_produk);
+            $insert_cart->execute();
+        }
+    }
+    
+    // Also update session cart
     if(!isset($_SESSION['keranjang'][$id_produk])) {
         $_SESSION['keranjang'][$id_produk] = 1;
     } else {
-        // If product exists, increment quantity
         $_SESSION['keranjang'][$id_produk] += 1;
     }
     
-    // Remove empty entries if any
     unset($_SESSION['keranjang']['']);
-    
-    // Redirect back to cart page to prevent duplicate additions on refresh
     header("Location: keranjang.php");
     exit;
+}
+
+// Load cart from database if user is logged in
+if (isset($_SESSION['user_id'])) {
+    $user_id = $_SESSION['user_id'];
+    $cart_query = $koneksi->prepare("SELECT id_produk, jumlah FROM keranjang WHERE id_user = ?");
+    $cart_query->bind_param("s", $user_id);
+    $cart_query->execute();
+    $cart_result = $cart_query->get_result();
+    
+    // Sync database cart with session cart
+    $_SESSION['keranjang'] = array();
+    while ($cart_item = $cart_result->fetch_assoc()) {
+        $_SESSION['keranjang'][$cart_item['id_produk']] = $cart_item['jumlah'];
+    }
 }
 ?>
 
@@ -31,7 +65,6 @@ if(isset($_GET['id_produk'])) {
     <title>Keranjang Belanja - Toko Tanaman</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <header>
@@ -53,7 +86,6 @@ if(isset($_GET['id_produk'])) {
                 <a href="keranjang.php" class="cart-icon active">
                     <i class="fas fa-shopping-cart"></i>
                     <?php
-                    // Count total items in cart
                     $totalItems = 0;
                     if(isset($_SESSION['keranjang']) && !empty($_SESSION['keranjang'])) {
                         foreach($_SESSION['keranjang'] as $id => $qty) {
@@ -63,7 +95,6 @@ if(isset($_GET['id_produk'])) {
                         }
                     }
                     
-                    // Only show badge if there are items
                     if($totalItems > 0) {
                         echo '<span class="cart-badge">' . $totalItems . '</span>';
                     }
@@ -91,19 +122,17 @@ if(isset($_GET['id_produk'])) {
                     </div>
                     
                     <?php
-                    // Initialize total
                     $totalHarga = 0;
                     
-                    // Check if cart exists and is not empty
                     if(isset($_SESSION['keranjang']) && !empty($_SESSION['keranjang'])) {
                         foreach ($_SESSION['keranjang'] as $id_produk => $jumlah) {
-                            // Skip empty product IDs
                             if(empty($id_produk)) continue;
                             
                             $ambil = $koneksi->query("SELECT * FROM produk WHERE id_produk='$id_produk'");
                             $pecah = $ambil->fetch_assoc();
                             
-                            // Calculate subtotal for this item
+                            if (!$pecah) continue; // Skip if product not found
+                            
                             $subtotal = $pecah['harga'] * $jumlah;
                             $totalHarga += $subtotal;
                     ?>
@@ -113,7 +142,7 @@ if(isset($_GET['id_produk'])) {
                             <div class="product-details">
                                 <h3><?php echo $pecah['nama_tanaman']; ?></h3>
                                 <p class="size">Ukuran: Sedang</p>
-                                <a href="checkout_item.php?id_produk=<?php echo $id_produk; ?>" class="checkout-item-btn">
+                                <a href="alamat_pengiriman.php?source=individual_checkout&id_produk=<?php echo $id_produk; ?>&qty=<?php echo $jumlah; ?>" class="checkout-item-btn">
                                     <i class="fas fa-shopping-bag"></i> Checkout Produk Ini
                                 </a>
                             </div>
@@ -157,9 +186,7 @@ if(isset($_GET['id_produk'])) {
                 </div>
                 
                 <div class="order-summary">
-                      
                     <h2 class="summary-title">Ringkasan Pesanan</h2>
-                    
                     
                     <div class="summary-row">
                         <span>Subtotal</span>
@@ -172,13 +199,11 @@ if(isset($_GET['id_produk'])) {
                     </div>
                     
                     <?php
-                 
                     $biayaPengiriman = 25000;
                     $totalBayar = $totalHarga + $biayaPengiriman;
                     ?>
                     
                     <div class="summary-row">
-                        
                         <span>Estimasi Pengiriman</span>
                         <span>Rp <?php echo number_format($biayaPengiriman, 0, ',', '.'); ?></span>
                     </div>
@@ -199,7 +224,8 @@ if(isset($_GET['id_produk'])) {
                         </a>
                     </div>
                     
-                    <a href="<?php echo !empty($_SESSION['keranjang']) ? 'alamat_pengiriman.php' : 'javascript:void(0)'; ?>" 
+                    <!-- Updated checkout button to pass cart source -->
+                    <a href="<?php echo !empty($_SESSION['keranjang']) ? 'alamat_pengiriman.php?source=cart' : 'javascript:void(0)'; ?>" 
                        class="checkout-btn <?php echo empty($_SESSION['keranjang']) ? 'disabled' : ''; ?>">
                         Lanjutkan ke Pembayaran
                     </a>
@@ -208,6 +234,7 @@ if(isset($_GET['id_produk'])) {
         </div>
     </main>
 
+    <!-- Footer remains the same -->
     <footer>
         <section class="feedback">
             <div class="container">
@@ -220,11 +247,7 @@ if(isset($_GET['id_produk'])) {
                 </div>
             </div>
         </section>
-         <br>
-         <br>
-         <br>
-         <br>  
-        
+         
         <div class="container">
             <div class="footer-content">
                 <div class="footer-logo">
@@ -261,146 +284,75 @@ if(isset($_GET['id_produk'])) {
     </footer>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Add event listeners to all plus buttons
-        document.querySelectorAll('.btn-plus').forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                ubahJumlah(this, 1);
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.btn-plus').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    ubahJumlah(this, 1);
+                });
+            });
+
+            document.querySelectorAll('.btn-minus').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    ubahJumlah(this, -1);
+                });
             });
         });
 
-        // Add event listeners to all minus buttons
-        document.querySelectorAll('.btn-minus').forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                ubahJumlah(this, -1);
-            });
-        });
-    });
-
-    function ubahJumlah(btn, delta) {
-        // Get the container and necessary elements
-        const container = btn.closest('.quantity-control');
-        const input = container.querySelector('input[name="jumlah"]');
-        const idProduk = container.getAttribute('data-idproduk');
-        
-        // Find the price and subtotal elements
-        const itemContainer = btn.closest('.cart-item');
-        const hargaEl = itemContainer.querySelector('.harga');
-        const subtotalEl = itemContainer.querySelector('.subtotal');
-
-        // Get the current values
-        const harga = parseInt(hargaEl.getAttribute('data-harga'));
-        let jumlah = parseInt(input.value) || 0;
-
-        // Update quantity (minimum 1)
-        jumlah += delta;
-        if (jumlah < 1) jumlah = 1;
-        
-        // Update the input field
-        input.value = jumlah;
-
-        // Calculate and update subtotal
-        const subtotal = harga * jumlah;
-        subtotalEl.textContent = "Rp " + subtotal.toLocaleString('id-ID');
-
-        // Send AJAX request to update the cart in the session and database
-        fetch('update_keranjang.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: 'id_produk=' + idProduk + '&jumlah=' + jumlah
-        })
-        .then(response => response.text())
-        .then(data => {
-            console.log("Update berhasil:", data);
+        function ubahJumlah(btn, delta) {
+            const container = btn.closest('.quantity-control');
+            const input = container.querySelector('input[name="jumlah"]');
+            const idProduk = container.getAttribute('data-idproduk');
             
-            // Optionally update the order summary without page refresh
-            // This would require additional code to recalculate totals
-        })
-        .catch(error => {
-            console.error("Gagal update:", error);
-        });
-    }
+            const itemContainer = btn.closest('.cart-item');
+            const hargaEl = itemContainer.querySelector('.harga');
+            const subtotalEl = itemContainer.querySelector('.subtotal');
+
+            const harga = parseInt(hargaEl.getAttribute('data-harga'));
+            let jumlah = parseInt(input.value) || 0;
+
+            jumlah += delta;
+            if (jumlah < 1) jumlah = 1;
+            
+            input.value = jumlah;
+
+            const subtotal = harga * jumlah;
+            subtotalEl.textContent = "Rp " + subtotal.toLocaleString('id-ID');
+
+            // Update both session and database
+            fetch('update_keranjang.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'id_produk=' + idProduk + '&jumlah=' + jumlah
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log("Update berhasil:", data);
+                // Update summary totals
+                updateSummaryTotals();
+            })
+            .catch(error => {
+                console.error("Gagal update:", error);
+            });
+        }
+
+        function updateSummaryTotals() {
+            let subtotal = 0;
+            document.querySelectorAll('.subtotal').forEach(function(el) {
+                const value = el.textContent.replace(/[^\d]/g, '');
+                subtotal += parseInt(value) || 0;
+            });
+            
+            const shipping = 25000;
+            const total = subtotal + shipping;
+            
+            // Update summary display
+            document.querySelector('.summary-row:first-child span:last-child').textContent = 
+                'Rp ' + subtotal.toLocaleString('id-ID');
+            document.querySelector('.summary-row.total span:last-child').textContent = 
+                'Rp ' + total.toLocaleString('id-ID');
+        }
     </script>
-
-    <style>
-        /* Cart Badge Styles */
-        .cart-icon {
-            position: relative;
-            display: inline-block;
-        }
-        
-        .cart-badge {
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            background-color: #dc3545;
-            color: white;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: bold;
-        }
-        
-        /* Checkout Item Button */
-        .checkout-item-btn {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 5px 10px;
-            background-color: var(--primary-color);
-            color: white;
-            border-radius: 4px;
-            font-size: 12px;
-            transition: all 0.3s ease;
-        }
-        
-        .checkout-item-btn:hover {
-            background-color: #7BC89A;
-            transform: translateY(-2px);
-        }
-        
-        .checkout-item-btn i {
-            margin-right: 5px;
-        }
-
-        /* Promo Link Styles */
-        .promo-link {
-            text-decoration: none;
-            display: block;
-        }
-
-        .promo-banner {
-            display: flex;
-            align-items: center;
-            padding: 12px 15px;
-            background-color: #f8f9fa;
-            border: 1px dashed var(--primary-color);
-            border-radius: var(--border-radius);
-            color: var(--dark-color);
-            transition: all 0.3s ease;
-        }
-
-        .promo-banner:hover {
-            background-color: #e8f5ee;
-        }
-
-        .promo-banner i:first-child {
-            color: var(--primary-color);
-            margin-right: 10px;
-        }
-
-        .promo-banner span {
-            flex: 1;
-        }
-
-        .promo-banner i:last-child {
-            color: var(--text-muted);
-        }
-    </style>
 </body>
 </html>

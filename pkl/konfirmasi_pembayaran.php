@@ -179,7 +179,7 @@ if ($pesanan_data) {
     }
 }
 
-// Proses form submission
+// PERBAIKAN: Proses form submission di file yang sama
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['konfirmasi_pembayaran'])) {
     if (!$pesanan_data) {
         $error_message = "Data pesanan tidak ditemukan.";
@@ -189,13 +189,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['konfirmasi_pembayaran
         try {
             $koneksi->begin_transaction();
             
-            // Validasi input
-            $tgl_pembayaran = $_POST['tgl_pembayaran'] ?? '';
-            $waktu_bayar = $_POST['waktu_bayar'] ?? '';
+            // PERBAIKAN: Ambil tanggal dan waktu dari hidden input (bukan disabled input)
+            $tgl_pembayaran = $_POST['tgl_pembayaran_hidden'] ?? date('Y-m-d');
+            $waktu_bayar = $_POST['waktu_bayar_hidden'] ?? date('H:i:s');
             $catatan = $_POST['catatan'] ?? '';
             
-            if (empty($tgl_pembayaran) || empty($waktu_bayar)) {
-                throw new Exception("Tanggal dan waktu pembayaran harus diisi.");
+            // Validasi ID pesanan
+            if (!$pesanan_data['id_pesanan'] || $pesanan_data['id_pesanan'] <= 0) {
+                throw new Exception("ID pesanan tidak valid.");
             }
             
             // Handle file upload
@@ -229,7 +230,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['konfirmasi_pembayaran
                 throw new Exception("Bukti pembayaran harus diupload.");
             }
             
-            // Insert pembayaran
+            // PERBAIKAN: Insert pembayaran dengan id_pesanan yang benar
             $sql_insert_payment = "
                 INSERT INTO pembayaran (id_pesanan, tgl_bayar, waktu_bayar, file_image, catatan) 
                 VALUES (?, ?, ?, ?, ?)
@@ -239,6 +240,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['konfirmasi_pembayaran
             if (!$stmt_insert) {
                 throw new Exception("Prepare statement gagal: " . $koneksi->error);
             }
+            
+            // Log untuk debugging
+            error_log("Inserting payment: id_pesanan=" . $pesanan_data['id_pesanan'] . ", tgl_bayar=" . $tgl_pembayaran . ", waktu_bayar=" . $waktu_bayar);
             
             $stmt_insert->bind_param("issss", 
                 $pesanan_data['id_pesanan'], 
@@ -274,9 +278,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['konfirmasi_pembayaran
         } catch (Exception $e) {
             $koneksi->rollback();
             $error_message = $e->getMessage();
+            error_log("Payment confirmation error: " . $e->getMessage());
         }
     }
 }
+
+// Set default values untuk tanggal dan waktu
+$default_date = date('Y-m-d');
+$default_time = date('H:i');
 ?>
 
 <!DOCTYPE html>
@@ -360,17 +369,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['konfirmasi_pembayaran
                         </div>
                         
                         <?php if ($show_payment_form && !$success_message): ?>
-                        <!-- FORM PEMBAYARAN - TAMPIL UNTUK PESANAN YANG BELUM DIBAYAR -->
+                        <!-- PERBAIKAN: Form action ke file yang sama, tambah hidden inputs -->
                         <h3>Silakan isi form konfirmasi pembayaran di bawah ini:</h3>
-                        <form action="proses_pembayaran.php" method="post" enctype="multipart/form-data">
+                        <form action="" method="post" enctype="multipart/form-data">
+                            <!-- PERBAIKAN: Hidden inputs untuk menyimpan nilai tanggal dan waktu -->
+                            <input type="hidden" name="tgl_pembayaran_hidden" value="<?= $default_date ?>">
+                            <input type="hidden" name="waktu_bayar_hidden" value="<?= $default_time ?>">
+                            
                             <div class="form-group">
                                 <label for="tgl_pembayaran">Tanggal Pembayaran *</label>
-                                <input type="date" id="tgl_pembayaran" name="tgl_pembayaran" disabled>
+                                <input type="date" id="tgl_pembayaran" name="tgl_pembayaran" 
+                                       value="<?= $default_date ?>" disabled>
+                                <small>Tanggal otomatis diset ke hari ini</small>
                             </div>
                             
                             <div class="form-group">
                                 <label for="waktu_bayar">Waktu Pembayaran *</label>
-                                <input type="time" id="waktu_bayar" name="waktu_bayar" disabled>
+                                <input type="time" id="waktu_bayar" name="waktu_bayar" 
+                                       value="<?= $default_time ?>" disabled>
+                                <small>Waktu otomatis diset ke waktu sekarang</small>
                             </div>
                             
                             <div class="form-group">
@@ -509,20 +526,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['konfirmasi_pembayaran
             });
         }
         
-        // Set default date to today
+        // PERBAIKAN: Update hidden inputs saat nilai berubah
         const dateInput = document.getElementById('tgl_pembayaran');
-        if (dateInput) {
-            dateInput.valueAsDate = new Date();
+        const timeInput = document.getElementById('waktu_bayar');
+        const hiddenDateInput = document.querySelector('input[name="tgl_pembayaran_hidden"]');
+        const hiddenTimeInput = document.querySelector('input[name="waktu_bayar_hidden"]');
+        
+        if (dateInput && hiddenDateInput) {
+            dateInput.addEventListener('change', function() {
+                hiddenDateInput.value = this.value;
+            });
         }
         
-        // Set default time to current time
-        const timeInput = document.getElementById('waktu_bayar');
-        if (timeInput) {
-            const now = new Date();
-            const timeString = now.getHours().toString().padStart(2, '0') + ':' + 
-                              now.getMinutes().toString().padStart(2, '0');
-            timeInput.value = timeString;
+        if (timeInput && hiddenTimeInput) {
+            timeInput.addEventListener('change', function() {
+                hiddenTimeInput.value = this.value;
+            });
         }
+        
+        // Set waktu real-time setiap detik
+        function updateDateTime() {
+            const now = new Date();
+            const dateString = now.getFullYear() + '-' + 
+                              String(now.getMonth() + 1).padStart(2, '0') + '-' + 
+                              String(now.getDate()).padStart(2, '0');
+            const timeString = String(now.getHours()).padStart(2, '0') + ':' + 
+                              String(now.getMinutes()).padStart(2, '0');
+            
+            if (dateInput) dateInput.value = dateString;
+            if (timeInput) timeInput.value = timeString;
+            if (hiddenDateInput) hiddenDateInput.value = dateString;
+            if (hiddenTimeInput) hiddenTimeInput.value = timeString;
+        }
+        
+        // Update setiap detik
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
     </script>
 </body>
 </html>
