@@ -21,11 +21,12 @@ $total_results = mysqli_num_rows($query);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Produk Tanaman - The Secret Garden</title>
-    <link rel="stylesheet" href="css/produk.css">
+    <link rel="stylesheet" href="css\/produk.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     
+     <!-- Header -->
     <header>
         <div class="container">
             <div class="logo">
@@ -35,26 +36,41 @@ $total_results = mysqli_num_rows($query);
             </div>
             <nav>
                 <ul>
-                    <li><a href="index.php">BERANDA</a></li>
+                    <li><a href="index.php">BERANDA</li>
                     <li><a href="produk.php" class="active">PRODUK</a></li>
                     <li><a href="kontak.php">KONTAK</a></li>
                     <li><a href="tentang_kami.php">TENTANG KAMI</a></li>
                 </ul>
             </nav>
-            <div class="icons">
-                <?php if (isset($_SESSION['username'])): ?>
-                    <a href="keranjang.php" class="action-btn">
-                        <i class="fas fa-shopping-cart"></i>  
-                    </a>
-                    <a href="profil.php"><i class="fas fa-user"></i></a>
-                    <a href="logout.php"> <i class="fas fa-sign-out-alt"></i> Logout</a>
-                <?php else: ?>
-                    <a href="login.php" class="action-btn">
-                        <i class="fas fa-shopping-cart"></i>
-                    </a>
-                    <a href="login.php">Login</a>
-                <?php endif; ?>
-            </div>
+            
+    <div class="icons">
+    <?php if (isset($_SESSION['username'])): ?>
+        <a href="keranjang.php" class="cart-icon">
+            <i class="fas fa-shopping-cart"></i>
+            <?php
+            $totalItems = 0;
+            if(isset($_SESSION['keranjang']) && !empty($_SESSION['keranjang'])) {
+                foreach($_SESSION['keranjang'] as $id => $qty) {
+                    if(!empty($id)) {
+                        $totalItems += $qty;
+                    }
+                }
+            }
+            
+            if($totalItems > 0) {
+                echo '<span class="cart-badge">' . $totalItems . '</span>';
+            }
+            ?>
+        </a>
+        <a href="profil.php"><i class="fas fa-user"></i></a>
+        <a href="logout.php"> <i class="fas fa-sign-out-alt"></i> Logout</a>
+    <?php else: ?>
+        <a href="login.php" class="cart-icon">
+            <i class="fas fa-shopping-cart"></i>
+        </a>
+        <a href="login.php">Login</a>
+    <?php endif; ?>
+</div>
         </div>
     </header>
 

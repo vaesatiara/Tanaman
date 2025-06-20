@@ -63,7 +63,7 @@ if (isset($_SESSION['user_id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Keranjang Belanja - Toko Tanaman</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/keranjang.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
@@ -106,7 +106,6 @@ if (isset($_SESSION['user_id'])) {
     </header>
 
     <main class="cart-section">
-        <div class="container">
             <h1 class="cart-title">Keranjang Belanja</h1>
             <p class="cart-subtitle">Tinjau item yang Anda tambahkan ke keranjang</p>
             
@@ -141,7 +140,6 @@ if (isset($_SESSION['user_id'])) {
                             <img src="/admin/Admin_WebTanaman/uploads/<?php echo $pecah['foto']; ?>" class="product-image" alt="<?php echo $pecah['nama_tanaman']; ?>">
                             <div class="product-details">
                                 <h3><?php echo $pecah['nama_tanaman']; ?></h3>
-                                <p class="size">Ukuran: Sedang</p>
                                 <a href="alamat_pengiriman.php?source=individual_checkout&id_produk=<?php echo $id_produk; ?>&qty=<?php echo $jumlah; ?>" class="checkout-item-btn">
                                     <i class="fas fa-shopping-bag"></i> Checkout Produk Ini
                                 </a>

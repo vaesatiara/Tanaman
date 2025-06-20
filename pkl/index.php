@@ -13,6 +13,7 @@ $query_featured = mysqli_query($koneksi, $sql_featured);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Secret Garden - Toko Tanaman Hias</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/keranjang.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
@@ -32,7 +33,23 @@ $query_featured = mysqli_query($koneksi, $sql_featured);
                 </ul>
             </nav>
             <div class="icons">
-                <a href="keranjang.php" class="cart-icon"><i class="fas fa-shopping-cart"></i></a>
+                <a href="keranjang.php" class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <?php
+                    $totalItems = 0;
+                    if(isset($_SESSION['keranjang']) && !empty($_SESSION['keranjang'])) {
+                        foreach($_SESSION['keranjang'] as $id => $qty) {
+                            if(!empty($id)) {
+                                $totalItems += $qty;
+                            }
+                        }
+                    }
+                    
+                    if($totalItems > 0) {
+                        echo '<span class="cart-badge">' . $totalItems . '</span>';
+                    }
+                    ?>
+                </a>
                 <?php if (isset($_SESSION['username'])): ?>
                 <a href="profil.php"><i class="fas fa-user"></i></a>
                 <a href="logout.php"> <i class="fas fa-sign-out-alt"></i> Logout</a>

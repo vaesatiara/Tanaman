@@ -9,6 +9,7 @@ session_start();
     <title>Kontak - The Secret Garden</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="css/kontak.css">
+    <link rel="stylesheet" href="css/keranjang.css">
 </head>
 <body>
     <!-- Header -->
@@ -29,19 +30,33 @@ session_start();
             </nav>
             
     <div class="icons">
-                <?php if (isset($_SESSION['username'])): ?>
-                    <a href="keranjang.php" class="action-btn">
-                        <i class="fas fa-shopping-cart"></i>  
-                    </a>
-                    <a href="profil.php"><i class="fas fa-user"></i></a>
-                    <a href="logout.php"> <i class="fas fa-sign-out-alt"></i> Logout</a>
-                <?php else: ?>
-                    <a href="login.php" class="action-btn">
-                        <i class="fas fa-shopping-cart"></i>
-                    </a>
-                    <a href="login.php">Login</a>
-                <?php endif; ?>
-            </div>
+    <?php if (isset($_SESSION['username'])): ?>
+        <a href="keranjang.php" class="cart-icon">
+            <i class="fas fa-shopping-cart"></i>
+            <?php
+            $totalItems = 0;
+            if(isset($_SESSION['keranjang']) && !empty($_SESSION['keranjang'])) {
+                foreach($_SESSION['keranjang'] as $id => $qty) {
+                    if(!empty($id)) {
+                        $totalItems += $qty;
+                    }
+                }
+            }
+            
+            if($totalItems > 0) {
+                echo '<span class="cart-badge">' . $totalItems . '</span>';
+            }
+            ?>
+        </a>
+        <a href="profil.php"><i class="fas fa-user"></i></a>
+        <a href="logout.php"> <i class="fas fa-sign-out-alt"></i> Logout</a>
+    <?php else: ?>
+        <a href="login.php" class="cart-icon">
+            <i class="fas fa-shopping-cart"></i>
+        </a>
+        <a href="login.php">Login</a>
+    <?php endif; ?>
+</div>
         </div>
     </header>
     <!-- Breadcrumb -->

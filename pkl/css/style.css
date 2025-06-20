@@ -6047,3 +6047,145 @@ body.auth-page {
     font-size: var(--font-xs);
   }
 }
+
+/* Cart Badge Styles */
+.cart-icon {
+  position: relative;
+  display: inline-block;
+  margin-left: 20px;
+  font-size: 1.2rem;
+  color: var(--dark-color);
+  transition: var(--transition);
+}
+
+.cart-icon:hover,
+.cart-icon.active {
+  color: var(--primary-color);
+}
+
+.cart-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: var(--secondary-color);
+  color: var(--light-color);
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1;
+  min-width: 20px;
+  padding: 0 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  animation: cartBadgeAppear 0.3s ease-out;
+}
+
+.cart-badge:empty {
+  display: none;
+}
+
+/* Animation for cart badge */
+@keyframes cartBadgeAppear {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Pulse animation when item is added */
+.cart-badge.pulse {
+  animation: cartBadgePulse 0.6s ease-out;
+}
+
+@keyframes cartBadgePulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.3);
+    background-color: var(--primary-color);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .cart-badge {
+    width: 18px;
+    height: 18px;
+    font-size: 0.7rem;
+    top: -6px;
+    right: -6px;
+  }
+}
+
+/* ===== CART ICON OVERLAY UNTUK PRODUK ===== */
+.cart-icon-overlay {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 35px;
+  height: 35px;
+  background-color: #ff6b9d;
+  color: #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  z-index: 2;
+  box-shadow: 0 2px 8px rgba(255, 107, 157, 0.3);
+  border: 2px solid #ffffff;
+  cursor: pointer;
+}
+
+.cart-icon-overlay:hover {
+  background-color: #ff5a8a;
+  color: #ffffff;
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(255, 107, 157, 0.4);
+}
+
+/* Untuk memastikan product card memiliki position relative */
+.product-card {
+  position: relative;
+}
+
+/* Styling khusus untuk halaman index */
+.featured-products .product-card {
+  position: relative;
+}
+
+/* Responsive untuk mobile */
+@media (max-width: 768px) {
+  .cart-icon-overlay {
+    width: 30px;
+    height: 30px;
+    font-size: 12px;
+    top: 8px;
+    right: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .cart-icon-overlay {
+    width: 28px;
+    height: 28px;
+    font-size: 11px;
+  }
+}

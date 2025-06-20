@@ -7,9 +7,9 @@ $database="web_tanaman";
 
 $koneksi=mysqli_connect($server,$username,$password,$database);
 
-if($koneksi){
-    echo "b";
-}else{
-    echo "g";
-}
+// if($koneksi){
+//     echo "b";
+// }else{
+//     echo "g";
+// }
 ?>
