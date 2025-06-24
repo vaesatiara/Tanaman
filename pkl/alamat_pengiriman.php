@@ -213,7 +213,7 @@ $stmt_alamat->bind_param("s", $id_pelanggan);
 $stmt_alamat->execute();
 $query_alamat = $stmt_alamat->get_result();
 ?>
-
+p
 <!DOCTYPE html>
 <html lang="id">
 <head>
