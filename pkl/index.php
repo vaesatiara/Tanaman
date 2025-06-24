@@ -21,7 +21,7 @@ $query_featured = mysqli_query($koneksi, $sql_featured);
         <div class="container">
             <div class="logo">
                 <a href="index.php">
-                    <img src="images/logo.png" alt="The Secret Garden">
+                    <img src="images/logo.png" alt="THE SECRET GARDEN">
                 </a>
             </div>
             <nav>
