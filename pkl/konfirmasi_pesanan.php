@@ -448,7 +448,7 @@ $display_status = getStatusLabel($status_pesanan);
                             <div class="receipt-value status-pending"><?= htmlspecialchars($display_status) ?></div>
                         </div>
                         <div class="receipt-row">
-                            <div class="receipt-label">Metode Pembayaran:</div>
+                            <div class="receipt-label">Metode Pembayaaran:</div>
                             <div class="receipt-value"><?= htmlspecialchars($paymentMethod) ?></div>
                         </div>
                     </div>
