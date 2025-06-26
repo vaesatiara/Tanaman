@@ -460,7 +460,7 @@ $display_status = getStatusLabel($status_pesanan);
                         <div class="summary-items">
                             <?php foreach ($orderData['items'] as $item): ?>
                             <div class="summary-item">
-                                <img src="/admin/Admin_WebTanaman/uploads<?= htmlspecialchars($item['foto']) ?>" alt="<?= htmlspecialchars($item['nama_tanaman']) ?>" class="item-image">
+                                <img src="/admin/Admin_WebTanaman/uploads/<?= $item['foto'] ?>" alt="<?= $item['nama_tanaman'] ?>" class="item-image">
                                 <div class="item-info">
                                     <h4><?= htmlspecialchars($item['nama_tanaman']) ?></h4>
                                     <p><?= $item['jumlah'] ?> x Rp<?= number_format($item['harga'], 0, ',', '.') ?></p>

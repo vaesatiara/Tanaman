@@ -113,50 +113,107 @@ function getStatusName($status) {
     }
 }
 
-// Fungsi untuk mendapatkan produk pesanan
+// Fungsi untuk mendapatkan produk pesanan - DIPERBAIKI
 function getOrderProducts($koneksi, $id_pesanan) {
     $products = [];
     
-    // Coba beberapa cara untuk mendapatkan produk pesanan
-    // Cara 1: Jika ada relasi langsung di tabel pesanan
-    $query1 = $koneksi->query("SELECT p.* FROM produk p 
-                              JOIN pesanan ps ON p.id_produk = ps.id_produk 
-                              WHERE ps.id_pesanan = '$id_pesanan'");
+    // Cara 1: Cek tabel detail_pesanan dengan join ke produk
+    $query1 = $koneksi->query("
+        SELECT 
+            p.nama_tanaman,
+            p.foto,
+            p.harga,
+            dp.jumlah,
+            dp.harga as harga_beli
+        FROM detail_pesanan dp 
+        JOIN produk p ON p.id_produk = dp.id_produk 
+        WHERE dp.id_pesanan = '$id_pesanan'
+    ");
     
     if ($query1 && $query1->num_rows > 0) {
         while ($row = $query1->fetch_assoc()) {
-            $products[] = $row;
+            $products[] = [
+                'nama_tanaman' => $row['nama_tanaman'],
+                'foto' => $row['foto'],
+                'harga' => $row['harga_beli'] ?? $row['harga'],
+                'jumlah' => $row['jumlah'] ?? 1
+            ];
         }
         return $products;
     }
     
-    // Cara 2: Jika ada tabel detail_pesanan
-    $query2 = $koneksi->query("SELECT p.* FROM produk p 
-                              JOIN detail_pesanan dp ON p.id_produk = dp.id_produk 
-                              WHERE dp.id_pesanan = '$id_pesanan'");
+    // Cara 2: Cek jika ada relasi langsung di tabel pesanan
+    $query2 = $koneksi->query("
+        SELECT 
+            p.nama_tanaman,
+            p.foto,
+            p.harga,
+            ps.jumlah
+        FROM pesanan ps 
+        LEFT JOIN produk p ON p.id_produk = ps.id_produk 
+        WHERE ps.id_pesanan = '$id_pesanan' AND p.id_produk IS NOT NULL
+    ");
     
     if ($query2 && $query2->num_rows > 0) {
         while ($row = $query2->fetch_assoc()) {
-            $products[] = $row;
+            $products[] = [
+                'nama_tanaman' => $row['nama_tanaman'],
+                'foto' => $row['foto'],
+                'harga' => $row['harga'],
+                'jumlah' => $row['jumlah'] ?? 1
+            ];
         }
         return $products;
     }
     
-    // Cara 3: Jika produk disimpan dalam kolom terpisah di tabel pesanan
-    $query3 = $koneksi->query("SELECT nama_produk, foto, harga_produk FROM pesanan WHERE id_pesanan = '$id_pesanan'");
+    // Cara 3: Ambil dari kolom di tabel pesanan jika data disimpan langsung
+    $query3 = $koneksi->query("
+        SELECT 
+            nama_produk,
+            foto_produk,
+            harga_produk,
+            jumlah
+        FROM pesanan 
+        WHERE id_pesanan = '$id_pesanan'
+    ");
     
     if ($query3 && $query3->num_rows > 0) {
         $row = $query3->fetch_assoc();
         if (!empty($row['nama_produk'])) {
             $products[] = [
                 'nama_tanaman' => $row['nama_produk'],
-                'foto' => $row['foto'] ?? 'default.jpg',
-                'harga' => $row['harga_produk'] ?? 0
+                'foto' => $row['foto_produk'] ?? 'default.jpg',
+                'harga' => $row['harga_produk'] ?? 0,
+                'jumlah' => $row['jumlah'] ?? 1
             ];
         }
     }
     
     return $products;
+}
+
+// Fungsi untuk mendapatkan path foto yang benar
+function getImagePath($foto) {
+    if (empty($foto) || $foto == 'default.jpg') {
+        return 'images/default-product.jpg';
+    }
+    
+    // Cek beberapa kemungkinan lokasi foto
+    $possible_paths = [
+        'admin/images/' . $foto,
+        'images/products/' . $foto,
+        'images/' . $foto,
+        'uploads/' . $foto
+    ];
+    
+    foreach ($possible_paths as $path) {
+        if (file_exists($path)) {
+            return $path;
+        }
+    }
+    
+    // Jika tidak ditemukan, return default
+    return 'images/default-product.jpg';
 }
 ?>
 
@@ -177,9 +234,9 @@ function getOrderProducts($koneksi, $id_pesanan) {
             text-transform: uppercase;
         }
         .status-processing { background-color: #fff3cd; color: #856404; }
-        .status-pending { background-color: #f8d7da; color: #721c24; }
+        .status-pending { background-color: #f3e2f3; color: #7b1fa2; }
         .status-verified { background-color: #d1ecf1; color: #0c5460; }
-        .status-shipped { background-color: #d4edda; color: #155724; }
+        .status-shipped { background-color: #cce5ff; color: #004085; }
         .status-completed { background-color: #d4edda; color: #155724; }
         .status-cancelled { background-color: #f8d7da; color: #721c24; }
         
@@ -268,6 +325,7 @@ function getOrderProducts($koneksi, $id_pesanan) {
             object-fit: cover;
             border-radius: 4px;
             margin-right: 15px;
+            border: 1px solid #ddd;
         }
         
         .item-details h3 {
@@ -353,6 +411,11 @@ function getOrderProducts($koneksi, $id_pesanan) {
             border-left-color: #ffc107;
         }
         
+        .status-info.pending {
+            background-color: #f3e2f3;
+            border-left-color: #7b1fa2;
+        }
+        
         .status-info.verified {
             background-color: #d1ecf1;
             border-left-color: #17a2b8;
@@ -434,6 +497,7 @@ function getOrderProducts($koneksi, $id_pesanan) {
                     <div class="order-tabs">
                         <a href="?status=all" class="tab-btn <?= $status_filter === 'all' ? 'active' : '' ?>">Semua</a>
                         <a href="?status=diproses" class="tab-btn <?= $status_filter === 'diproses' ? 'active' : '' ?>">Belum Dibayar</a>
+                        <a href="?status=menunggu_verifikasi" class="tab-btn <?= $status_filter === 'menunggu_verifikasi' ? 'active' : '' ?>">Menunggu Verifikasi</a>
                         <a href="?status=diverifikasi" class="tab-btn <?= $status_filter === 'diverifikasi' ? 'active' : '' ?>">Sedang Diproses</a>
                         <a href="?status=dikirim" class="tab-btn <?= $status_filter === 'dikirim' ? 'active' : '' ?>">Dikirim</a>
                         <a href="?status=selesai" class="tab-btn <?= $status_filter === 'selesai' ? 'active' : '' ?>">Selesai</a>
@@ -464,6 +528,10 @@ function getOrderProducts($koneksi, $id_pesanan) {
                                     <div class="status-info processing">
                                         <p><i class="fas fa-clock"></i> Menunggu pembayaran. Silakan lakukan pembayaran untuk melanjutkan pesanan.</p>
                                     </div>
+                                    <?php elseif ($pesanan['status_pesanan'] === 'menunggu_verifikasi'): ?>
+                                    <div class="status-info pending">
+                                        <p><i class="fas fa-hourglass-half"></i> Pembayaran sedang diverifikasi. Harap tunggu konfirmasi dari admin.</p>
+                                    </div>
                                     <?php endif; ?>
 
                                     <?php
@@ -478,14 +546,15 @@ function getOrderProducts($koneksi, $id_pesanan) {
                                             $index = 0;
                                             foreach ($products as $produk) {
                                                 if ($index < 3) { // Tampilkan maksimal 3 item
+                                                    $foto_path = getImagePath($produk['foto']);
                                         ?>
                                                     <div class="order-item">
-                                                        <img src="admin/images/<?= htmlspecialchars($produk['foto']) ?>" 
+                                                        <img src="<?= $foto_path ?>" 
                                                             alt="<?= htmlspecialchars($produk['nama_tanaman']) ?>"
                                                             onerror="this.src='images/default-product.jpg'">
                                                         <div class="item-details">
                                                             <h3><?= htmlspecialchars($produk['nama_tanaman']) ?></h3>
-                                                            <p>1 x Rp<?= number_format($produk['harga'], 0, ',', '.') ?></p>
+                                                            <p><?= $produk['jumlah'] ?> x Rp<?= number_format($produk['harga'], 0, ',', '.') ?></p>
                                                         </div>
                                                     </div>
                                         <?php
@@ -503,6 +572,7 @@ function getOrderProducts($koneksi, $id_pesanan) {
                                         } else {
                                         ?>
                                             <div class="order-item">
+                                                <img src="images/default-product.jpg" alt="Default Product">
                                                 <div class="item-details">
                                                     <h3>Pesanan #<?= htmlspecialchars($pesanan['nomor_pesanan']) ?></h3>
                                                     <p>Detail produk akan ditampilkan setelah pembayaran</p>
@@ -522,6 +592,8 @@ function getOrderProducts($koneksi, $id_pesanan) {
                                             
                                             <?php if ($pesanan['status_pesanan'] === 'diproses'): ?>
                                                 <a href="konfirmasi_pembayaran.php?order_id=<?= $pesanan['id_pesanan'] ?>" class="btn btn-primary">Bayar Sekarang</a>
+                                            <?php elseif ($pesanan['status_pesanan'] === 'menunggu_verifikasi'): ?>
+                                                <span class="btn btn-outline" style="background-color: #f3e2f3; color: #7b1fa2;">Menunggu Verifikasi</span>
                                             <?php elseif ($pesanan['status_pesanan'] === 'diverifikasi'): ?>
                                                 <span class="btn btn-outline" style="background-color: #d1ecf1; color: #0c5460;">Sedang Diproses</span>
                                             <?php elseif ($pesanan['status_pesanan'] === 'dikirim'): ?>

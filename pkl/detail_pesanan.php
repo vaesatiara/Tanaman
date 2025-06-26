@@ -56,7 +56,7 @@ $sql_pelanggan = "SELECT * FROM pelanggan WHERE username = '$username'";
 $query_pelanggan = mysqli_query($koneksi, $sql_pelanggan);
 $pelanggan = mysqli_fetch_assoc($query_pelanggan);
 
-// Fungsi untuk mengambil produk pesanan
+// Fungsi untuk mengambil produk pesanan dengan foto yang benar
 function getOrderProducts($koneksi, $id_pesanan) {
     $products = [];
     
@@ -91,6 +91,36 @@ function getOrderProducts($koneksi, $id_pesanan) {
     }
     
     return $products;
+}
+
+// Fungsi untuk mengecek dan menentukan path foto yang benar - DIPERBAIKI
+function getProductImagePath($foto) {
+    // Jika foto kosong atau default, langsung return default image
+    if (empty($foto) || $foto == 'default.jpg') {
+        return 'images/default-product.jpg';
+    }
+    
+    // Cek beberapa kemungkinan lokasi foto
+    $possible_paths = [
+        'uploads/' . $foto,
+        'images/products/' . $foto,
+        'images/produk/' . $foto,
+        'images/' . $foto,
+        'assets/images/products/' . $foto,
+        'assets/images/' . $foto,
+        'assets/uploads/' . $foto,
+        'img/products/' . $foto,
+        'img/' . $foto
+    ];
+    
+    foreach ($possible_paths as $path) {
+        if (file_exists($path)) {
+            return $path;
+        }
+    }
+    
+    // Jika tidak ditemukan di server, coba return path asli (mungkin foto ada tapi path berbeda)
+    return !empty($foto) ? 'uploads/' . $foto : 'images/default-product.jpg';
 }
 
 // Fungsi untuk mengambil detail pesanan lengkap
@@ -320,18 +350,45 @@ $shippingDisplay = getShippingMethodDisplay($shippingMethod);
         }
 
         .item-image {
-            width: 60px;
-            height: 60px;
+            width: 80px;
+            height: 80px;
             margin-right: 15px;
             flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            background-color: #f8f9fa;
         }
 
         .item-image img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            border-radius: 8px;
-            border: 1px solid #e0e0e0;
+            transition: opacity 0.3s ease;
+        }
+
+        .item-image img.loading {
+            opacity: 0.7;
+        }
+
+        .item-image .image-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f8f9fa;
+            color: #6c757d;
+            font-size: 24px;
+            z-index: 1;
+        }
+
+        .item-image .image-placeholder.hidden {
+            display: none;
         }
 
         .item-details {
@@ -615,6 +672,8 @@ $shippingDisplay = getShippingMethodDisplay($shippingMethod);
             .item-image {
                 margin-right: 0;
                 margin-bottom: 10px;
+                width: 100px;
+                height: 100px;
             }
 
             .item-price {
@@ -731,9 +790,14 @@ $shippingDisplay = getShippingMethodDisplay($shippingMethod);
                                     <?php foreach ($orderDetail['items'] as $item): ?>
                                     <div class="order-item">
                                         <div class="item-image">
-                                            <img src="uploads/<?= htmlspecialchars($item['foto']) ?>" 
+                                            <div class="image-placeholder" id="placeholder-<?= $item['id_produk'] ?>">
+                                                <i class="fas fa-seedling"></i>
+                                            </div>
+                                            <img src="<?= getProductImagePath($item['foto']) ?>" 
                                                  alt="<?= htmlspecialchars($item['nama_tanaman']) ?>"
-                                                 onerror="this.src='images/default-product.jpg'">
+                                                 onload="imageLoaded(this, <?= $item['id_produk'] ?>)"
+                                                 onerror="imageError(this, <?= $item['id_produk'] ?>)"
+                                                 style="position: relative; z-index: 2;">
                                         </div>
                                         <div class="item-details">
                                             <h5><?= htmlspecialchars($item['nama_tanaman']) ?></h5>
@@ -773,6 +837,7 @@ $shippingDisplay = getShippingMethodDisplay($shippingMethod);
                         
                         <div class="address-info">
                             <h3>Alamat Pengiriman</h3>
+                            
                             <p class="recipient-name"><?= htmlspecialchars($pelanggan['username']) ?></p>
                             <p><?= htmlspecialchars($pelanggan['no_telepon'] ?? '0812-3456-7890') ?></p>
                             <p><?= htmlspecialchars($pelanggan['alamat'] ?? 'Jl. Tanaman Indah No. 123, Purwokerto, 53116') ?></p>

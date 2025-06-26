@@ -136,8 +136,8 @@ function getCompleteOrderData($id_pelanggan, $source = 'cart', $product_id = nul
         'items' => $orderItems,
         'subtotal' => $totalHarga
     ];
-}
 
+}
 // Get order data
 $orderData = getCompleteOrderData($id_pelanggan, $source, $product_id, $quantity);
 
@@ -213,7 +213,7 @@ $stmt_alamat->bind_param("s", $id_pelanggan);
 $stmt_alamat->execute();
 $query_alamat = $stmt_alamat->get_result();
 ?>
-p
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -498,38 +498,31 @@ p
                     <?php endif; ?>
                 </div>
 
-                <!-- PERBAIKAN: Enhanced Order Summary dengan data produk yang lengkap -->
+                <!-- PERBAIKAN: Enhanced Order Summary dengan URL gambar yang benar -->
                 <div class="order-summary">
-                    <h2><i class="fas fa-receipt"></i> Ringkasan Pesanan</h2>
+                      <div class="order-summary">
+                    <h2 class="summary-title">Ringkasan Pesanan</h2>
                     
                     <?php if (!empty($orderData['items'])): ?>
                         <div class="summary-items">
                             <?php foreach ($orderData['items'] as $item): ?>
-                            <div class="summary-item" data-product-id="<?= $item['id_produk'] ?>">
-                                <img src="/admin/uploads/<?= htmlspecialchars($item['foto']) ?>" 
-                                     alt="<?= htmlspecialchars($item['nama_tanaman']) ?>" 
-                                     class="item-image"
-                                     onerror="this.src='/images/placeholder-product.jpg'">
+                            <div class="summary-item">
+                                <img src="/admin/Admin_WebTanaman/uploads/<?= $item['foto'] ?>" alt="<?= $item['nama_tanaman'] ?>" class="item-image">
                                 <div class="item-info">
-                                    <h3><?= htmlspecialchars($item['nama_tanaman']) ?></h3>
-                                    <p class="item-quantity"><?= $item['jumlah'] ?> x Rp<?= number_format($item['harga'], 0, ',', '.') ?></p>
-                                    <p class="item-source"><?= ucfirst($item['source'] ?? $source) ?></p>
-                                    <!-- PERBAIKAN: Hidden data untuk JavaScript -->
-                                    <input type="hidden" class="item-data" value="<?= htmlspecialchars(json_encode($item)) ?>">
+                                    <h3><?= $item['nama_tanaman'] ?></h3>
+                                    <p><?= $item['jumlah'] ?> x Rp<?= number_format($item['harga'], 0, ',', '.') ?></p>
                                 </div>
-                                <div class="item-price">
-                                    <strong>Rp<?= number_format($item['subtotal'], 0, ',', '.') ?></strong>
-                                </div>
+                                <div class="item-price">Rp<?= number_format($item['subtotal'], 0, ',', '.') ?></div>
                             </div>
                             <?php endforeach; ?>
                         </div>
+                        
                         
                         <div class="summary-calculations">
                             <div class="summary-row">
                                 <span>Subtotal (<?= count($orderData['items']) ?> item)</span>
                                 <span>Rp<?= number_format($orderData['subtotal'], 0, ',', '.') ?></span>
                             </div>
-                            
                             
                             <div class="summary-row total">
                                 <span><strong>Total</strong></span>
