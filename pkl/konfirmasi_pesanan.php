@@ -7,7 +7,6 @@ if (!isset($_SESSION['username'])) {
     die("Akses ditolak. Silakan login terlebih dahulu.");
 }
 
-// Periksa apakah ada data pesanan di session
 if (!isset($_SESSION['order_data'])) {
     header("Location: keranjang.php");
     exit();
@@ -15,14 +14,11 @@ if (!isset($_SESSION['order_data'])) {
 
 // Ambil data dari session
 $sessionData = $_SESSION['order_data'];
-
-// PERBAIKAN: Ambil data dari database ringkasan_pesanan berdasarkan temp_order_id atau session_id
 function getOrderDataFromDatabase($koneksi, $temp_order_id = null, $session_id = null) {
     $orderItems = [];
     $orderInfo = [];
     
     if ($temp_order_id) {
-        // PERBAIKAN: JOIN dengan tabel produk untuk memastikan data produk valid
         $query = $koneksi->query("
             SELECT r.*, p.nama_tanaman as produk_nama, p.harga as produk_harga, p.foto as produk_foto
             FROM ringkasan_pesanan r 
@@ -45,7 +41,6 @@ function getOrderDataFromDatabase($koneksi, $temp_order_id = null, $session_id =
     if ($query && $query->num_rows > 0) {
         $subtotal = 0;
         while ($row = $query->fetch_assoc()) {
-            // PERBAIKAN: Validasi ID produk tidak boleh NULL atau kosong
             if (!empty($row['id_produk']) && $row['id_produk'] > 0) {
                 $orderItems[] = [
                     'id_produk' => (int)$row['id_produk'], // PERBAIKAN: Cast ke integer
