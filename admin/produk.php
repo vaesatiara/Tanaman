@@ -112,12 +112,12 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="deskripsi">Deskripsi</label>
+                    <label for="deskripsi">Deskripsis</label>
                     <textarea id="deskripsi" name="deskripsi" class="form-control textarea" required></textarea>
                     <small class="form-text">Deskripsikan tanaman secara singkat</small>
                 </div>
             </div>
-        </div>
+        </div> 
 
         <!-- Tambahan Detail Produk -->
         <div class="form-container">
