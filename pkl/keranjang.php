@@ -404,7 +404,7 @@ if (isset($_SESSION['user_id'])) {
                 <a href="<?php echo !empty($_SESSION['keranjang']) ? 'alamat_pengiriman.php?source=cart' : 'javascript:void(0)'; ?>" 
                    class="checkout-btn <?php echo empty($_SESSION['keranjang']) ? 'disabled' : ''; ?>" 
                    style="margin-top: 10px;">
-                    Checkout Semua Item
+                    Checkout Semua Itema
                 </a>
             </div>
         </div>
