@@ -96,13 +96,13 @@ if ($currentMonthNumber == 2) { // February as example of no orders
         <div class="menu-label">MENU</div>
         <ul class="menu-items">
             <li>
-                <a class="menu-item" onclick="location.href='dashboard.php'">
+                <a class="menu-item active" onclick="location.href='dashboard.php'">
                     <i class="fas fa-tachometer-alt"></i>
                     <span>Dashboard</span>
                 </a>
             </li>
             <li>
-                <a class="menu-item active" onclick="location.href='manajemen_pesanan.php'">
+                <a class="menu-item" onclick="location.href='manajemen_pesanan.php'">
                     <i class="fas fa-shopping-cart"></i>
                     <span>Management Pesanan</span>
                 </a>

@@ -1,12 +1,10 @@
 <?php
-//session_start();
+session_start();
 include "koneksi.php";
 
-// // Check if user is logged in
-// if (!isset($_SESSION['username'])){
-//     header("Location:login.php?login dulu");
-//     exit;
-//}
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 // Handle AJAX requests
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -17,109 +15,231 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     switch ($action) {
         case 'get_orders':
             try {
-                // Tambahkan log untuk debugging
-                error_log("Executing get_orders query");
-                
-                // Cek koneksi database
-                if ($koneksi->connect_error) {
-                    error_log("Database connection failed: " . $koneksi->connect_error);
-                    echo json_encode(['error' => 'Database connection failed']);
-                    exit;
-                }
-                
-                $stmt = $koneksi->query("SELECT * FROM pesanan ORDER BY tgl_pesanan DESC");
-                
-                // Cek apakah query berhasil
-                if (!$stmt) {
-                    error_log("Query failed: " . $koneksi->error);
-                    echo json_encode(['error' => 'Query failed: ' . $koneksi->error]);
-                    exit;
-                }
+                $stmt = $koneksi->query("SELECT 
+                    id_pesanan, 
+                    id_produk, 
+                    id_pelanggan, 
+                    nomor_pesanan, 
+                    tgl_pesanan, 
+                    status_pesanan, 
+                    jumlah, 
+                    total 
+                FROM pesanan 
+                ORDER BY tgl_pesanan DESC");
                 
                 $orders = $stmt->fetch_all(MYSQLI_ASSOC);
-                
-                // Log jumlah data yang ditemukan
-                error_log("Found " . count($orders) . " orders");
-                
-                echo json_encode($orders);
+                echo json_encode(['success' => true, 'data' => $orders]);
             } catch (Exception $e) {
-                error_log("Exception in get_orders: " . $e->getMessage());
-                echo json_encode(['error' => 'Exception: ' . $e->getMessage()]);
+                echo json_encode(['success' => false, 'error' => $e->getMessage()]);
             }
             exit;
             
         case 'get_order_detail':
-            $orderId = $_POST['order_id'] ?? 0;
-            $stmt = $koneksi->prepare("SELECT * FROM pesanan WHERE id_pesanan = ?");
-            $stmt->bind_param("i", $orderId);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $order = $result->fetch_assoc();
+            $orderId = intval($_POST['order_id'] ?? 0);
             
-            if ($order) {
-                // If you have order items table, fetch them here
-                // $stmt = $koneksi->prepare("SELECT * FROM order_items WHERE order_id = ?");
-                // $stmt->bind_param("i", $orderId);
-                // $stmt->execute();
-                // $result = $stmt->get_result();
-                // $items = $result->fetch_all(MYSQLI_ASSOC);
-                // $order['items'] = $items;
-                
-                // For now, we'll just return the order data
-                $order['items'] = []; // Empty array since we don't have items table in your DB
+            if ($orderId <= 0) {
+                echo json_encode(['success' => false, 'error' => 'ID pesanan tidak valid']);
+                exit;
             }
             
-            echo json_encode($order);
+            try {
+                $stmt = $koneksi->prepare("SELECT 
+                    id_pesanan, 
+                    id_produk, 
+                    id_pelanggan, 
+                    nomor_pesanan, 
+                    tgl_pesanan, 
+                    status_pesanan, 
+                    jumlah, 
+                    total 
+                FROM pesanan 
+                WHERE id_pesanan = ?");
+                $stmt->bind_param("i", $orderId);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                $order = $result->fetch_assoc();
+                
+                if ($order) {
+                    echo json_encode(['success' => true, 'data' => $order]);
+                } else {
+                    echo json_encode(['success' => false, 'error' => 'Pesanan tidak ditemukan']);
+                }
+            } catch (Exception $e) {
+                echo json_encode(['success' => false, 'error' => $e->getMessage()]);
+            }
+            exit;
+            
+        case 'verify_payment':
+            $orderId = intval($_POST['order_id'] ?? 0);
+            $verified = intval($_POST['verified'] ?? 0);
+            $notes = $_POST['notes'] ?? '';
+            
+            if ($orderId <= 0) {
+                echo json_encode(['success' => false, 'error' => 'ID pesanan tidak valid']);
+                exit;
+            }
+            
+            try {
+                // Cek status pesanan saat ini
+                $stmt = $koneksi->prepare("SELECT status_pesanan FROM pesanan WHERE id_pesanan = ?");
+                $stmt->bind_param("i", $orderId);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                $currentOrder = $result->fetch_assoc();
+                
+                if (!$currentOrder) {
+                    echo json_encode(['success' => false, 'error' => 'Pesanan tidak ditemukan']);
+                    exit;
+                }
+                
+                // Hanya bisa verifikasi jika status masih menunggu konfirmasi
+                if ($currentOrder['status_pesanan'] !== 'menunggu-konfirmasi') {
+                    echo json_encode(['success' => false, 'error' => 'Pesanan sudah diverifikasi atau tidak bisa diverifikasi']);
+                    exit;
+                }
+                
+                $newStatus = $verified ? 'dikonfirmasi' : 'dibatalkan';
+                
+                $stmt = $koneksi->prepare("UPDATE pesanan SET status_pesanan = ? WHERE id_pesanan = ?");
+                $stmt->bind_param("si", $newStatus, $orderId);
+                $result = $stmt->execute();
+                
+                if ($result) {
+                    echo json_encode(['success' => true, 'new_status' => $newStatus, 'message' => 'Verifikasi pembayaran berhasil']);
+                } else {
+                    echo json_encode(['success' => false, 'error' => 'Gagal memperbarui status pesanan']);
+                }
+            } catch (Exception $e) {
+                echo json_encode(['success' => false, 'error' => $e->getMessage()]);
+            }
             exit;
             
         case 'update_status':
-            $orderId = $_POST['order_id'] ?? 0;
+            $orderId = intval($_POST['order_id'] ?? 0);
             $status = $_POST['status'] ?? '';
             $notes = $_POST['notes'] ?? '';
             
-            // Check if catatan column exists, if not, update only status
-            $stmt = $koneksi->prepare("UPDATE pesanan SET status_pesanan = ? WHERE id_pesanan = ?");
-            $stmt->bind_param("si", $status, $orderId);
-            $result = $stmt->execute();
+            if ($orderId <= 0) {
+                echo json_encode(['success' => false, 'error' => 'ID pesanan tidak valid']);
+                exit;
+            }
             
-            echo json_encode(['success' => $result]);
+            // Validasi status yang diperbolehkan
+            $allowedStatuses = [
+                'menunggu-konfirmasi',
+                'dikonfirmasi', 
+                'diproses', 
+                'dikemas', 
+                'menunggu-dikirim',
+                'dikirim', 
+                'selesai',
+                'dibatalkan'
+            ];
+            
+            if (!in_array($status, $allowedStatuses)) {
+                echo json_encode(['success' => false, 'error' => 'Status tidak valid: ' . $status]);
+                exit;
+            }
+            
+            try {
+                // Cek apakah pesanan ada
+                $stmt = $koneksi->prepare("SELECT status_pesanan FROM pesanan WHERE id_pesanan = ?");
+                $stmt->bind_param("i", $orderId);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                $currentOrder = $result->fetch_assoc();
+                
+                if (!$currentOrder) {
+                    echo json_encode(['success' => false, 'error' => 'Pesanan tidak ditemukan']);
+                    exit;
+                }
+                
+                // Update status
+                $stmt = $koneksi->prepare("UPDATE pesanan SET status_pesanan = ? WHERE id_pesanan = ?");
+                $stmt->bind_param("si", $status, $orderId);
+                $result = $stmt->execute();
+                
+                if ($result) {
+                    // Log perubahan status (optional)
+                    error_log("Status pesanan ID $orderId diubah dari {$currentOrder['status_pesanan']} ke $status");
+                    
+                    echo json_encode([
+                        'success' => true, 
+                        'message' => 'Status pesanan berhasil diperbarui',
+                        'old_status' => $currentOrder['status_pesanan'],
+                        'new_status' => $status
+                    ]);
+                } else {
+                    echo json_encode(['success' => false, 'error' => 'Gagal memperbarui status pesanan']);
+                }
+            } catch (Exception $e) {
+                echo json_encode(['success' => false, 'error' => $e->getMessage()]);
+            }
             exit;
             
         case 'get_stats':
-            $stats = [];
+            try {
+                $stats = [];
+                
+                // Total orders today
+                $stmt = $koneksi->query("SELECT COUNT(*) as count FROM pesanan WHERE DATE(tgl_pesanan) = CURDATE()");
+                $result = $stmt->fetch_assoc();
+                $stats['total'] = $result['count'];
+                
+                // Pending orders (menunggu konfirmasi)
+                $stmt = $koneksi->query("SELECT COUNT(*) as count FROM pesanan WHERE status_pesanan = 'menunggu-konfirmasi'");
+                $result = $stmt->fetch_assoc();
+                $stats['pending'] = $result['count'];
+                
+                // Processing orders (dikonfirmasi + diproses + dikemas)
+                $stmt = $koneksi->query("SELECT COUNT(*) as count FROM pesanan WHERE status_pesanan IN ('dikonfirmasi', 'diproses', 'dikemas')");
+                $result = $stmt->fetch_assoc();
+                $stats['processing'] = $result['count'];
+                
+                // Shipped orders (dikirim)
+                $stmt = $koneksi->query("SELECT COUNT(*) as count FROM pesanan WHERE status_pesanan = 'dikirim'");
+                $result = $stmt->fetch_assoc();
+                $stats['shipped'] = $result['count'];
+                
+                // Canceled orders (dibatalkan)
+                $stmt = $koneksi->query("SELECT COUNT(*) as count FROM pesanan WHERE status_pesanan = 'dibatalkan'");
+                $result = $stmt->fetch_assoc();
+                $stats['canceled'] = $result['count'];
+                
+                echo json_encode(['success' => true, 'data' => $stats]);
+            } catch (Exception $e) {
+                echo json_encode(['success' => false, 'error' => $e->getMessage()]);
+            }
+            exit;
             
-            // Total orders today
-            $stmt = $koneksi->query("SELECT COUNT(*) FROM pesanan WHERE DATE(tgl_pesanan) = CURDATE()");
-            $stats['total'] = $stmt->fetch_row()[0];
-            
-            // Pending orders (menunggu-konfirmasi)
-            $stmt = $koneksi->query("SELECT COUNT(*) FROM pesanan WHERE status_pesanan = 'menunggu-konfirmasi'");
-            $stats['pending'] = $stmt->fetch_row()[0];
-            
-            // Processing orders (diproses)
-            $stmt = $koneksi->query("SELECT COUNT(*) FROM pesanan WHERE status_pesanan = 'diproses'");
-            $stats['processing'] = $stmt->fetch_row()[0];
-            
-            // Shipped orders (dikirim)
-            $stmt = $koneksi->query("SELECT COUNT(*) FROM pesanan WHERE status_pesanan = 'dikirim'");
-            $stats['shipped'] = $stmt->fetch_row()[0];
-            
-            // Completed orders (selesai)
-            $stmt = $koneksi->query("SELECT COUNT(*) FROM pesanan WHERE status_pesanan = 'selesai'");
-            $stats['completed'] = $stmt->fetch_row()[0];
-            
-            // Canceled orders (dibatalkan)
-            $stmt = $koneksi->query("SELECT COUNT(*) FROM pesanan WHERE status_pesanan = 'dibatalkan'");
-            $stats['canceled'] = $stmt->fetch_row()[0];
-            
-            echo json_encode($stats);
+        default:
+            echo json_encode(['success' => false, 'error' => 'Action tidak dikenal']);
             exit;
     }
 }
 
 // Get orders for initial page load
-$sql = "SELECT * FROM pesanan ORDER BY tgl_pesanan DESC";
-$query = mysqli_query($koneksi, $sql);
+try {
+    $sql = "SELECT 
+        id_pesanan, 
+        id_produk, 
+        id_pelanggan, 
+        nomor_pesanan, 
+        tgl_pesanan, 
+        status_pesanan, 
+        jumlah, 
+        total 
+    FROM pesanan 
+    ORDER BY tgl_pesanan DESC";
+    $query = mysqli_query($koneksi, $sql);
+    $initialOrders = [];
+    while ($row = mysqli_fetch_assoc($query)) {
+        $initialOrders[] = $row;
+    }
+} catch (Exception $e) {
+    $initialOrders = [];
+    error_log("Error loading initial orders: " . $e->getMessage());
+}
 ?>
 
 <!DOCTYPE html>
@@ -217,13 +337,13 @@ $query = mysqli_query($koneksi, $sql);
 
                 <div class="stat-card">
                     <div class="stat-header">
-                        <span class="stat-title">Menunggu Konfirmasi</span>
+                        <span class="stat-title">Menunggu Verifikasi</span>
                         <i class="fas fa-clock stat-icon"></i>
                     </div>
                     <div class="stat-value pending" id="pendingOrders">0</div>
                     <div class="stat-info">
                         <i class="fas fa-exclamation-circle"></i>
-                        <span>Perlu tindakan</span>
+                        <span>Perlu verifikasi pembayaran</span>
                     </div>
                 </div>
 
@@ -264,6 +384,7 @@ $query = mysqli_query($koneksi, $sql);
                             <th>Tanggal</th>
                             <th>Total</th>
                             <th>Status</th>
+                            <th>Verifikasi Pembayaran</th>
                             <th>Update Status</th>
                             <th>Aksi</th>
                         </tr>
@@ -272,6 +393,43 @@ $query = mysqli_query($koneksi, $sql);
                         <!-- Orders will be populated by JavaScript -->
                     </tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Verification Modal -->
+    <div id="paymentVerificationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-credit-card"></i> Verifikasi Pembayaran</h3>
+                <span class="modal-close" data-modal="paymentVerificationModal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="confirm-content">
+                    <div class="confirm-icon">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                    <div class="confirm-text">
+                        <h4>Verifikasi Pembayaran Pesanan</h4>
+                        <p id="paymentVerificationText"></p>
+                        <div class="payment-details" id="paymentDetails">
+                            <!-- Payment details will be populated here -->
+                        </div>
+                        <div class="form-group">
+                            <label for="paymentNote">Catatan Verifikasi (Opsional):</label>
+                            <textarea id="paymentNote" placeholder="Tambahkan catatan verifikasi pembayaran..." rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-cancel" onclick="cancelPaymentVerification()">Batal</button>
+                <button type="button" class="btn btn-danger" onclick="rejectPayment()">
+                    <i class="fas fa-times"></i> Tolak Pembayaran
+                </button>
+                <button type="button" class="btn btn-confirm" onclick="confirmPayment()">
+                    <i class="fas fa-check"></i> Konfirmasi Pembayaran
+                </button>
             </div>
         </div>
     </div>
@@ -340,9 +498,12 @@ $query = mysqli_query($koneksi, $sql);
         // Global variables
         let currentOrderId = null;
         let currentStatus = null;
+        let currentOrder = null;
         
         // DOM Ready
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, initializing...');
+            
             // Initialize mobile menu
             const mobileMenuBtn = document.getElementById('mobileMenuBtn');
             const sidebar = document.getElementById('sidebar');
@@ -367,7 +528,9 @@ $query = mysqli_query($koneksi, $sql);
                 closeBtn.addEventListener('click', function() {
                     const modalId = this.getAttribute('data-modal');
                     const modal = document.getElementById(modalId);
-                    modal.classList.remove('show');
+                    if (modal) {
+                        modal.classList.remove('show');
+                    }
                 });
             });
             
@@ -386,9 +549,15 @@ $query = mysqli_query($koneksi, $sql);
             }
         });
         
+        // Check if payment is verified
+        function isPaymentVerified(status) {
+            return status !== 'menunggu-konfirmasi';
+        }
+        
         // Load orders from server
         function loadOrders(searchTerm = '') {
             console.log('Loading orders...');
+            
             fetch('manajemen_pesanan.php', {
                 method: 'POST',
                 headers: {
@@ -397,38 +566,31 @@ $query = mysqli_query($koneksi, $sql);
                 body: 'action=get_orders'
             })
             .then(response => {
-                console.log('Response status:', response.status);
-                return response.text();
-            })
-            .then(text => {
-                console.log('Raw response:', text);
-                try {
-                    return JSON.parse(text);
-                } catch (e) {
-                    console.error('Error parsing JSON:', e);
-                    showToast('Format respons tidak valid', 'error');
-                    throw e;
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
                 }
+                return response.json();
             })
-            .then(orders => {
-                console.log('Parsed orders:', orders);
+            .then(result => {
+                console.log('Orders response:', result);
                 
-                // Check if response contains error
-                if (orders.error) {
-                    console.error('Server error:', orders.error);
-                    showToast('Error server: ' + orders.error, 'error');
+                if (!result.success) {
+                    console.error('Server error:', result.error);
+                    showToast('Error server: ' + result.error, 'error');
                     return;
                 }
                 
+                const orders = result.data || [];
                 const tableBody = document.getElementById('ordersTableBody');
                 if (!tableBody) return;
                 
                 tableBody.innerHTML = '';
                 
                 // Filter orders if search term exists
+                let filteredOrders = orders;
                 if (searchTerm) {
                     const term = searchTerm.toLowerCase();
-                    orders = orders.filter(order => 
+                    filteredOrders = orders.filter(order => 
                         (order.id_pesanan && order.id_pesanan.toString().includes(term)) ||
                         (order.nomor_pesanan && order.nomor_pesanan.toLowerCase().includes(term)) ||
                         (order.tgl_pesanan && order.tgl_pesanan.toLowerCase().includes(term)) ||
@@ -437,19 +599,17 @@ $query = mysqli_query($koneksi, $sql);
                     );
                 }
                 
-                if (!Array.isArray(orders) || orders.length === 0) {
+                if (filteredOrders.length === 0) {
                     const row = document.createElement('tr');
-                    row.innerHTML = `<td colspan="9" class="text-center">Tidak ada pesanan ditemukan</td>`;
+                    row.innerHTML = `<td colspan="10" class="text-center">Tidak ada pesanan ditemukan</td>`;
                     tableBody.appendChild(row);
                     return;
                 }
                 
-                orders.forEach(order => {
-                    console.log('Processing order:', order);
-                    
+                filteredOrders.forEach(order => {
                     const row = document.createElement('tr');
                     
-                    // Format date if exists
+                    // Format date
                     let formattedDate = '-';
                     if (order.tgl_pesanan) {
                         try {
@@ -462,12 +622,11 @@ $query = mysqli_query($koneksi, $sql);
                                 minute: '2-digit'
                             });
                         } catch (e) {
-                            console.error('Error formatting date:', e);
                             formattedDate = order.tgl_pesanan;
                         }
                     }
                     
-                    // Format total as currency if exists
+                    // Format total as currency
                     let formattedTotal = '-';
                     if (order.total) {
                         try {
@@ -477,13 +636,45 @@ $query = mysqli_query($koneksi, $sql);
                                 minimumFractionDigits: 0
                             }).format(order.total);
                         } catch (e) {
-                            console.error('Error formatting total:', e);
-                            formattedTotal = order.total;
+                            formattedTotal = 'Rp ' + order.total.toLocaleString('id-ID');
                         }
                     }
                     
-                    // Safely get status or default to empty string
                     const status = order.status_pesanan || '';
+                    const paymentVerified = isPaymentVerified(status);
+                    
+                    // Verification button or status
+                    let verificationButton = '';
+                    if (!paymentVerified) {
+                        verificationButton = `
+                            <button class="btn-action btn-detail" onclick="showPaymentVerification(${order.id_pesanan})" title="Verifikasi Pembayaran">
+                                <i class="fas fa-credit-card"></i> Verifikasi
+                            </button>
+                        `;
+                    } else {
+                        verificationButton = '<span class="status-badge status-selesai"><i class="fas fa-check"></i> Terverifikasi</span>';
+                    }
+                    
+                    // Status update dropdown
+                    let statusUpdateDropdown = '';
+                    if (paymentVerified) {
+                        statusUpdateDropdown = `
+                            <select class="status-select" 
+                                    onchange="showStatusConfirmation(${order.id_pesanan}, this.value, '${status}')" 
+                                    data-order-id="${order.id_pesanan}" 
+                                    data-current-status="${status}">
+                                <option value="dikonfirmasi" ${status === 'dikonfirmasi' ? 'selected' : ''}>Dikonfirmasi</option>
+                                <option value="diproses" ${status === 'diproses' ? 'selected' : ''}>Diproses</option>
+                                <option value="dikemas" ${status === 'dikemas' ? 'selected' : ''}>Dikemas</option>
+                                <option value="menunggu-dikirim" ${status === 'menunggu-dikirim' ? 'selected' : ''}>Menunggu Dikirim</option>
+                                <option value="dikirim" ${status === 'dikirim' ? 'selected' : ''}>Dikirim</option>
+                                <option value="selesai" ${status === 'selesai' ? 'selected' : ''}>Selesai</option>
+                                <option value="dibatalkan" ${status === 'dibatalkan' ? 'selected' : ''}>Dibatalkan</option>
+                            </select>
+                        `;
+                    } else {
+                        statusUpdateDropdown = '<span class="text-sm" style="color: #dc3545; font-weight: 500;"><i class="fas fa-exclamation-triangle"></i> Verifikasi pembayaran dulu</span>';
+                    }
                     
                     row.innerHTML = `
                         <td>${order.id_pesanan || '-'}</td>
@@ -493,15 +684,8 @@ $query = mysqli_query($koneksi, $sql);
                         <td>${formattedDate}</td>
                         <td>${formattedTotal}</td>
                         <td><span class="status-badge status-${status}">${getStatusText(status)}</span></td>
-                        <td>
-                            <select class="status-select" onchange="showStatusConfirmation(${order.id_pesanan}, this.value)" data-order-id="${order.id_pesanan}">
-                                <option value="menunggu-konfirmasi" ${status === 'menunggu-konfirmasi' ? 'selected' : ''}>Menunggu Konfirmasi</option>
-                                <option value="diproses" ${status === 'diproses' ? 'selected' : ''}>Diproses</option>
-                                <option value="dikirim" ${status === 'dikirim' ? 'selected' : ''}>Dikirim</option>
-                                <option value="selesai" ${status === 'selesai' ? 'selected' : ''}>Selesai</option>
-                                <option value="dibatalkan" ${status === 'dibatalkan' ? 'selected' : ''}>Dibatalkan</option>
-                            </select>
-                        </td>
+                        <td>${verificationButton}</td>
+                        <td>${statusUpdateDropdown}</td>
                         <td class="action-buttons">
                             <button class="btn-action btn-detail" onclick="showOrderDetail(${order.id_pesanan})">
                                 <i class="fas fa-eye"></i>
@@ -514,7 +698,7 @@ $query = mysqli_query($koneksi, $sql);
             })
             .catch(error => {
                 console.error('Error loading orders:', error);
-                showToast('Gagal memuat data pesanan', 'error');
+                showToast('Gagal memuat data pesanan: ' + error.message, 'error');
             });
         }
         
@@ -528,20 +712,180 @@ $query = mysqli_query($koneksi, $sql);
                 body: 'action=get_stats'
             })
             .then(response => response.json())
-            .then(stats => {
-                const totalElement = document.getElementById('totalOrders');
-                const pendingElement = document.getElementById('pendingOrders');
-                const processingElement = document.getElementById('processingOrders');
-                const shippedElement = document.getElementById('shippedOrders');
-                
-                if (totalElement) totalElement.textContent = stats.total || 0;
-                if (pendingElement) pendingElement.textContent = stats.pending || 0;
-                if (processingElement) processingElement.textContent = stats.processing || 0;
-                if (shippedElement) shippedElement.textContent = stats.shipped || 0;
+            .then(result => {
+                if (result.success) {
+                    const stats = result.data;
+                    const totalElement = document.getElementById('totalOrders');
+                    const pendingElement = document.getElementById('pendingOrders');
+                    const processingElement = document.getElementById('processingOrders');
+                    const shippedElement = document.getElementById('shippedOrders');
+                    
+                    if (totalElement) totalElement.textContent = stats.total || 0;
+                    if (pendingElement) pendingElement.textContent = stats.pending || 0;
+                    if (processingElement) processingElement.textContent = stats.processing || 0;
+                    if (shippedElement) shippedElement.textContent = stats.shipped || 0;
+                } else {
+                    console.error('Error loading stats:', result.error);
+                }
             })
             .catch(error => {
                 console.error('Error loading stats:', error);
             });
+        }
+        
+        // Show payment verification modal
+        function showPaymentVerification(orderId) {
+            console.log('Showing payment verification for order:', orderId);
+            
+            fetch('manajemen_pesanan.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `action=get_order_detail&order_id=${orderId}`
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (!result.success) {
+                    showToast(result.error || 'Pesanan tidak ditemukan', 'error');
+                    return;
+                }
+                
+                const order = result.data;
+                currentOrder = order;
+                currentOrderId = orderId;
+                
+                const formattedTotal = new Intl.NumberFormat('id-ID', {
+                    style: 'currency',
+                    currency: 'IDR',
+                    minimumFractionDigits: 0
+                }).format(order.total);
+                
+                const orderDate = new Date(order.tgl_pesanan);
+                const formattedDate = orderDate.toLocaleDateString('id-ID', {
+                    day: '2-digit',
+                    month: 'long',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                document.getElementById('paymentVerificationText').textContent = 
+                    `Apakah pembayaran untuk pesanan #${order.nomor_pesanan || order.id_pesanan} sudah diterima?`;
+                
+                document.getElementById('paymentDetails').innerHTML = `
+                    <div class="payment-detail-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0; padding: 1rem; background: #f9f9f9; border-radius: 8px;">
+                        <div>
+                            <strong>Total Pembayaran:</strong><br>
+                            <span style="font-size: 1.2em; color: #28a745; font-weight: bold;">${formattedTotal}</span>
+                        </div>
+                        <div>
+                            <strong>Tanggal Pesanan:</strong><br>
+                            ${formattedDate}
+                        </div>
+                        <div>
+                            <strong>ID Pelanggan:</strong><br>
+                            ${order.id_pelanggan}
+                        </div>
+                        <div>
+                            <strong>ID Produk:</strong><br>
+                            ${order.id_produk}
+                        </div>
+                    </div>
+                `;
+                
+                document.getElementById('paymentNote').value = '';
+                document.getElementById('paymentVerificationModal').classList.add('show');
+            })
+            .catch(error => {
+                console.error('Error loading order detail:', error);
+                showToast('Gagal memuat detail pesanan', 'error');
+            });
+        }
+        
+        // Confirm payment
+        function confirmPayment() {
+            const note = document.getElementById('paymentNote').value;
+            
+            console.log('Confirming payment for order:', currentOrderId);
+            
+            fetch('manajemen_pesanan.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `action=verify_payment&order_id=${currentOrderId}&verified=1&notes=${encodeURIComponent(note)}`
+            })
+            .then(response => response.json())
+            .then(result => {
+                console.log('Payment verification result:', result);
+                
+                if (result.success) {
+                    showToast('Pembayaran berhasil dikonfirmasi', 'success');
+                    loadOrders();
+                    loadStats();
+                } else {
+                    showToast(result.error || 'Gagal mengkonfirmasi pembayaran', 'error');
+                }
+                
+                document.getElementById('paymentVerificationModal').classList.remove('show');
+                currentOrderId = null;
+                currentOrder = null;
+            })
+            .catch(error => {
+                console.error('Error confirming payment:', error);
+                showToast('Terjadi kesalahan saat mengkonfirmasi pembayaran', 'error');
+                
+                document.getElementById('paymentVerificationModal').classList.remove('show');
+                currentOrderId = null;
+                currentOrder = null;
+            });
+        }
+        
+        // Reject payment
+        function rejectPayment() {
+            const note = document.getElementById('paymentNote').value;
+            
+            console.log('Rejecting payment for order:', currentOrderId);
+            
+            fetch('manajemen_pesanan.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `action=verify_payment&order_id=${currentOrderId}&verified=0&notes=${encodeURIComponent(note)}`
+            })
+            .then(response => response.json())
+            .then(result => {
+                console.log('Payment rejection result:', result);
+                
+                if (result.success) {
+                    showToast('Pembayaran ditolak dan pesanan dibatalkan', 'warning');
+                    loadOrders();
+                    loadStats();
+                } else {
+                    showToast(result.error || 'Gagal menolak pembayaran', 'error');
+                }
+                
+                document.getElementById('paymentVerificationModal').classList.remove('show');
+                currentOrderId = null;
+                currentOrder = null;
+            })
+            .catch(error => {
+                console.error('Error rejecting payment:', error);
+                showToast('Terjadi kesalahan saat menolak pembayaran', 'error');
+                
+                document.getElementById('paymentVerificationModal').classList.remove('show');
+                currentOrderId = null;
+                currentOrder = null;
+            });
+        }
+        
+        // Cancel payment verification
+        function cancelPaymentVerification() {
+            document.getElementById('paymentVerificationModal').classList.remove('show');
+            currentOrderId = null;
+            currentOrder = null;
         }
         
         // Show order detail modal
@@ -554,13 +898,14 @@ $query = mysqli_query($koneksi, $sql);
                 body: `action=get_order_detail&order_id=${orderId}`
             })
             .then(response => response.json())
-            .then(order => {
-                if (!order) {
-                    showToast('Pesanan tidak ditemukan', 'error');
+            .then(result => {
+                if (!result.success) {
+                    showToast(result.error || 'Pesanan tidak ditemukan', 'error');
                     return;
                 }
                 
-                // Format date
+                const order = result.data;
+                
                 const orderDate = new Date(order.tgl_pesanan);
                 const formattedDate = orderDate.toLocaleDateString('id-ID', {
                     day: '2-digit',
@@ -570,12 +915,16 @@ $query = mysqli_query($koneksi, $sql);
                     minute: '2-digit'
                 });
                 
-                // Format total as currency
                 const formattedTotal = new Intl.NumberFormat('id-ID', {
                     style: 'currency',
                     currency: 'IDR',
                     minimumFractionDigits: 0
                 }).format(order.total);
+                
+                const paymentVerified = isPaymentVerified(order.status_pesanan);
+                const paymentStatus = paymentVerified ? 
+                    '<span class="status-badge status-selesai"><i class="fas fa-check"></i> Terverifikasi</span>' : 
+                    '<span class="status-badge status-menunggu-konfirmasi"><i class="fas fa-clock"></i> Belum Verifikasi</span>';
                 
                 const modalContent = document.getElementById('orderDetailContent');
                 modalContent.innerHTML = `
@@ -603,7 +952,11 @@ $query = mysqli_query($koneksi, $sql);
                                 <span>${formattedDate}</span>
                             </div>
                             <div class="detail-item">
-                                <label>Status:</label>
+                                <label>Status Pembayaran:</label>
+                                ${paymentStatus}
+                            </div>
+                            <div class="detail-item">
+                                <label>Status Pesanan:</label>
                                 <span class="status-badge status-${order.status_pesanan}">${getStatusText(order.status_pesanan)}</span>
                             </div>
                             <div class="detail-item">
@@ -614,7 +967,6 @@ $query = mysqli_query($koneksi, $sql);
                     </div>
                 `;
                 
-                // Show the modal
                 document.getElementById('orderDetailModal').classList.add('show');
             })
             .catch(error => {
@@ -624,7 +976,21 @@ $query = mysqli_query($koneksi, $sql);
         }
         
         // Show status confirmation modal
-        function showStatusConfirmation(orderId, newStatus) {
+        function showStatusConfirmation(orderId, newStatus, currentStatusParam = null) {
+            console.log('Status confirmation:', { orderId, newStatus, currentStatusParam });
+            
+            // Get current status from the select element or parameter
+            const currentSelect = document.querySelector(`.status-select[data-order-id="${orderId}"]`);
+            const currentStatus = currentStatusParam || (currentSelect ? currentSelect.getAttribute('data-current-status') : null);
+            
+            // Don't allow status change if it's the same
+            if (newStatus === currentStatus) {
+                if (currentSelect) {
+                    currentSelect.value = currentStatus; // Reset select to current status
+                }
+                return;
+            }
+            
             currentOrderId = orderId;
             currentStatus = newStatus;
             
@@ -632,22 +998,19 @@ $query = mysqli_query($koneksi, $sql);
             document.getElementById('statusChangeText').textContent = `Anda akan mengubah status pesanan #${orderId} menjadi "${statusText}"`;
             document.getElementById('statusNote').value = '';
             
-            // Show the modal
             document.getElementById('statusConfirmModal').classList.add('show');
         }
         
         // Cancel status update
         function cancelStatusUpdate() {
-            // Reset the select to previous value
             const select = document.querySelector(`.status-select[data-order-id="${currentOrderId}"]`);
             if (select) {
-                select.value = select.dataset.previousValue;
+                // Reset to previous value using data attribute
+                const originalStatus = select.getAttribute('data-current-status');
+                select.value = originalStatus;
             }
             
-            // Close modal
             document.getElementById('statusConfirmModal').classList.remove('show');
-            
-            // Reset globals
             currentOrderId = null;
             currentStatus = null;
         }
@@ -655,6 +1018,8 @@ $query = mysqli_query($koneksi, $sql);
         // Confirm status update
         function confirmStatusUpdate() {
             const note = document.getElementById('statusNote').value;
+            
+            console.log('Updating status:', { currentOrderId, currentStatus, note });
             
             fetch('manajemen_pesanan.php', {
                 method: 'POST',
@@ -665,18 +1030,30 @@ $query = mysqli_query($koneksi, $sql);
             })
             .then(response => response.json())
             .then(result => {
+                console.log('Status update result:', result);
+                
                 if (result.success) {
                     showToast('Status pesanan berhasil diperbarui', 'success');
                     loadOrders();
                     loadStats();
+                    
+                    // Update the data-current-status attribute after successful update
+                    const select = document.querySelector(`.status-select[data-order-id="${currentOrderId}"]`);
+                    if (select) {
+                        select.setAttribute('data-current-status', currentStatus);
+                    }
                 } else {
-                    showToast('Gagal memperbarui status pesanan', 'error');
+                    showToast(result.error || 'Gagal memperbarui status pesanan', 'error');
+                    
+                    // Reset select to original value on error
+                    const select = document.querySelector(`.status-select[data-order-id="${currentOrderId}"]`);
+                    if (select) {
+                        const originalStatus = select.getAttribute('data-current-status');
+                        select.value = originalStatus;
+                    }
                 }
                 
-                // Close modal
                 document.getElementById('statusConfirmModal').classList.remove('show');
-                
-                // Reset globals
                 currentOrderId = null;
                 currentStatus = null;
             })
@@ -684,10 +1061,14 @@ $query = mysqli_query($koneksi, $sql);
                 console.error('Error updating status:', error);
                 showToast('Terjadi kesalahan saat memperbarui status', 'error');
                 
-                // Close modal
-                document.getElementById('statusConfirmModal').classList.remove('show');
+                // Reset select to original value on error
+                const select = document.querySelector(`.status-select[data-order-id="${currentOrderId}"]`);
+                if (select) {
+                    const originalStatus = select.getAttribute('data-current-status');
+                    select.value = originalStatus;
+                }
                 
-                // Reset globals
+                document.getElementById('statusConfirmModal').classList.remove('show');
                 currentOrderId = null;
                 currentStatus = null;
             });
@@ -697,12 +1078,14 @@ $query = mysqli_query($koneksi, $sql);
         function getStatusText(status) {
             const statusMap = {
                 'menunggu-konfirmasi': 'Menunggu Konfirmasi',
+                'dikonfirmasi': 'Dikonfirmasi',
                 'diproses': 'Diproses',
+                'dikemas': 'Dikemas',
+                'menunggu-dikirim': 'Menunggu Dikirim',
                 'dikirim': 'Dikirim',
                 'selesai': 'Selesai',
                 'dibatalkan': 'Dibatalkan'
             };
-            
             return statusMap[status] || status;
         }
         
@@ -714,10 +1097,8 @@ $query = mysqli_query($koneksi, $sql);
             const toastIcon = toast.querySelector('.toast-icon-element');
             const toastMessage = toast.querySelector('.toast-message');
             
-            // Set content
             toastMessage.textContent = message;
             
-            // Set icon based on type
             let iconClass;
             switch (type) {
                 case 'success':
@@ -734,12 +1115,9 @@ $query = mysqli_query($koneksi, $sql);
             }
             
             toastIcon.className = iconClass;
-            
-            // Set toast class
             toast.className = 'toast';
             toast.classList.add(type, 'show');
             
-            // Auto hide after 5 seconds
             setTimeout(() => {
                 closeToast();
             }, 5000);
