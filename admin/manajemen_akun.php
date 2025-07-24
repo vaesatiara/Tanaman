@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
                 $search = $_POST['search'] ?? '';
                 
-                $sql = "SELECT id_pelanggan, username, email, password, no_hp, tanggal_lahir FROM pelanggan WHERE 1=1";
+                $sql = "SELECT id_pelanggan, username, email, no_hp, tanggal_lahir FROM pelanggan WHERE 1=1";
                 
                 $params = [];
                 $types = "";
@@ -60,15 +60,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             
             try {
-                $stmt = $koneksi->prepare("SELECT * FROM pelanggan WHERE id_pelanggan = ?");
+                $stmt = $koneksi->prepare("SELECT id_pelanggan, username, email, no_hp, tanggal_lahir FROM pelanggan WHERE id_pelanggan = ?");
                 $stmt->bind_param("i", $accountId);
                 $stmt->execute();
                 $result = $stmt->get_result();
                 $account = $result->fetch_assoc();
                 
                 if ($account) {
-                    // Don't send password in response for security
-                    unset($account['password']);
                     echo json_encode(['success' => true, 'data' => $account]);
                 } else {
                     echo json_encode(['success' => false, 'error' => 'Akun tidak ditemukan']);
@@ -79,15 +77,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
             
         case 'add_account':
-            $username = $_POST['username'] ?? '';
-            $email = $_POST['email'] ?? '';
+            $username = sanitize_input($_POST['username'] ?? '');
+            $email = sanitize_input($_POST['email'] ?? '');
             $password = $_POST['password'] ?? '';
-            $no_hp = $_POST['no_hp'] ?? '';
-            $tanggal_lahir = $_POST['tanggal_lahir'] ?? '';
+            $no_hp = sanitize_input($_POST['no_hp'] ?? '');
+            $tanggal_lahir = sanitize_input($_POST['tanggal_lahir'] ?? '');
             
             // Validation
             if (empty($username) || empty($email) || empty($password)) {
                 echo json_encode(['success' => false, 'error' => 'Username, email, dan password wajib diisi']);
+                exit;
+            }
+            
+            // Validate email format
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                echo json_encode(['success' => false, 'error' => 'Format email tidak valid']);
+                exit;
+            }
+            
+            // Validate password length
+            if (strlen($password) < 6) {
+                echo json_encode(['success' => false, 'error' => 'Password minimal 6 karakter']);
                 exit;
             }
             
@@ -103,7 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     exit;
                 }
                 
-                // Hash password
+                // Hash password dengan PASSWORD_DEFAULT (bcrypt)
                 $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
                 
                 // Insert new account
@@ -113,7 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($stmt->execute()) {
                     echo json_encode(['success' => true, 'message' => 'Akun berhasil ditambahkan']);
                 } else {
-                    echo json_encode(['success' => false, 'error' => 'Gagal menambahkan akun']);
+                    echo json_encode(['success' => false, 'error' => 'Gagal menambahkan akun: ' . $koneksi->error]);
                 }
             } catch (Exception $e) {
                 echo json_encode(['success' => false, 'error' => $e->getMessage()]);
@@ -122,13 +132,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
         case 'update_account':
             $accountId = intval($_POST['account_id'] ?? 0);
-            $username = $_POST['username'] ?? '';
-            $email = $_POST['email'] ?? '';
-            $no_hp = $_POST['no_hp'] ?? '';
-            $tanggal_lahir = $_POST['tanggal_lahir'] ?? '';
+            $username = sanitize_input($_POST['username'] ?? '');
+            $email = sanitize_input($_POST['email'] ?? '');
+            $no_hp = sanitize_input($_POST['no_hp'] ?? '');
+            $tanggal_lahir = sanitize_input($_POST['tanggal_lahir'] ?? '');
             
             if ($accountId <= 0) {
                 echo json_encode(['success' => false, 'error' => 'ID akun tidak valid']);
+                exit;
+            }
+            
+            // Validate email format
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                echo json_encode(['success' => false, 'error' => 'Format email tidak valid']);
                 exit;
             }
             
@@ -151,7 +167,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($stmt->execute()) {
                     echo json_encode(['success' => true, 'message' => 'Akun berhasil diperbarui']);
                 } else {
-                    echo json_encode(['success' => false, 'error' => 'Gagal memperbarui akun']);
+                    echo json_encode(['success' => false, 'error' => 'Gagal memperbarui akun: ' . $koneksi->error]);
                 }
             } catch (Exception $e) {
                 echo json_encode(['success' => false, 'error' => $e->getMessage()]);
@@ -167,22 +183,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             
             try {
-                // Generate new password
-                $newPassword = 'newpass' . rand(1000, 9999);
+                // Generate new password yang mudah diingat tapi tetap aman
+                $newPassword = 'reset' . rand(100, 999) . '!';
+                
+                // Hash password dengan metode yang sama seperti saat registrasi
                 $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+                
+                // Debug: Log password hash untuk troubleshooting
+                error_log("Reset Password Debug - Account ID: $accountId, New Password: $newPassword, Hash: $hashedPassword");
                 
                 // Update password
                 $stmt = $koneksi->prepare("UPDATE pelanggan SET password = ? WHERE id_pelanggan = ?");
                 $stmt->bind_param("si", $hashedPassword, $accountId);
                 
                 if ($stmt->execute()) {
-                    echo json_encode([
-                        'success' => true, 
-                        'message' => 'Password berhasil direset',
-                        'new_password' => $newPassword
-                    ]);
+                    // Verify the update worked
+                    $verifyStmt = $koneksi->prepare("SELECT password FROM pelanggan WHERE id_pelanggan = ?");
+                    $verifyStmt->bind_param("i", $accountId);
+                    $verifyStmt->execute();
+                    $verifyResult = $verifyStmt->get_result();
+                    $verifyData = $verifyResult->fetch_assoc();
+                    
+                    // Test if the new password can be verified
+                    $canVerify = password_verify($newPassword, $verifyData['password']);
+                    
+                    if ($canVerify) {
+                        echo json_encode([
+                            'success' => true, 
+                            'message' => 'Password berhasil direset',
+                            'new_password' => $newPassword,
+                            'note' => 'Password baru dapat langsung digunakan untuk login'
+                        ]);
+                    } else {
+                        echo json_encode(['success' => false, 'error' => 'Password direset tapi verifikasi gagal']);
+                    }
                 } else {
-                    echo json_encode(['success' => false, 'error' => 'Gagal mereset password']);
+                    echo json_encode(['success' => false, 'error' => 'Gagal mereset password: ' . $koneksi->error]);
                 }
             } catch (Exception $e) {
                 echo json_encode(['success' => false, 'error' => $e->getMessage()]);
@@ -198,16 +234,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             
             try {
-                // Check if account has orders
-                $stmt = $koneksi->prepare("SELECT COUNT(*) as order_count FROM pesanan WHERE id_pelanggan = ?");
-                $stmt->bind_param("i", $accountId);
-                $stmt->execute();
-                $result = $stmt->get_result();
-                $orderData = $result->fetch_assoc();
+                // Check if account has orders (jika tabel pesanan ada)
+                $checkOrdersQuery = "SHOW TABLES LIKE 'pesanan'";
+                $tableExists = $koneksi->query($checkOrdersQuery);
                 
-                if ($orderData['order_count'] > 0) {
-                    echo json_encode(['success' => false, 'error' => 'Tidak dapat menghapus akun yang memiliki riwayat pesanan']);
-                    exit;
+                if ($tableExists && $tableExists->num_rows > 0) {
+                    $stmt = $koneksi->prepare("SELECT COUNT(*) as order_count FROM pesanan WHERE id_pelanggan = ?");
+                    $stmt->bind_param("i", $accountId);
+                    $stmt->execute();
+                    $result = $stmt->get_result();
+                    $orderData = $result->fetch_assoc();
+                    
+                    if ($orderData['order_count'] > 0) {
+                        echo json_encode(['success' => false, 'error' => 'Tidak dapat menghapus akun yang memiliki riwayat pesanan']);
+                        exit;
+                    }
                 }
                 
                 // Delete account
@@ -217,7 +258,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($stmt->execute()) {
                     echo json_encode(['success' => true, 'message' => 'Akun berhasil dihapus']);
                 } else {
-                    echo json_encode(['success' => false, 'error' => 'Gagal menghapus akun']);
+                    echo json_encode(['success' => false, 'error' => 'Gagal menghapus akun: ' . $koneksi->error]);
                 }
             } catch (Exception $e) {
                 echo json_encode(['success' => false, 'error' => $e->getMessage()]);
@@ -233,12 +274,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $result = $stmt->fetch_assoc();
                 $stats['total'] = $result['count'];
                 
-                // Active accounts (accounts with orders)
-                $stmt = $koneksi->query("SELECT COUNT(DISTINCT id_pelanggan) as count FROM pesanan");
-                $result = $stmt->fetch_assoc();
-                $stats['active'] = $result['count'];
+                // Active accounts (accounts with orders) - jika tabel pesanan ada
+                $checkOrdersQuery = "SHOW TABLES LIKE 'pesanan'";
+                $tableExists = $koneksi->query($checkOrdersQuery);
+                
+                if ($tableExists && $tableExists->num_rows > 0) {
+                    $stmt = $koneksi->query("SELECT COUNT(DISTINCT id_pelanggan) as count FROM pesanan");
+                    $result = $stmt->fetch_assoc();
+                    $stats['active'] = $result['count'];
+                } else {
+                    $stats['active'] = 0;
+                }
                 
                 echo json_encode(['success' => true, 'data' => $stats]);
+            } catch (Exception $e) {
+                echo json_encode(['success' => false, 'error' => $e->getMessage()]);
+            }
+            exit;
+            
+        case 'test_login':
+            // Endpoint untuk testing login dengan password yang di-reset
+            $username = sanitize_input($_POST['username'] ?? '');
+            $password = $_POST['password'] ?? '';
+            
+            if (empty($username) || empty($password)) {
+                echo json_encode(['success' => false, 'error' => 'Username dan password wajib diisi']);
+                exit;
+            }
+            
+            try {
+                $stmt = $koneksi->prepare("SELECT id_pelanggan, username, password FROM pelanggan WHERE username = ? OR email = ?");
+                $stmt->bind_param("ss", $username, $username);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                $user = $result->fetch_assoc();
+                
+                if ($user && password_verify($password, $user['password'])) {
+                    echo json_encode([
+                        'success' => true, 
+                        'message' => 'Login berhasil',
+                        'user_id' => $user['id_pelanggan'],
+                        'username' => $user['username']
+                    ]);
+                } else {
+                    echo json_encode(['success' => false, 'error' => 'Username atau password salah']);
+                }
             } catch (Exception $e) {
                 echo json_encode(['success' => false, 'error' => $e->getMessage()]);
             }
@@ -287,7 +367,7 @@ try {
         <!-- Sidebar -->
         <div class="sidebar" id="sidebar">
             <div class="logo">
-                <img src="uploads/logo.png" alt="The Secret Garden">
+                <div class="logo-text">Secret Garden</div>
             </div>
             <div class="menu-label">MENU</div>
             <ul class="menu-items">
@@ -347,7 +427,7 @@ try {
                         <div class="notification-badge"></div>
                     </div>
                     <div class="profile-pic">
-                        <img src="images/4396a60b-6455-40ed-8331-89a96395469f.jpeg" alt="Profile">
+                        <div class="profile-avatar">A</div>
                     </div>
                 </div>
             </div>
@@ -384,7 +464,7 @@ try {
                                 <th>Username</th>
                                 <th>Email</th>
                                 <th>No. HP</th>
-                                <th>Tanggal Lahir</th>
+                                <th>Password</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -406,6 +486,14 @@ try {
                 <button class="btn-add-admin" onclick="showAddModal()">
                     <i class="fas fa-plus"></i>
                     Tambah Akun Baru
+                </button>
+            </div>
+
+            <!-- Test Login Section -->
+            <div class="add-admin-section">
+                <button class="btn-add-admin" onclick="showTestLoginModal()" style="background: linear-gradient(135deg, #17a2b8, #138496);">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Test Login
                 </button>
             </div>
 
@@ -436,11 +524,12 @@ try {
                     </div>
                     <div class="form-group" id="passwordGroup">
                         <label for="password">Password:</label>
-                        <input type="password" id="password" name="password" required>
+                        <input type="password" id="password" name="password" required minlength="6">
+                        <small style="color: #6c757d;">Minimal 6 karakter</small>
                     </div>
                     <div class="form-group" id="confirmPasswordGroup">
                         <label for="confirm_password">Konfirmasi Password:</label>
-                        <input type="password" id="confirm_password" name="confirm_password" required>
+                        <input type="password" id="confirm_password" name="confirm_password" required minlength="6">
                     </div>
                     <div class="form-group">
                         <label for="no_hp">No. HP:</label>
@@ -473,6 +562,32 @@ try {
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" onclick="closeDetailModal()">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal untuk test login -->
+    <div id="testLoginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Test Login</h3>
+                <span class="close" onclick="closeTestLoginModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="testLoginForm">
+                    <div class="form-group">
+                        <label for="testUsername">Username/Email:</label>
+                        <input type="text" id="testUsername" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="testPassword">Password:</label>
+                        <input type="password" id="testPassword" name="password" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeTestLoginModal()">Batal</button>
+                <button type="button" class="btn btn-primary" onclick="testLogin()">Test Login</button>
             </div>
         </div>
     </div>
@@ -588,23 +703,15 @@ try {
             accounts.forEach(account => {
                 const row = document.createElement('tr');
                 
-                // Format tanggal lahir
-                let formattedDate = '-';
-                if (account.tanggal_lahir && account.tanggal_lahir !== '0000-00-00') {
-                    try {
-                        const date = new Date(account.tanggal_lahir);
-                        formattedDate = date.toLocaleDateString('id-ID');
-                    } catch (e) {
-                        formattedDate = account.tanggal_lahir;
-                    }
-                }
+                // Mask password for display
+                const maskedPassword = '••••••••';
                 
                 row.innerHTML = `
                     <td><strong>${account.id_pelanggan || '-'}</strong></td>
                     <td>${account.username || '-'}</td>
                     <td>${account.email || '-'}</td>
                     <td>${account.no_hp || '-'}</td>
-                    <td>${formattedDate}</td>
+                    <td>${maskedPassword}</td>
                     <td class="actions">
                         <button class="btn-icon" title="Lihat Detail" onclick="viewAccount(${account.id_pelanggan})">
                             <i class="fas fa-eye"></i>
@@ -675,6 +782,12 @@ try {
             document.getElementById('accountModal').style.display = 'block';
         }
         
+        // Fungsi untuk menampilkan modal test login
+        function showTestLoginModal() {
+            document.getElementById('testLoginForm').reset();
+            document.getElementById('testLoginModal').style.display = 'block';
+        }
+        
         // Fungsi untuk menutup modal
         function closeModal() {
             document.getElementById('accountModal').style.display = 'none';
@@ -683,6 +796,44 @@ try {
         // Fungsi untuk menutup modal detail
         function closeDetailModal() {
             document.getElementById('detailModal').style.display = 'none';
+        }
+        
+        // Fungsi untuk menutup modal test login
+        function closeTestLoginModal() {
+            document.getElementById('testLoginModal').style.display = 'none';
+        }
+        
+        // Fungsi untuk test login
+        function testLogin() {
+            const form = document.getElementById('testLoginForm');
+            const formData = new FormData(form);
+            formData.append('action', 'test_login');
+            
+            const username = document.getElementById('testUsername').value;
+            const password = document.getElementById('testPassword').value;
+            
+            if (!username || !password) {
+                showToast('Username dan password wajib diisi', 'error');
+                return;
+            }
+            
+            fetch('manajemen_akun.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    showToast(`Login berhasil! Selamat datang ${result.username}`, 'success');
+                    closeTestLoginModal();
+                } else {
+                    showToast(result.error || 'Login gagal', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error testing login:', error);
+                showToast('Terjadi kesalahan saat test login', 'error');
+            });
         }
         
         // Fungsi untuk melihat detail akun
@@ -799,7 +950,7 @@ try {
         
         // Fungsi untuk reset password
         function resetPassword(id, username) {
-            if (!confirm(`Apakah Anda yakin ingin mereset password untuk akun "${username}"?`)) {
+            if (!confirm(`Apakah Anda yakin ingin mereset password untuk akun "${username}"?\n\nPassword baru akan digenerate otomatis.`)) {
                 return;
             }
             
@@ -813,7 +964,8 @@ try {
             .then(response => response.json())
             .then(result => {
                 if (result.success) {
-                    alert(`Password berhasil direset!\nPassword baru: ${result.new_password}\n\nPassword baru telah dikirim ke email pelanggan.`);
+                    const message = `Password berhasil direset!\n\nPassword baru: ${result.new_password}\n\n${result.note || 'Password baru dapat langsung digunakan untuk login.'}`;
+                    alert(message);
                     showToast('Password berhasil direset', 'success');
                 } else {
                     showToast(result.error || 'Gagal mereset password', 'error');
@@ -860,8 +1012,8 @@ try {
             const formData = new FormData(form);
             
             // Validation
-            const username = document.getElementById('username').value;
-            const email = document.getElementById('email').value;
+            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
             
             if (!username || !email) {
                 showToast('Username dan email wajib diisi', 'error');
@@ -874,6 +1026,11 @@ try {
                 
                 if (!password) {
                     showToast('Password wajib diisi', 'error');
+                    return;
+                }
+                
+                if (password.length < 6) {
+                    showToast('Password minimal 6 karakter', 'error');
                     return;
                 }
                 
@@ -959,12 +1116,16 @@ try {
         window.onclick = function(event) {
             const accountModal = document.getElementById('accountModal');
             const detailModal = document.getElementById('detailModal');
+            const testLoginModal = document.getElementById('testLoginModal');
             
             if (event.target == accountModal) {
                 closeModal();
             }
             if (event.target == detailModal) {
                 closeDetailModal();
+            }
+            if (event.target == testLoginModal) {
+                closeTestLoginModal();
             }
         }
     </script>
