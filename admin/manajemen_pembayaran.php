@@ -98,16 +98,10 @@ $query=mysqli_query($koneksi,$sql);
                             <td><?=$pembayaran['tgl_bayar']?></td>
                             <td><?=$pembayaran['waktu_bayar']?></td>
                             <td>
-                                <?php if(!empty($pembayaran['file_image'])): ?>
-                                    <img src="uploads/pembayaran/<?=$pembayaran['file_image']?>" 
-                                         alt="Bukti Transfer" 
-                                         class="payment-image" 
-                                         style="max-width:150px; height:100px; object-fit:cover; border-radius:8px; border:1px solid #ddd; cursor:pointer;"
-                                         onclick="showImageModal('uploads/pembayaran/<?=$pembayaran['file_image']?>')">
-                                <?php else: ?>
-                                    <span class="no-image">Tidak ada bukti</span>
-                                <?php endif; ?>
-                            </td> 
+                 
+                                 
+                                    <img src="pembayaran/<?=$pembayaran['file_image']?>" width=150>
+                        </td>
                             <td><?=$pembayaran['catatan']?></td>
                             <td class="action-buttons">
                                 <button class="btn-edit" title="Konfirmasi Pembayaran">

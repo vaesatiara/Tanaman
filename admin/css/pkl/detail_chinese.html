@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chinese Money Plant - The Secret Garden</title>
+    <link rel="stylesheet" href="css/detail_produk.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="images/logo.png" alt="The Secret Garden">
+                </a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">BERANDA</a></li>
+                    <li><a href="produk.html" class="active">PRODUK</a></li>
+                    <li><a href="kontak.html">KONTAK</a></li>
+                    <li><a href="tentang-kami.html">TENTANG KAMI</a></li>
+                </ul>
+            </nav>
+            <div class="icons">
+                <a href="cart.html"><i class="fas fa-shopping-cart"></i></a>
+                <a href="account.html"><i class="fas fa-user"></i></a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-container">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="index.html">Beranda</a>
+                <span class="separator">/</span>
+                <a href="produk.html">Produk</a>
+                <span class="separator">/</span>
+                <span class="current">Chinese Money Plant</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Detail -->
+    <section class="product-detail">
+        <div class="container">
+            <div class="product-detail-container">
+                <!-- Product Gallery -->
+                <div class="product-gallery">
+                    <div class="main-image">
+                        <img id="main-product-image" src="images/chinese money.jpg" alt="Chinese Money Plant">
+                    </div>
+                    <div class="thumbnail-images">
+                        <div class="thumbnail active" data-image="images/pilea1.jpeg">
+                            <img src="images/chinese (1).jpeg" alt="Chinese Money Plant Thumbnail 1">
+                        </div>
+                        <div class="thumbnail" data-image="images/pilea2.jpeg">
+                            <img src="images/chinese (2).jpeg" alt="Chinese Money Plant Thumbnail 2">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Info -->
+                <div class="product-info">
+                    <span class="product-badge">Baru</span>
+                    <h1 class="product-title">Chinese Money Plant</h1>
+                    <div class="product-rating">
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <span class="rating-count">4.6 (142 reviews)</span>
+                    </div>
+                    <div class="product-price">
+                        <span class="original-price">Rp 325.000</span>
+                        <span class="price">Rp 275.000</span>
+                    </div>
+                    <div class="product-stock">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Stok tersedia</span>
+                    </div>
+                    <div class="product-description">
+                        <p>Chinese Money Plant (Pilea Peperomioides) adalah tanaman hias populer dengan daun berbentuk koin yang unik dan batang yang ramping. Tanaman ini dikenal sebagai "Tanaman Pengemis" karena mudah diperbanyak dan sering dibagikan ke teman-teman.</p>
+                    </div>
+                    <div class="product-quantity">
+                        <label>Jumlah:</label>
+                        <div class="quantity-input">
+                            <button class="quantity-btn minus">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <input type="number" value="1" min="1" max="10">
+                            <button class="quantity-btn plus">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="product-actions">
+                        <button id="add-to-cart-btn" class="btn primary-btn">
+                            <i class="fas fa-shopping-cart"></i>
+                            Tambahkan ke Keranjang
+                        </button>
+                        <button class="btn secondary-btn">
+                            <i class="fas fa-bolt"></i>
+                            Beli Sekarang
+                        </button>
+                    </div>
+                    <div class="product-delivery">
+                        <div class="delivery-item">
+                            <i class="fas fa-truck"></i>
+                            <span>Pengiriman gratis untuk pembelian di atas Rp 500.000</span>
+                        </div>
+                        <div class="delivery-item">
+                            <i class="fas fa-undo"></i>
+                            <span>Pengembalian gratis dalam 7 hari</span>
+                        </div>
+                        <div class="delivery-item">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Garansi tanaman sehat selama 30 hari</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Tabs -->
+    <section class="product-tabs">
+        <div class="container">
+            <div class="tabs-container">
+                <div class="tabs-header">
+                    <button class="tab-btn active" data-tab="description-tab">Deskripsi</button>
+                    <button class="tab-btn" data-tab="specifications-tab">Spesifikasi</button>
+                    <button class="tab-btn" data-tab="care-tab">Perawatan</button>
+                    <button class="tab-btn" data-tab="reviews-tab">Ulasan</button>
+                    <button class="tab-btn" data-tab="shipping-tab">Pengiriman & Pengembalian</button>
+                </div>
+                <div class="tabs-content">
+                    <!-- Description Tab -->
+                    <div id="description-tab" class="tab-panel active">
+                        <h3>Tentang Chinese Money Plant</h3>
+                        <p>Chinese Money Plant (Pilea Peperomioides) adalah tanaman hias yang berasal dari provinsi Yunnan di Tiongkok selatan. Tanaman ini menjadi sangat populer di seluruh dunia karena bentuk daunnya yang unik seperti koin dan kemudahan perawatannya.</p>
+                        <p>Daunnya yang bulat, hijau cerah, dan mengkilap tumbuh pada tangkai panjang yang ramping, menciptakan penampilan yang modern dan minimalis. Tanaman ini menghasilkan tunas-tunas kecil (pups) yang dapat dipisahkan dan ditanam kembali, membuatnya sering disebut sebagai "Tanaman Persahabatan".</p>
+                        <p>Pilea Peperomioides adalah tanaman yang cocok untuk pemula karena relatif mudah dirawat dan tumbuh dengan cepat dalam kondisi yang tepat. Tanaman ini dapat mencapai tinggi 30-40 cm saat dewasa.</p>
+                        <h3>Fitur Utama</h3>
+                        <ul>
+                            <li>Daun berbentuk koin yang unik dan menggemaskan</li>
+                            <li>Tanaman yang mudah diperbanyak (menghasilkan banyak anakan)</li>
+                            <li>Perawatan mudah, cocok untuk pemula</li>
+                            <li>Penampilan modern dan minimalis</li>
+                            <li>Dipercaya membawa keberuntungan dan kemakmuran</li>
+                        </ul>
+                    </div>
+
+                    <!-- Specifications Tab -->
+                    <div id="specifications-tab" class="tab-panel">
+                        <h3>Spesifikasi Tanaman</h3>
+                        <table class="specs-table">
+                            <tr>
+                                <td>Nama Ilmiah</td>
+                                <td>Pilea Peperomioides</td>
+                            </tr>
+                            <tr>
+                                <td>Nama Umum</td>
+                                <td>Chinese Money Plant, Pancake Plant, UFO Plant</td>
+                            </tr>
+                            <tr>
+                                <td>Asal</td>
+                                <td>Provinsi Yunnan, Tiongkok Selatan</td>
+                            </tr>
+                            <tr>
+                                <td>Keluarga</td>
+                                <td>Urticaceae</td>
+                            </tr>
+                            <tr>
+                                <td>Tinggi Maksimum</td>
+                                <td>30-40 cm (dalam ruangan)</td>
+                            </tr>
+                            <tr>
+                                <td>Lebar Maksimum</td>
+                                <td>30 cm</td>
+                            </tr>
+                            <tr>
+                                <td>Kecepatan Pertumbuhan</td>
+                                <td>Cepat dalam kondisi ideal</td>
+                            </tr>
+                            <tr>
+                                <td>Kebutuhan Cahaya</td>
+                                <td>Cahaya tidak langsung terang</td>
+                            </tr>
+                            <tr>
+                                <td>Kebutuhan Air</td>
+                                <td>Siram ketika 2-3 cm tanah atas kering</td>
+                            </tr>
+                            <tr>
+                                <td>Kelembaban</td>
+                                <td>Kelembaban sedang (40-50%)</td>
+                            </tr>
+                            <tr>
+                                <td>Suhu Ideal</td>
+                                <td>16-24°C</td>
+                            </tr>
+                            <tr>
+                                <td>Jenis Tanah</td>
+                                <td>Campuran tanah porous dengan drainase baik</td>
+                            </tr>
+                            <tr>
+                                <td>Toksisitas</td>
+                                <td>Aman untuk manusia dan hewan peliharaan</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- Care Tab -->
+                    <div id="care-tab" class="tab-panel">
+                        <h3>Panduan Perawatan</h3>
+                        <div class="care-item">
+                            <div class="care-icon">
+                                <i class="fas fa-sun"></i>
+                            </div>
+                            <div class="care-content">
+                                <h4>Pencahayaan</h4>
+                                <p>Chinese Money Plant tumbuh optimal di bawah cahaya tidak langsung terang. Tempatkan di dekat jendela timur atau utara. Hindari sinar matahari langsung yang dapat menyebabkan daun terbakar. Jika daun mulai merebah secara berlebihan, itu pertanda tanaman membutuhkan lebih banyak cahaya. Rotasi tanaman secara berkala untuk pertumbuhan yang merata.</p>
+                            </div>
+                        </div>
+                        <div class="care-item">
+                            <div class="care-icon">
+                                <i class="fas fa-tint"></i>
+                            </div>
+                            <div class="care-content">
+                                <h4>Penyiraman</h4>
+                                <p>Siram ketika 2-3 cm tanah atas sudah kering. Chinese Money Plant lebih menyukai tanah yang sedikit lembab tetapi tidak basah. Pastikan pot memiliki drainase yang baik. Kurangi penyiraman di musim dingin. Daun yang menggantung bisa menjadi tanda penyiraman berlebihan, sementara daun keriput menandakan kekurangan air.</p>
+                            </div>
+                        </div>
+                        <div class="care-item">
+                            <div class="care-icon">
+                                <i class="fas fa-temperature-high"></i>
+                            </div>
+                            <div class="care-content">
+                                <h4>Suhu & Kelembaban</h4>
+                                <p>Suhu ideal antara 16-24°C. Hindari suhu di bawah 10°C. Tanaman ini menyukai kelembaban sedang (40-50%). Jika udara terlalu kering, daun mungkin mulai keriting di tepinya. Anda bisa meningkatkan kelembaban dengan pelembab udara atau menempatkan tanaman di atas nampan kerikil berisi air.</p>
+                            </div>
+                        </div>
+                        <div class="care-item">
+                            <div class="care-icon">
+                                <i class="fas fa-seedling"></i>
+                            </div>
+                            <div class="care-content">
+                                <h4>Tanah & Pemupukan</h4>
+                                <p>Gunakan campuran tanah yang porous dengan drainase baik. Campuran tanah pot standar dengan tambahan perlite atau pasir kasar sangat ideal. Pupuk setiap 3-4 minggu selama musim tanam (musim semi dan musim panas) dengan pupuk cair seimbang yang diencerkan setengah dari dosis yang direkomendasikan.</p>
+                            </div>
+                        </div>
+                        <div class="care-item">
+                            <div class="care-icon">
+                                <i class="fas fa-cut"></i>
+                            </div>
+                            <div class="care-content">
+                                <h4>Pemangkasan & Perbanyakan</h4>
+                                <p>Pangkas daun yang menguning atau rusak untuk menjaga penampilan tanaman. Chinese Money Plant menghasilkan banyak anakan (pups) yang dapat dipisahkan ketika sudah memiliki 3-4 daun. Bersihkan daun secara teratur dengan kain lembab untuk menghilangkan debu. Ganti pot setiap 1-2 tahun di musim semi jika tanaman sudah terlalu besar.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Reviews Tab -->
+                    <div id="reviews-tab" class="tab-panel">
+                        <div class="reviews-summary">
+                            <div class="rating-summary">
+                                <div class="average-rating">
+                                    <div class="rating-number">4.6</div>
+                                    <div class="stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                    </div>
+                                    <div class="rating-count">142 ulasan</div>
+                                </div>
+                                <div class="rating-bars">
+                                    <div class="rating-bar">
+                                        <div class="rating-level">
+                                            <i class="fas fa-star"></i>
+                                            <span>5</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 72%"></div>
+                                        </div>
+                                        <div class="rating-percent">72%</div>
+                                    </div>
+                                    <div class="rating-bar">
+                                        <div class="rating-level">
+                                            <i class="fas fa-star"></i>
+                                            <span>4</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 18%"></div>
+                                        </div>
+                                        <div class="rating-percent">18%</div>
+                                    </div>
+                                    <div class="rating-bar">
+                                        <div class="rating-level">
+                                            <i class="fas fa-star"></i>
+                                            <span>3</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 6%"></div>
+                                        </div>
+                                        <div class="rating-percent">6%</div>
+                                    </div>
+                                    <div class="rating-bar">
+                                        <div class="rating-level">
+                                            <i class="fas fa-star"></i>
+                                            <span>2</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 3%"></div>
+                                        </div>
+                                        <div class="rating-percent">3%</div>
+                                    </div>
+                                    <div class="rating-bar">
+                                        <div class="rating-level">
+                                            <i class="fas fa-star"></i>
+                                            <span>1</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 1%"></div>
+                                        </div>
+                                        <div class="rating-percent">1%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="reviews-filter">
+                            <div class="filter-label">Filter Ulasan:</div>
+                            <div class="filter-options">
+                                <button class="filter-btn active">Semua</button>
+                                <button class="filter-btn">5 Bintang</button>
+                                <button class="filter-btn">4 Bintang</button>
+                                <button class="filter-btn">3 Bintang</button>
+                                <button class="filter-btn">2 Bintang</button>
+                                <button class="filter-btn">1 Bintang</button>
+                                <button class="filter-btn">Dengan Foto</button>
+                            </div>
+                        </div>
+                        <div class="reviews-list">
+                            <div class="review-item">
+                                <div class="review-header">
+                                    <div class="reviewer-info">
+                                        <img src="images/user1.jpg" alt="Reviewer" class="reviewer-avatar">
+                                        <div class="reviewer-details">
+                                            <h4>Dian Sastro</h4>
+                                            <div class="review-date">10 Juli 2023</div>
+                                        </div>
+                                    </div>
+                                    <div class="stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                </div>
+                                <div class="review-content">
+                                    <p>Tanaman datang dalam kondisi sangat sehat! Daun-daunnya besar dan mengkilap. Sudah 1 bulan dan tanaman tumbuh subur, bahkan sudah menghasilkan 2 anakan kecil. Pengemasan sangat rapi dan aman. Sangat direkomendasikan!</p>
+                                </div>
+                                <div class="review-images">
+                                    <img src="images/review-pilea1.jpg" alt="Review Image">
+                                </div>
+                                <div class="review-footer">
+                                    <div class="review-helpful">
+                                        <span>Apakah ulasan ini membantu?</span>
+                                        <button class="helpful-btn">
+                                            <i class="fas fa-thumbs-up"></i>
+                                            Ya (32)
+                                        </button>
+                                        <button class="helpful-btn">
+                                            <i class="fas fa-thumbs-down"></i>
+                                            Tidak (1)
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="review-item">
+                                <div class="review-header">
+                                    <div class="reviewer-info">
+                                        <img src="images/user2.jpg" alt="Reviewer" class="reviewer-avatar">
+                                        <div class="reviewer-details">
+                                            <h4>Rangga Putra</h4>
+                                            <div class="review-date">25 Juni 2023</div>
+                                        </div>
+                                    </div>
+                                    <div class="stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                </div>
+                                <div class="review-content">
+                                    <p>Chinese Money Plant saya sangat cantik! Bentuk daunnya yang seperti koin unik sekali. Tanaman datang dengan beberapa daun kecil rusak di pinggir, tapi setelah 2 minggu sudah tumbuh daun baru yang sempurna. Perawatannya mudah sekali.</p>
+                                </div>
+                                <div class="review-footer">
+                                    <div class="review-helpful">
+                                        <span>Apakah ulasan ini membantu?</span>
+                                        <button class="helpful-btn">
+                                            <i class="fas fa-thumbs-up"></i>
+                                            Ya (24)
+                                        </button>
+                                        <button class="helpful-btn">
+                                            <i class="fas fa-thumbs-down"></i>
+                                            Tidak (2)
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="review-item">
+                                <div class="review-header">
+                                    <div class="reviewer-info">
+                                        <img src="images/user3.jpg" alt="Reviewer" class="reviewer-avatar">
+                                        <div class="reviewer-details">
+                                            <h4>Siti Nurhaliza</h4>
+                                            <div class="review-date">12 Juni 2023</div>
+                                        </div>
+                                    </div>
+                                    <div class="stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                    </div>
+                                </div>
+                                <div class="review-content">
+                                    <p>Saya membeli ini sebagai hadiah untuk teman dan dia sangat menyukainya! Tanaman dikemas dengan sangat baik dan datang tepat waktu. Daun-daunnya sempurna dan batangnya kokoh. Sudah 3 minggu dan tanaman tetap sehat dengan perawatan dasar.</p>
+                                </div>
+                                <div class="review-images">
+                                    <img src="images/review-pilea2.jpg" alt="Review Image">
+                                </div>
+                                <div class="review-footer">
+                                    <div class="review-helpful">
+                                        <span>Apakah ulasan ini membantu?</span>
+                                        <button class="helpful-btn">
+                                            <i class="fas fa-thumbs-up"></i>
+                                            Ya (19)
+                                        </button>
+                                        <button class="helpful-btn">
+                                            <i class="fas fa-thumbs-down"></i>
+                                            Tidak (0)
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pagination">
+                            <button class="pagination-btn" disabled>
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <div class="pagination-numbers">
+                                <button class="pagination-number active">1</button>
+                                <button class="pagination-number">2</button>
+                                <button class="pagination-number">3</button>
+                                <span class="pagination-ellipsis">...</span>
+                                <button class="pagination-number">6</button>
+                            </div>
+                            <button class="pagination-btn">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Shipping Tab -->
+                    <div id="shipping-tab" class="tab-panel">
+                        <h3>Informasi Pengiriman & Pengembalian</h3>
+                        <div class="shipping-info">
+                            <div class="shipping-item">
+                                <h4>Pengiriman</h4>
+                                <p>Kami mengirimkan tanaman ke seluruh Indonesia menggunakan jasa pengiriman terpercaya untuk memastikan tanaman Anda tiba dengan aman dan sehat.</p>
+                                <ul>
+                                    <li>Pengiriman gratis untuk pembelian di atas Rp 500.000</li>
+                                    <li>Estimasi waktu pengiriman: 2-5 hari kerja</li>
+                                    <li>Tanaman dikemas dengan hati-hati untuk mencegah kerusakan selama pengiriman</li>
+                                    <li>Nomor pelacakan akan diberikan setelah pesanan dikirim</li>
+                                </ul>
+                            </div>
+                            <div class="shipping-item">
+                                <h4>Pengembalian & Penukaran</h4>
+                                <p>Kepuasan Anda adalah prioritas kami. Jika Anda tidak puas dengan pembelian Anda, kami menawarkan kebijakan pengembalian yang mudah.</p>
+                                <ul>
+                                    <li>Pengembalian gratis dalam 7 hari setelah penerimaan</li>
+                                    <li>Tanaman harus dikembalikan dalam kondisi aslinya</li>
+                                    <li>Biaya pengiriman untuk pengembalian ditanggung oleh pembeli, kecuali jika tanaman rusak saat tiba</li>
+                                    <li>Pengembalian dana akan diproses dalam 3-5 hari kerja setelah tanaman diterima kembali</li>
+                                </ul>
+                            </div>
+                            <div class="shipping-item">
+                                <h4>Garansi Tanaman</h4>
+                                <p>Kami menawarkan garansi tanaman sehat selama 30 hari untuk memberikan Anda ketenangan pikiran dengan pembelian Anda.</p>
+                                <ul>
+                                    <li>Jika tanaman Anda mati dalam 30 hari pertama, kami akan menggantinya secara gratis</li>
+                                    <li>Foto tanaman yang rusak diperlukan untuk klaim garansi</li>
+                                    <li>Garansi tidak berlaku jika tanaman rusak karena perawatan yang tidak tepat</li>
+                                    <li>Hubungi layanan pelanggan kami untuk mengajukan klaim garansi</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <!-- Feedback Section -->
+        <div class="feedback-section">
+            <div class="container">
+                <h2 class="feedback-title">Kirim kritik/saran untuk kami</h2>
+                <p class="feedback-subtitle">Ceritakan kepada kami kritik dan/atau saran Anda</p>
+                <div class="feedback-form">
+                    <input type="text" placeholder="Masukkan kritik/saran" class="feedback-input">
+                    <button class="feedback-btn">KIRIM</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Footer -->
+        <div class="main-footer">
+            <div class="container">
+                <div class="footer-content">
+                    <!-- Company Info -->
+                    <div class="footer-company">
+                        <div class="footer-logo">
+                            <img src="images/logo.png" alt="The Secret Garden">
+                        </div>
+                        <p class="company-description">
+                            Toko tanaman hias terpercaya dengan berbagai koleksi tanaman berkualitas untuk mempercantik rumah dan ruangan Anda.
+                        </p>
+                        <div class="social-links">
+                            <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Links -->
+                    <div class="footer-links">
+                        <h3 class="footer-heading">Tautan Cepat</h3>
+                        <ul class="footer-menu">
+                            <li><a href="index.html">BERANDA</a></li>
+                            <li><a href="produk.html">PRODUK</a></li>
+                            <li><a href="kontak.html">KONTAK</a></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Categories -->
+                    <div class="footer-categories">
+                        <h3 class="footer-heading">Kategori</h3>
+                        <ul class="footer-menu">
+                            <li><a href="#">Tanaman Hias Bunga</a></li>
+                            <li><a href="#">Tanaman Hias Daun</a></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Contact Info -->
+                    <div class="footer-contact">
+                        <h3 class="footer-heading">Kontak Kami</h3>
+                        <ul class="contact-info">
+                            <li>
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Jl. Tanaman Indah No. 123, Purwokerto</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-phone-alt"></i>
+                                <span>0812-3456-7890</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-envelope"></i>
+                                <span>thesecretgarden@gmail.com</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Copyright -->
+        <div class="copyright">
+            <div class="container">
+                <p>© 2023 The Secret Garden. Hak Cipta Dilindungi.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Toast Notification -->
+    <div id="notification-toast" class="toast">
+        <div class="toast-content">
+            <div class="toast-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="toast-message">Produk telah ditambahkan ke keranjang!</div>
+        </div>
+        <button class="toast-close">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="js/detail.js"></script>
+</body>
+</html>

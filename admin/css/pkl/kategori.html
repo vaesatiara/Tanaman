@@ -1,0 +1,45 @@
+// Ambil alamat pengiriman yang dipilih
+$shippingAddress = getSelectedAddress();
+
+// Tentukan metode pengiriman (default atau dari form/session)
+$selectedShipping = 'jne'; // default
+if (isset($_POST['shipping_method'])) {
+    $selectedShipping = $_POST['shipping_method'];
+} elseif (isset($_SESSION['shipping_method'])) {
+    $selectedShipping = $_SESSION['shipping_method'];
+} elseif (isset($_SESSION['order_data']['shipping_method'])) {
+    $selectedShipping = $_SESSION['order_data']['shipping_method'];
+}
+
+$shippingCost = getShippingCost($selectedShipping);
+$shippingName = getShippingName($selectedShipping);
+
+// Hitung total
+$total = $orderData['subtotal'] + $shippingCost;
+<div class="checkout-content">
+                <div class="checkout-form">
+                    <h2>Metode Pengiriman</h2>
+                     <a href="alamat_pengiriman.php" class="btn btn-outline" style="margin-bottom: 20px; display: inline-block;">
+                        <i class="fas fa-arrow-left"></i> Kembali ke Alamat Pengiriman
+                    </a>
+                    
+                    <!-- Alamat Pengiriman -->
+                    <div class="address-section">
+                        <h3>Alamat Pengiriman</h3>
+                        
+                        <?php if ($shippingAddress): ?>
+                        <div class="address-summary">
+                            <div class="address-info">
+                                <p class="address-name"><strong><?= htmlspecialchars($shippingAddress['nama_penerima']) ?></strong> (<?= htmlspecialchars($shippingAddress['label_alamat']) ?>)</p>
+                                <p class="address-phone"><?= htmlspecialchars($shippingAddress['no_telepon']) ?></p>
+                                <p class="address-detail"><?= htmlspecialchars($shippingAddress['alamat_lengkap']) ?>, <?= htmlspecialchars($shippingAddress['kecamatan']) ?>, <?= htmlspecialchars($shippingAddress['kota']) ?>, <?= htmlspecialchars($shippingAddress['provinsi']) ?></p>
+                            </div>
+                            <a href="alamat_pengiriman.php?source=<?= $source ?><?= $product_id ? '&id_produk='.$product_id.'&qty='.$quantity : '' ?>" class="btn btn-outline btn-sm">Ubah Alamat</a>
+                        </div>
+                        <?php else: ?>
+                        <div class="no-address">
+                            <p>Belum ada alamat pengiriman yang dipilih.</p>
+                            <a href="alamat_pengiriman.php?source=<?= $source ?><?= $product_id ? '&id_produk='.$product_id.'&qty='.$quantity : '' ?>" class="btn btn-primary">Pilih Alamat</a>
+                        </div>
+                        <?php endif; ?>
+                    </div>

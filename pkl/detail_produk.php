@@ -381,9 +381,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['buy_now'])) {
                                 <i class="fas fa-plus"></i>
                             </button>
                         </div>
-                        <div class="stock-indicator">
-                            <span id="stock-info">Stok tersedia: <?php echo $produk['stok']; ?></span>
-                        </div>
+                        
                     </div>
                    
                     <div class="product-actions">

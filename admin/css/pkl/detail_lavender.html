@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lavender - The Secret Garden</title>
+    <link rel="stylesheet" href="css/detail_produk.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="images/logo.png" alt="The Secret Garden">
+                </a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">BERANDA</a></li>
+                    <li><a href="produk.html" class="active">PRODUK</a></li>
+                    <li><a href="kontak.html">KONTAK</a></li>
+                    <li><a href="tentang-kami.html">TENTANG KAMI</a></li>
+                </ul>
+            </nav>
+            <div class="icons">
+                <a href="keranjang.html"><i class="fas fa-shopping-cart"></i></a>
+                <a href="#"><i class="fas fa-user"></i></a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-container">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="index.html">Beranda</a>
+                <span class="separator">/</span>
+                <a href="produk.html">Produk</a>
+                <span class="separator">/</span>
+                <span class="current">Lavender</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Detail -->
+    <section class="product-detail">
+        <div class="container">
+            <div class="product-detail-container">
+                <!-- Product Gallery -->
+                <div class="product-gallery">
+                    <div class="main-image">
+                        <img id="main-product-image" src="images/lavender.jpg" alt="Lavender">
+                    </div>
+                    <div class="thumbnail-images">
+                        <div class="thumbnail active" data-image="images/lavender1.jpg">
+                            <img src="images/lavender (1).jpeg" alt="Lavender Thumbnail 1">
+                        </div>
+                        <div class="thumbnail" data-image="images/lavender2.jpg">
+                            <img src="images/lavender (2).jpeg" alt="Lavender Thumbnail 2">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Info -->
+                <div class="product-info">
+                    <span class="product-badge">Baru</span>
+                    <h1 class="product-title">Lavender</h1>
+                    <div class="product-rating">
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <span class="rating-count">(4.5)</span>
+                    </div>
+                    <div class="product-price">
+                        <span class="price">Rp 65.000</span>
+                        <span class="old-price">Rp 80.000</span>
+                    </div>
+                    <div class="product-stock">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Stok tersedia</span>
+                    </div>
+                    <div class="product-description">
+                        <p>Lavender (Lavandula angustifolia) adalah tanaman aromatik dengan bunga ungu yang indah dan aroma menenangkan yang khas. Tanaman ini tidak hanya mempercantik taman tetapi juga memiliki banyak manfaat, termasuk mengusir nyamuk secara alami. Lavender kami adalah varietas unggul yang telah beradaptasi dengan iklim tropis, dengan ketahanan terhadap kelembaban tinggi dan tetap menghasilkan aroma yang kuat.</p>
+                    </div>
+                    <div class="product-quantity">
+                        <label>Jumlah:</label>
+                        <div class="quantity-input">
+                            <button class="quantity-btn minus">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <input type="number" value="1" min="1" max="10">
+                            <button class="quantity-btn plus">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="product-actions">
+                        <button id="add-to-cart-btn" class="btn primary-btn">
+                            <i class="fas fa-shopping-cart"></i>
+                            Tambahkan ke Keranjang
+                        </button>
+                        <button class="btn secondary-btn">
+                            <i class="fas fa-bolt"></i>
+                            Beli Sekarang
+                        </button>
+                    </div>
+                    <div class="product-delivery">
+                        <div class="delivery-item">
+                            <i class="fas fa-truck"></i>
+                            <span>Pengiriman gratis untuk pembelian di atas Rp 500.000</span>
+                        </div>
+                        <div class="delivery-item">
+                            <i class="fas fa-undo"></i>
+                            <span>Pengembalian gratis dalam 7 hari</span>
+                        </div>
+                        <div class="delivery-item">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Garansi tanaman sehat selama 30 hari</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Tabs -->
+    <section class="product-tabs">
+        <div class="container">
+            <div class="tabs-container">
+                <div class="tabs-header">
+                    <button class="tab-btn active" data-tab="description-tab">Deskripsi</button>
+                    <button class="tab-btn" data-tab="specifications-tab">Spesifikasi</button>
+                    <button class="tab-btn" data-tab="care-tab">Perawatan</button>
+                    <button class="tab-btn" data-tab="reviews-tab">Ulasan</button>
+                </div>
+                <div class="tabs-content">
+                    <!-- Description Tab -->
+                    <div id="description-tab" class="tab-panel active">
+                        <h3>Tentang Lavender</h3>
+                        <p>Lavender adalah tanaman perennial yang berasal dari wilayah Mediterania tetapi telah dibudidayakan secara luas di seluruh dunia. Tanaman ini dikenal karena bunga ungu kebiruan yang indah dan aroma khas yang menenangkan. Lavender yang kami tawarkan adalah varietas khusus yang telah beradaptasi dengan iklim tropis Indonesia, sehingga lebih tahan terhadap kelembaban tinggi dibanding lavender biasa.</p>
+                        <p>Tanaman ini tumbuh membentuk semak kecil dengan tinggi sekitar 30-60 cm, sangat cocok untuk ditanam di pot atau sebagai border garden. Selain keindahannya, lavender juga memiliki banyak manfaat praktis seperti pengusir nyamuk alami, bahan aromaterapi, dan bahan untuk berbagai produk kecantikan.</p>
+                        <h3>Fitur Utama</h3>
+                        <ul>
+                            <li>Bunga ungu kebiruan yang indah dengan aroma menenangkan</li>
+                            <li>Varietas unggul yang tahan iklim tropis</li>
+                            <li>Mengusir nyamuk secara alami</li>
+                            <li>Cocok untuk pot, taman, atau tanaman hias</li>
+                            <li>Daun dan bunga dapat digunakan untuk berbagai keperluan</li>
+                            <li>Perawatan relatif mudah dan tahan kekeringan</li>
+                        </ul>
+                    </div>
+
+                    <!-- Specifications Tab -->
+                    <div id="specifications-tab" class="tab-panel">
+                        <h3>Spesifikasi Tanaman</h3>
+                        <table class="specs-table">
+                            <tr>
+                                <td>Nama Ilmiah</td>
+                                <td>Lavandula angustifolia</td>
+                            </tr>
+                            <tr>
+                                <td>Nama Umum</td>
+                                <td>Lavender, Lavender Inggris</td>
+                            </tr>
+                            <tr>
+                                <td>Varietas</td>
+                                <td>Tropical Hybrid</td>
+                            </tr>
+                            <tr>
+                                <td>Asal</td>
+                                <td>Mediterania (dikembangkan untuk tropis)</td>
+                            </tr>
+                            <tr>
+                                <td>Keluarga</td>
+                                <td>Lamiaceae</td>
+                            </tr>
+                            <tr>
+                                <td>Tinggi Tanaman</td>
+                                <td>30-60 cm</td>
+                            </tr>
+                            <tr>
+                                <td>Lebar Tanaman</td>
+                                <td>30-45 cm</td>
+                            </tr>
+                            <tr>
+                                <td>Warna Bunga</td>
+                                <td>Ungu kebiruan</td>
+                            </tr>
+                            <tr>
+                                <td>Musim Berbunga</td>
+                                <td>Utama di musim kemarau, bisa berbunga sepanjang tahun</td>
+                            </tr>
+                            <tr>
+                                <td>Kebutuhan Cahaya</td>
+                                <td>Matahari penuh (minimal 6 jam sehari)</td>
+                            </tr>
+                            <tr>
+                                <td>Ketahanan</td>
+                                <td>Tahan kekeringan, sensitif terhadap kelembaban berlebih</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- Care Tab -->
+                    <div id="care-tab" class="tab-panel">
+                        <h3>Panduan Perawatan</h3>
+                        <div class="care-item">
+                            <div class="care-icon">
+                                <i class="fas fa-sun"></i>
+                            </div>
+                            <div class="care-content">
+                                <h4>Pencahayaan</h4>
+                                <p>Lavender membutuhkan sinar matahari penuh minimal 6 jam sehari untuk tumbuh optimal dan menghasilkan aroma terbaik. Tanaman ini tidak cocok untuk tempat teduh. Jika ditanam di dalam ruangan, pastikan berada di dekat jendela yang mendapat banyak sinar matahari langsung.</p>
+                            </div>
+                        </div>
+                        <div class="care-item">
+                            <div class="care-icon">
+                                <i class="fas fa-tint"></i>
+                            </div>
+                            <div class="care-content">
+                                <h4>Penyiraman</h4>
+                                <p>Siram lavender hanya ketika tanah benar-benar kering. Tanaman ini sangat toleran terhadap kekeringan tetapi tidak tahan terhadap tanah yang terlalu basah. Penyiraman berlebihan adalah penyebab utama kematian lavender. Di musim hujan, pastikan drainase sangat baik.</p>
+                            </div>
+                        </div>
+                        <div class="care-item">
+                            <div class="care-icon">
+                                <i class="fas fa-seedling"></i>
+                            </div>
+                            <div class="care-content">
+                                <h4>Media Tanam & Pemupukan</h4>
+                                <p>Gunakan media tanam berpasir dengan drainase sangat baik. Campuran tanah kebun, pasir, dan kompos (1:1:1) sangat ideal. Lavender menyukai tanah yang agak alkalin. Beri pupuk rendah nitrogen setiap 2-3 bulan selama musim tanam. Hindari pemupukan berlebihan.</p>
+                            </div>
+                        </div>
+                        <div class="care-item">
+                            <div class="care-icon">
+                                <i class="fas fa-cut"></i>
+                            </div>
+                            <div class="care-content">
+                                <h4>Pemangkasan & Perawatan</h4>
+                                <p>Pangkas lavender secara teratur setelah berbunga untuk mempertahankan bentuk dan mencegah tanaman menjadi berkayu. Jangan memangkas hingga ke bagian kayu tua karena sulit tumbuh kembali. Periksa secara rutin tanda-tanda busuk akar atau jamur daun, terutama di musim hujan.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Reviews Tab -->
+                    <div id="reviews-tab" class="tab-panel">
+                        <div class="reviews-summary">
+                            <div class="rating-summary">
+                                <div class="average-rating">
+                                    <div class="rating-number">4.4</div>
+                                    <div class="stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                    </div>
+                                    <div class="rating-count">156 ulasan</div>
+                                </div>
+                                <div class="rating-bars">
+                                    <div class="rating-bar">
+                                        <div class="rating-level">
+                                            <i class="fas fa-star"></i>
+                                            <span>5</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 65%"></div>
+                                        </div>
+                                        <div class="rating-percent">65%</div>
+                                    </div>
+                                    <div class="rating-bar">
+                                        <div class="rating-level">
+                                            <i class="fas fa-star"></i>
+                                            <span>4</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 22%"></div>
+                                        </div>
+                                        <div class="rating-percent">22%</div>
+                                    </div>
+                                    <div class="rating-bar">
+                                        <div class="rating-level">
+                                            <i class="fas fa-star"></i>
+                                            <span>3</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 8%"></div>
+                                        </div>
+                                        <div class="rating-percent">8%</div>
+                                    </div>
+                                    <div class="rating-bar">
+                                        <div class="rating-level">
+                                            <i class="fas fa-star"></i>
+                                            <span>2</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 3%"></div>
+                                        </div>
+                                        <div class="rating-percent">3%</div>
+                                    </div>
+                                    <div class="rating-bar">
+                                        <div class="rating-level">
+                                            <i class="fas fa-star"></i>
+                                            <span>1</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 2%"></div>
+                                        </div>
+                                        <div class="rating-percent">2%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="reviews-list">
+                            <div class="review-item">
+                                <div class="review-header">
+                                    <div class="reviewer-info">
+                                        <img src="images/user13.jpg" alt="Reviewer" class="reviewer-avatar">
+                                        <div class="reviewer-details">
+                                            <h4>Siti Rahmawati</h4>
+                                            <div class="review-date">10 April 2024</div>
+                                        </div>
+                                    </div>
+                                    <div class="stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                </div>
+                                <div class="review-content">
+                                    <p>Lavender ini benar-benar tahan dengan iklim di Jakarta! Aromanya sangat kuat dan menyenangkan, bahkan bisa tercium dari beberapa meter. Saya menanamnya di pot di teras dan benar-benar membantu mengurangi nyamuk di rumah. Tanaman datang dalam kondisi sangat sehat dengan beberapa tangkai bunga sudah mulai mekar. Sekarang sudah 3 bulan dan masih terus berbunga!</p>
+                                </div>
+                                <div class="review-footer">
+                                    <div class="review-helpful">
+                                        <span>Apakah ulasan ini membantu?</span>
+                                        <button class="helpful-btn">
+                                            <i class="fas fa-thumbs-up"></i>
+                                            Ya (78)
+                                        </button>
+                                        <button class="helpful-btn">
+                                            <i class="fas fa-thumbs-down"></i>
+                                            Tidak (3)
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="review-item">
+                                <div class="review-header">
+                                    <div class="reviewer-info">
+                                        <img src="images/user14.jpg" alt="Reviewer" class="reviewer-avatar">
+                                        <div class="reviewer-details">
+                                            <h4>Adi Nugroho</h4>
+                                            <div class="review-date">28 Maret 2024</div>
+                                        </div>
+                                    </div>
+                                    <div class="stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                </div>
+                                <div class="review-content">
+                                    <p>Saya membeli 5 tanaman lavender untuk border taman. Empat tumbuh dengan sangat baik, tapi satu mati mungkin karena terlalu banyak hujan. Yang tumbuh subur aromanya sangat harum dan bunganya cantik. Saya memberi 4 bintang karena mungkin perlu perhatian lebih di musim hujan. Seller memberikan panduan perawatan yang sangat membantu.</p>
+                                </div>
+                                <div class="review-footer">
+                                    <div class="review-helpful">
+                                        <span>Apakah ulasan ini membantu?</span>
+                                        <button class="helpful-btn">
+                                            <i class="fas fa-thumbs-up"></i>
+                                            Ya (56)
+                                        </button>
+                                        <button class="helpful-btn">
+                                            <i class="fas fa-thumbs-down"></i>
+                                            Tidak (1)
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <!-- Feedback Section -->
+        <div class="feedback-section">
+            <div class="container">
+                <h2 class="feedback-title">Kirim kritik/saran untuk kami</h2>
+                <p class="feedback-subtitle">Ceritakan kepada kami kritik dan/atau saran Anda</p>
+                <div class="feedback-form">
+                    <input type="text" placeholder="Masukkan kritik/saran" class="feedback-input">
+                    <button class="feedback-btn">KIRIM</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Footer -->
+        <div class="main-footer">
+            <div class="container">
+                <div class="footer-content">
+                    <!-- Company Info -->
+                    <div class="footer-company">
+                        <div class="footer-logo">
+                            <img src="images/logo.png" alt="The Secret Garden">
+                        </div>
+                        <p class="company-description">
+                            Toko tanaman hias terpercaya dengan berbagai koleksi tanaman berkualitas untuk mempercantik rumah dan ruangan Anda.
+                        </p>
+                        <div class="social-links">
+                            <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Links -->
+                    <div class="footer-links">
+                        <h3 class="footer-heading">Tautan Cepat</h3>
+                        <ul class="footer-menu">
+                            <li><a href="index.html">BERANDA</a></li>
+                            <li><a href="produk.html">PRODUK</a></li>
+                            <li><a href="kontak.html">KONTAK</a></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Categories -->
+                    <div class="footer-categories">
+                        <h3 class="footer-heading">Kategori</h3>
+                        <ul class="footer-menu">
+                            <li><a href="#">Tanaman Hias Bunga</a></li>
+                            <li><a href="#">Tanaman Hias Daun</a></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Contact Info -->
+                    <div class="footer-contact">
+                        <h3 class="footer-heading">Kontak Kami</h3>
+                        <ul class="contact-info">
+                            <li>
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Jl. Tanaman Indah No. 123, Purwokerto</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-phone-alt"></i>
+                                <span>0812-3456-7890</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-envelope"></i>
+                                <span>thesecretgarden@gmail.com</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Copyright -->
+        <div class="copyright">
+            <div class="container">
+                <p>© 2024 The Secret Garden. Hak Cipta Dilindungi.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Toast Notification -->
+    <div id="notification-toast" class="toast">
+        <div class="toast-content">
+            <div class="toast-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="toast-message">Produk telah ditambahkan ke keranjang!</div>
+        </div>
+        <button class="toast-close">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="js/detail.js"></script>
+</body>
+</html>

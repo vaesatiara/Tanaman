@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tulip - The Secret Garden</title>
+    <link rel="stylesheet" href="css/detail_produk.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="images/logo.png" alt="The Secret Garden">
+                </a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">BERANDA</a></li>
+                    <li><a href="produk.html" class="active">PRODUK</a></li>
+                    <li><a href="kontak.html">KONTAK</a></li>
+                    <li><a href="tentang-kami.html">TENTANG KAMI</a></li>
+                </ul>
+            </nav>
+            <div class="icons">
+                <a href="keranjang.html"><i class="fas fa-shopping-cart"></i></a>
+                <a href="#"><i class="fas fa-user"></i></a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-container">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="index.html">Beranda</a>
+                <span class="separator">/</span>
+                <a href="produk.html">Produk</a>
+                <span class="separator">/</span>
+                <span class="current">Tulip</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Detail -->
+    <section class="product-detail">
+        <div class="container">
+            <div class="product-detail-container">
+                <!-- Product Gallery -->
+                <div class="product-gallery">
+                    <div class="main-image">
+                        <img id="main-product-image" src="images/tulip.jpg" alt="Tulip">
+                    </div>
+                    <div class="thumbnail-images">
+                        <div class="thumbnail active" data-image="images/tulip1.jpg">
+                            <img src="images/tulip (1).jpg" alt="Tulip Thumbnail 1">
+                        </div>
+                        <div class="thumbnail" data-image="images/tulip2.jpg">
+                            <img src="images/tulip (2).jpg" alt="Tulip Thumbnail 2">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Info -->
+                <div class="product-info">
+                    <h1 class="product-title">Tulip</h1>
+                    <div class="product-rating">
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <span class="rating-count">(4.7)</span>
+                    </div>
+                    <div class="product-price">
+                        <span class="price">Rp 95.000</span>
+                    </div>
+                    <div class="product-stock">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Stok tersedia</span>
+                    </div>
+                    <div class="product-description">
+                        <p>Tulip (Tulipa) adalah bunga musim semi yang elegan dengan bentuk khas dan warna-warni menakjubkan. Bunga ini berasal dari Asia Tengah dan menjadi simbol keindahan di Belanda. Kami menyediakan umbi Tulip berkualitas tinggi yang siap ditanam, dengan jaminan akan menghasilkan bunga yang indah. Tulip tersedia dalam berbagai warna termasuk merah, kuning, pink, ungu, dan variegata.</p>
+                    </div>
+                    <div class="product-quantity">
+                        <label>Jumlah:</label>
+                        <div class="quantity-input">
+                            <button class="quantity-btn minus">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <input type="number" value="1" min="1" max="10">
+                            <button class="quantity-btn plus">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="product-actions">
+                        <button id="add-to-cart-btn" class="btn primary-btn">
+                            <i class="fas fa-shopping-cart"></i>
+                            Tambahkan ke Keranjang
+                        </button>
+                        <button class="btn secondary-btn">
+                            <i class="fas fa-bolt"></i>
+                            Beli Sekarang
+                        </button>
+                    </div>
+                    <div class="product-delivery">
+                        <div class="delivery-item">
+                            <i class="fas fa-truck"></i>
+                            <span>Pengiriman gratis untuk pembelian di atas Rp 500.000</span>
+                        </div>
+                        <div class="delivery-item">
+                            <i class="fas fa-undo"></i>
+                            <span>Pengembalian gratis dalam 7 hari</span>
+                        </div>
+                        <div class="delivery-item">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Garansi tumbuh dan berbunga</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Tabs -->
+    <section class="product-tabs">
+        <div class="container">
+            <div class="tabs-container">
+                <div class="tabs-header">
+                    <button class="tab-btn active" data-tab="description-tab">Deskripsi</button>
+                    <button class="tab-btn" data-tab="specifications-tab">Spesifikasi</button>
+                    <button class="tab-btn" data-tab="care-tab">Perawatan</button>
+                    <button class="tab-btn" data-tab="reviews-tab">Ulasan</button>
+                </div>
+                <div class="tabs-content">
+                    <!-- Description Tab -->
+                    <div id="description-tab" class="tab-panel active">
+                        <h3>Tentang Tulip</h3>
+                        <p>Tulip adalah salah satu bunga musim semi paling ikonis di dunia, dikenal dengan bentuknya yang elegan dan warna-warni cerah. Bunga ini termasuk dalam keluarga Liliaceae dan memiliki lebih dari 100 spesies alami serta ribuan varietas hasil hibridisasi. Tulip yang kami jual adalah umbi berkualitas tinggi yang telah melalui proses seleksi ketat untuk memastikan kualitas berbunga optimal.</p>
+                        <p>Tanaman ini sangat cocok untuk ditanam di pot maupun langsung di tanah, dan akan memberikan warna spektakuler di taman Anda setiap musim semi. Tulip juga populer sebagai bunga potong karena kesegarannya yang tahan lama.</p>
+                        <h3>Fitur Utama</h3>
+                        <ul>
+                            <li>Bunga besar dengan bentuk elegan dan warna cerah</li>
+                            <li>Umbi berkualitas tinggi dengan jaminan tumbuh</li>
+                            <li>Cocok untuk pot, taman, atau sebagai bunga potong</li>
+                            <li>Tersedia dalam berbagai warna dan varietas</li>
+                            <li>Mekar di musim semi dengan tampilan spektakuler</li>
+                            <li>Bunga tahan lama baik di tanaman maupun sebagai bunga potong</li>
+                        </ul>
+                    </div>
+
+                    <!-- Specifications Tab -->
+                    <div id="specifications-tab" class="tab-panel">
+                        <h3>Spesifikasi Tanaman</h3>
+                        <table class="specs-table">
+                            <tr>
+                                <td>Nama Ilmiah</td>
+                                <td>Tulipa</td>
+                            </tr>
+                            <tr>
+                                <td>Nama Umum</td>
+                                <td>Tulip</td>
+                            </tr>
+                            <tr>
+                                <td>Asal</td>
+                                <td>Asia Tengah</td>
+                            </tr>
+                            <tr>
+                                <td>Keluarga</td>
+                                <td>Liliaceae</td>
+                            </tr>
+                            <tr>
+                                <td>Tinggi Tanaman</td>
+                                <td>20-70 cm (tergantung varietas)</td>
+                            </tr>
+                            <tr>
+                                <td>Warna Bunga</td>
+                                <td>Merah, Kuning, Pink, Ungu, Putih, Oranye, dan kombinasi</td>
+                            </tr>
+                            <tr>
+                                <td>Diameter Bunga</td>
+                                <td>5-10 cm saat mekar penuh</td>
+                            </tr>
+                            <tr>
+                                <td>Musim Tanam</td>
+                                <td>Musim gugur (penanaman), musim semi (berbunga)</td>
+                            </tr>
+                            <tr>
+                                <td>Kebutuhan Cahaya</td>
+                                <td>Matahari penuh hingga sebagian teduh</td>
+                            </tr>
+                            <tr>
+                                <td>Zona Tumbuh</td>
+                                <td>3-8 (dapat ditanam di dataran tinggi Indonesia)</td>
+                            </tr>
+                            <tr>
+                                <td>Jenis Produk</td>
+                                <td>Umbi kering siap tanam</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- Care Tab -->
+                    <div id="care-tab" class="tab-panel">
+                        <h3>Panduan Perawatan</h3>
+                        <div class="care-item">
+                            <div class="care-icon">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <div class="care-content">
+                                <h4>Waktu Tanam</h4>
+                                <p>Tanam umbi Tulip di musim gugur (Oktober-Desember) untuk berbunga di musim semi. Di Indonesia, tanam di dataran tinggi (minimal 1000m dpl) atau simpan umbi di kulkas (bukan freezer) selama 6-8 minggu sebelum tanam untuk simulasi musim dingin. Tanam umbi dengan kedalaman 10-15 cm dengan ujung runcing menghadap ke atas.</p>
+                            </div>
+                        </div>
+                        <div class="care-item">
+                            <div class="care-icon">
+                                <i class="fas fa-sun"></i>
+                            </div>
+                            <div class="care-content">
+                                <h4>Lokasi & Pencahayaan</h4>
+                                <p>Tulip membutuhkan sinar matahari penuh minimal 6 jam sehari. Pilih lokasi dengan drainase baik untuk mencegah umbi busuk. Jika ditanam di pot, pastikan pot memiliki lubang drainase yang cukup. Di dataran rendah, letakkan pot di area yang mendapat angin sejuk dan tidak terlalu panas.</p>
+                            </div>
+                        </div>
+                        <div class="care-item">
+                            <div class="care-icon">
+                                <i class="fas fa-tint"></i>
+                            </div>
+                            <div class="care-content">
+                                <h4>Penyiraman</h4>
+                                <p>Siram umbi setelah tanam hingga tanah lembab, kemudian siram secara teratur saat pertumbuhan muncul. Hindari penyiraman berlebihan yang membuat tanah tergenang. Setelah bunga mekar, kurangi penyiraman secara bertahap. Setelah daun menguning dan layu, hentikan penyiraman untuk mempersiapkan masa dorman.</p>
+                            </div>
+                        </div>
+                        <div class="care-item">
+                            <div class="care-icon">
+                                <i class="fas fa-spa"></i>
+                            </div>
+                            <div class="care-content">
+                                <h4>Perawatan Pasca Berbunga</h4>
+                                <p>Setelah bunga layu, potong tangkai bunga tetapi biarkan daun hingga menguning alami. Ini memungkinkan umbi menyimpan makanan untuk musim berikutnya. Untuk Tulip di dataran rendah, umbi biasanya tidak bisa digunakan kembali. Di dataran tinggi, umbi bisa dibiarkan di tanah dengan perawatan khusus.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Reviews Tab -->
+                    <div id="reviews-tab" class="tab-panel">
+                        <div class="reviews-summary">
+                            <div class="rating-summary">
+                                <div class="average-rating">
+                                    <div class="rating-number">4.7</div>
+                                    <div class="stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                    </div>
+                                    <div class="rating-count">215 ulasan</div>
+                                </div>
+                                <div class="rating-bars">
+                                    <div class="rating-bar">
+                                        <div class="rating-level">
+                                            <i class="fas fa-star"></i>
+                                            <span>5</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 75%"></div>
+                                        </div>
+                                        <div class="rating-percent">75%</div>
+                                    </div>
+                                    <div class="rating-bar">
+                                        <div class="rating-level">
+                                            <i class="fas fa-star"></i>
+                                            <span>4</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 18%"></div>
+                                        </div>
+                                        <div class="rating-percent">18%</div>
+                                    </div>
+                                    <div class="rating-bar">
+                                        <div class="rating-level">
+                                            <i class="fas fa-star"></i>
+                                            <span>3</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 5%"></div>
+                                        </div>
+                                        <div class="rating-percent">5%</div>
+                                    </div>
+                                    <div class="rating-bar">
+                                        <div class="rating-level">
+                                            <i class="fas fa-star"></i>
+                                            <span>2</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 1%"></div>
+                                        </div>
+                                        <div class="rating-percent">1%</div>
+                                    </div>
+                                    <div class="rating-bar">
+                                        <div class="rating-level">
+                                            <i class="fas fa-star"></i>
+                                            <span>1</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 1%"></div>
+                                        </div>
+                                        <div class="rating-percent">1%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="reviews-list">
+                            <div class="review-item">
+                                <div class="review-header">
+                                    <div class="reviewer-info">
+                                        <img src="images/user4.jpg" alt="Reviewer" class="reviewer-avatar">
+                                        <div class="reviewer-details">
+                                            <h4>Anita Rahayu</h4>
+                                            <div class="review-date">15 Maret 2024</div>
+                                        </div>
+                                    </div>
+                                    <div class="stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                </div>
+                                <div class="review-content">
+                                    <p>Saya menanam umbi Tulip ini di Lembang dan hasilnya luar biasa! Bunganya mekar sempurna dengan warna merah terang yang memukau. Umbi datang dalam kondisi sangat baik dengan ukuran besar. Saya mengikuti petunjuk perawatan dari seller dan berhasil membuat 9 dari 10 umbi berbunga. Sekarang taman saya terlihat seperti mini Belanda di musim semi!</p>
+                                </div>
+                                <div class="review-footer">
+                                    <div class="review-helpful">
+                                        <span>Apakah ulasan ini membantu?</span>
+                                        <button class="helpful-btn">
+                                            <i class="fas fa-thumbs-up"></i>
+                                            Ya (87)
+                                        </button>
+                                        <button class="helpful-btn">
+                                            <i class="fas fa-thumbs-down"></i>
+                                            Tidak (3)
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="review-item">
+                                <div class="review-header">
+                                    <div class="reviewer-info">
+                                        <img src="images/user5.jpg" alt="Reviewer" class="reviewer-avatar">
+                                        <div class="reviewer-details">
+                                            <h4>Budi Santoso</h4>
+                                            <div class="review-date">28 Februari 2024</div>
+                                        </div>
+                                    </div>
+                                    <div class="stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                </div>
+                                <div class="review-content">
+                                    <p>Meski tinggal di Jakarta, saya mencoba menanam Tulip dengan metode pendinginan umbi di kulkas selama 8 minggu. Hasilnya cukup mengejutkan - 5 dari 7 umbi berhasil berbunga! Bunganya tidak sebesar yang di foto mungkin karena suhu yang kurang ideal, tapi warnanya sangat indah. Pengemasan umbi sangat rapi dan disertai panduan lengkap untuk penanaman di dataran rendah.</p>
+                                </div>
+                                <div class="review-footer">
+                                    <div class="review-helpful">
+                                        <span>Apakah ulasan ini membantu?</span>
+                                        <button class="helpful-btn">
+                                            <i class="fas fa-thumbs-up"></i>
+                                            Ya (64)
+                                        </button>
+                                        <button class="helpful-btn">
+                                            <i class="fas fa-thumbs-down"></i>
+                                            Tidak (2)
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="review-item">
+                                <div class="review-header">
+                                    <div class="reviewer-info">
+                                        <img src="images/user6.jpg" alt="Reviewer" class="reviewer-avatar">
+                                        <div class="reviewer-details">
+                                            <h4>Citra Dewi</h4>
+                                            <div class="review-date">10 Januari 2024</div>
+                                        </div>
+                                    </div>
+                                    <div class="stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                </div>
+                                <div class="review-content">
+                                    <p>Saya membeli Tulip varietas ungu dan hasilnya sangat memuaskan. Bunganya besar dan warnanya lebih cantik dari yang saya bayangkan. Yang membuat saya memberi 4 bintang adalah ada 2 umbi yang tidak tumbuh, mungkin karena kesalahan saya dalam penyimpanan sebelum tanam. Tapi untuk 5 umbi yang tumbuh, semuanya menghasilkan bunga sempurna. Seller juga responsif saat saya konsultasikan masalah ini.</p>
+                                </div>
+                                <div class="review-footer">
+                                    <div class="review-helpful">
+                                        <span>Apakah ulasan ini membantu?</span>
+                                        <button class="helpful-btn">
+                                            <i class="fas fa-thumbs-up"></i>
+                                            Ya (53)
+                                        </button>
+                                        <button class="helpful-btn">
+                                            <i class="fas fa-thumbs-down"></i>
+                                            Tidak (1)
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <!-- Feedback Section -->
+        <div class="feedback-section">
+            <div class="container">
+                <h2 class="feedback-title">Kirim kritik/saran untuk kami</h2>
+                <p class="feedback-subtitle">Ceritakan kepada kami kritik dan/atau saran Anda</p>
+                <div class="feedback-form">
+                    <input type="text" placeholder="Masukkan kritik/saran" class="feedback-input">
+                    <button class="feedback-btn">KIRIM</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Footer -->
+        <div class="main-footer">
+            <div class="container">
+                <div class="footer-content">
+                    <!-- Company Info -->
+                    <div class="footer-company">
+                        <div class="footer-logo">
+                            <img src="images/logo.png" alt="The Secret Garden">
+                        </div>
+                        <p class="company-description">
+                            Toko tanaman hias terpercaya dengan berbagai koleksi tanaman berkualitas untuk mempercantik rumah dan ruangan Anda.
+                        </p>
+                        <div class="social-links">
+                            <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Links -->
+                    <div class="footer-links">
+                        <h3 class="footer-heading">Tautan Cepat</h3>
+                        <ul class="footer-menu">
+                            <li><a href="index.html">BERANDA</a></li>
+                            <li><a href="produk.html">PRODUK</a></li>
+                            <li><a href="kontak.html">KONTAK</a></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Categories -->
+                    <div class="footer-categories">
+                        <h3 class="footer-heading">Kategori</h3>
+                        <ul class="footer-menu">
+                            <li><a href="#">Tanaman Hias Bunga</a></li>
+                            <li><a href="#">Tanaman Hias Daun</a></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Contact Info -->
+                    <div class="footer-contact">
+                        <h3 class="footer-heading">Kontak Kami</h3>
+                        <ul class="contact-info">
+                            <li>
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Jl. Tanaman Indah No. 123, Purwokerto</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-phone-alt"></i>
+                                <span>0812-3456-7890</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-envelope"></i>
+                                <span>thesecretgarden@gmail.com</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Copyright -->
+        <div class="copyright">
+            <div class="container">
+                <p>© 2024 The Secret Garden. Hak Cipta Dilindungi.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Toast Notification -->
+    <div id="notification-toast" class="toast">
+        <div class="toast-content">
+            <div class="toast-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="toast-message">Produk telah ditambahkan ke keranjang!</div>
+        </div>
+        <button class="toast-close">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="js/detail.js"></script>
+</body>
+</html>

@@ -95,9 +95,6 @@ $query=mysqli_query($koneksi,$sql);
                                 <th>Harga</th>
                                 <th>Stok</th>
                                 <th>Deskripsi</th>
-                                <th>Keunggulan</th>
-                                <th>Perawatan Harian</th>
-                                <th>Perawatan Berkala</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -118,24 +115,7 @@ $query=mysqli_query($koneksi,$sql);
                                         <button class="btn-expand" onclick="toggleText(this)">Lihat Selengkapnya</button>
                                     <?php endif; ?>
                                 </td>
-                                <td class="description-cell">
-                                    <div class="truncate-text"><?=isset($produk['keunggulan']) ? $produk['keunggulan'] : '-'?></div>
-                                    <?php if(isset($produk['keunggulan']) && strlen($produk['keunggulan']) > 100): ?>
-                                        <button class="btn-expand" onclick="toggleText(this)">Lihat Selengkapnya</button>
-                                    <?php endif; ?>
-                                </td>
-                                <td class="description-cell">
-                                    <div class="truncate-text"><?=isset($produk['perawatan_harian']) ? $produk['perawatan_harian'] : '-'?></div>
-                                    <?php if(isset($produk['perawatan_harian']) && strlen($produk['perawatan_harian']) > 100): ?>
-                                        <button class="btn-expand" onclick="toggleText(this)">Lihat Selengkapnya</button>
-                                    <?php endif; ?>
-                                </td>
-                                <td class="description-cell">
-                                    <div class="truncate-text"><?=isset($produk['perawatan_berkala']) ? $produk['perawatan_berkala'] : '-'?></div>
-                                    <?php if(isset($produk['perawatan_berkala']) && strlen($produk['perawatan_berkala']) > 100): ?>
-                                        <button class="btn-expand" onclick="toggleText(this)">Lihat Selengkapnya</button>
-                                    <?php endif; ?>
-                                </td>
+                              
                                 <td class="action-buttons">
                                     <a href="edit_produk.php?id_produk=<?=$produk['id_produk']?>" class="btn-edit" title="Edit">
                                         <i class="fas fa-pencil"></i>

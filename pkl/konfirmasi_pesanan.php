@@ -7,6 +7,7 @@ if (!isset($_SESSION['username'])) {
     die("Akses ditolak. Silakan login terlebih dahulu.");
 }
 
+// Periksa apakah ada data pesanan di session
 if (!isset($_SESSION['order_data'])) {
     header("Location: keranjang.php");
     exit();
@@ -14,11 +15,14 @@ if (!isset($_SESSION['order_data'])) {
 
 // Ambil data dari session
 $sessionData = $_SESSION['order_data'];
+
+// PERBAIKAN: Ambil data dari database ringkasan_pesanan berdasarkan temp_order_id atau session_id
 function getOrderDataFromDatabase($koneksi, $temp_order_id = null, $session_id = null) {
     $orderItems = [];
     $orderInfo = [];
     
     if ($temp_order_id) {
+        // PERBAIKAN: JOIN dengan tabel produk untuk memastikan data produk valid
         $query = $koneksi->query("
             SELECT r.*, p.nama_tanaman as produk_nama, p.harga as produk_harga, p.foto as produk_foto
             FROM ringkasan_pesanan r 
@@ -41,6 +45,7 @@ function getOrderDataFromDatabase($koneksi, $temp_order_id = null, $session_id =
     if ($query && $query->num_rows > 0) {
         $subtotal = 0;
         while ($row = $query->fetch_assoc()) {
+            // PERBAIKAN: Validasi ID produk tidak boleh NULL atau kosong
             if (!empty($row['id_produk']) && $row['id_produk'] > 0) {
                 $orderItems[] = [
                     'id_produk' => (int)$row['id_produk'], // PERBAIKAN: Cast ke integer
@@ -161,9 +166,7 @@ function getPaymentMethodName($method) {
         'bca' => 'Transfer Bank BCA',
         'bni' => 'Transfer Bank BNI', 
         'mandiri' => 'Transfer Bank Mandiri',
-        'gopay' => 'GoPay',
-        'ovo' => 'OVO',
-        'dana' => 'DANA'
+       
     ];
     return isset($paymentNames[$method]) ? $paymentNames[$method] : 'Transfer Bank';
 }
@@ -435,9 +438,11 @@ $display_status = getStatusLabel($status_pesanan);
                             <div class="receipt-value"><?= htmlspecialchars($nomor_pesanan) ?></div>
                         </div>
                         <div class="receipt-row">
-                            <div class="receipt-label">Tanggal Pesanan:</div>
-                            <div class="receipt-value"><?= htmlspecialchars($tanggal_pesanan) ?> WIB</div>
-                        </div>
+                        <div class="receipt-label">Tanggal Pesanan:</div>
+                        <div class="receipt-value"><?= htmlspecialchars("
+
+24 Jul 2025, 22:25") ?> WIB</div>
+                    </div>
                         <div class="receipt-row">
                             <div class="receipt-label">Status:</div>
                             <div class="receipt-value status-pending"><?= htmlspecialchars($display_status) ?></div>
@@ -459,7 +464,7 @@ $display_status = getStatusLabel($status_pesanan);
                                 <div class="item-info">
                                     <h4><?= htmlspecialchars($item['nama_tanaman']) ?></h4>
                                     <p><?= $item['jumlah'] ?> x Rp<?= number_format($item['harga'], 0, ',', '.') ?></p>
-                                    <small>ID Produk: <?= $item['id_produk'] ?></small>
+                                    
                                 </div>
                                 <div class="item-price">Rp<?= number_format($item['subtotal'], 0, ',', '.') ?></div>
                             </div>
